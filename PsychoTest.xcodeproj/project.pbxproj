@@ -1,0 +1,472 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1000001 /* PsychoTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001 /* PsychoTestApp.swift */; };
+		A1000002 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000002 /* MainMenuView.swift */; };
+		A1000003 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000003 /* Game.swift */; };
+		A1000004 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000004 /* Score.swift */; };
+		A1000005 /* GameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000005 /* GameCard.swift */; };
+		A1000006 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000006 /* TimerView.swift */; };
+		A1000007 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000007 /* ScoreView.swift */; };
+		A1000008 /* MentalCalculationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000008 /* MentalCalculationView.swift */; };
+		A1000009 /* MentalCalculationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000009 /* MentalCalculationViewModel.swift */; };
+		A1000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1000015 /* Assets.xcassets */; };
+		A1000020 /* PairImpairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000020 /* PairImpairView.swift */; };
+		A1000021 /* M2BackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000021 /* M2BackView.swift */; };
+		A1000022 /* GrillesCalculsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000022 /* GrillesCalculsView.swift */; };
+		A1000023 /* SeriesLogiquesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000023 /* SeriesLogiquesView.swift */; };
+		A1000024 /* AnglaisQCMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000024 /* AnglaisQCMView.swift */; };
+		A1000025 /* CultureAeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000025 /* CultureAeroView.swift */; };
+		A1000026 /* ComingSoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000026 /* ComingSoonView.swift */; };
+		A1000030 /* UnMotSurDeuxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000030 /* UnMotSurDeuxView.swift */; };
+		A1000031 /* FormesCouleursView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000031 /* FormesCouleursView.swift */; };
+		A1000032 /* BoitesAMotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000032 /* BoitesAMotsView.swift */; };
+		A1000033 /* MotsEnEtoileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000033 /* MotsEnEtoileView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B1000001 /* PsychoTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsychoTestApp.swift; sourceTree = "<group>"; };
+		B1000002 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
+		B1000003 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		B1000004 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		B1000005 /* GameCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCard.swift; sourceTree = "<group>"; };
+		B1000006 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		B1000007 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
+		B1000008 /* MentalCalculationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentalCalculationView.swift; sourceTree = "<group>"; };
+		B1000009 /* MentalCalculationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentalCalculationViewModel.swift; sourceTree = "<group>"; };
+		B1000015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1000020 /* PairImpairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairImpairView.swift; sourceTree = "<group>"; };
+		B1000021 /* M2BackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M2BackView.swift; sourceTree = "<group>"; };
+		B1000022 /* GrillesCalculsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrillesCalculsView.swift; sourceTree = "<group>"; };
+		B1000023 /* SeriesLogiquesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesLogiquesView.swift; sourceTree = "<group>"; };
+		B1000024 /* AnglaisQCMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnglaisQCMView.swift; sourceTree = "<group>"; };
+		B1000025 /* CultureAeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CultureAeroView.swift; sourceTree = "<group>"; };
+		B1000026 /* ComingSoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonView.swift; sourceTree = "<group>"; };
+		B1000030 /* UnMotSurDeuxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnMotSurDeuxView.swift; sourceTree = "<group>"; };
+		B1000031 /* FormesCouleursView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormesCouleursView.swift; sourceTree = "<group>"; };
+		B1000032 /* BoitesAMotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoitesAMotsView.swift; sourceTree = "<group>"; };
+		B1000033 /* MotsEnEtoileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotsEnEtoileView.swift; sourceTree = "<group>"; };
+		C1000001 /* PsychoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PsychoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D1000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E1000001 = {
+			isa = PBXGroup;
+			children = (
+				E1000002 /* PsychoTest */,
+				E1000010 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E1000002 /* PsychoTest */ = {
+			isa = PBXGroup;
+			children = (
+				E1000003 /* App */,
+				E1000004 /* Views */,
+				E1000007 /* ViewModels */,
+				E1000008 /* Models */,
+				E1000009 /* Resources */,
+			);
+			path = PsychoTest;
+			sourceTree = "<group>";
+		};
+		E1000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001 /* PsychoTestApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E1000004 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B1000002 /* MainMenuView.swift */,
+				E1000005 /* Games */,
+				E1000006 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1000005 /* Games */ = {
+			isa = PBXGroup;
+			children = (
+				B1000008 /* MentalCalculationView.swift */,
+				B1000020 /* PairImpairView.swift */,
+				B1000021 /* M2BackView.swift */,
+				B1000022 /* GrillesCalculsView.swift */,
+				B1000023 /* SeriesLogiquesView.swift */,
+				B1000024 /* AnglaisQCMView.swift */,
+				B1000025 /* CultureAeroView.swift */,
+				B1000026 /* ComingSoonView.swift */,
+				B1000030 /* UnMotSurDeuxView.swift */,
+				B1000031 /* FormesCouleursView.swift */,
+				B1000032 /* BoitesAMotsView.swift */,
+				B1000033 /* MotsEnEtoileView.swift */,
+			);
+			path = Games;
+			sourceTree = "<group>";
+		};
+		E1000006 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B1000005 /* GameCard.swift */,
+				B1000006 /* TimerView.swift */,
+				B1000007 /* ScoreView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E1000007 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B1000009 /* MentalCalculationViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E1000008 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1000003 /* Game.swift */,
+				B1000004 /* Score.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E1000009 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B1000015 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E1000010 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1000001 /* PsychoTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1000001 /* PsychoTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G1000003 /* Build configuration list for PBXNativeTarget "PsychoTest" */;
+			buildPhases = (
+				F1000002 /* Sources */,
+				D1000001 /* Frameworks */,
+				F1000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PsychoTest;
+			productName = PsychoTest;
+			productReference = C1000001 /* PsychoTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		H1000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					F1000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = G1000001 /* Build configuration list for PBXProject "PsychoTest" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = fr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				fr,
+				Base,
+			);
+			mainGroup = E1000001;
+			productRefGroup = E1000010 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1000001 /* PsychoTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000015 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001 /* PsychoTestApp.swift in Sources */,
+				A1000002 /* MainMenuView.swift in Sources */,
+				A1000003 /* Game.swift in Sources */,
+				A1000004 /* Score.swift in Sources */,
+				A1000005 /* GameCard.swift in Sources */,
+				A1000006 /* TimerView.swift in Sources */,
+				A1000007 /* ScoreView.swift in Sources */,
+				A1000008 /* MentalCalculationView.swift in Sources */,
+				A1000009 /* MentalCalculationViewModel.swift in Sources */,
+				A1000020 /* PairImpairView.swift in Sources */,
+				A1000021 /* M2BackView.swift in Sources */,
+				A1000022 /* GrillesCalculsView.swift in Sources */,
+				A1000023 /* SeriesLogiquesView.swift in Sources */,
+				A1000024 /* AnglaisQCMView.swift in Sources */,
+				A1000025 /* CultureAeroView.swift in Sources */,
+				A1000026 /* ComingSoonView.swift in Sources */,
+				A1000030 /* UnMotSurDeuxView.swift in Sources */,
+				A1000031 /* FormesCouleursView.swift in Sources */,
+				A1000032 /* BoitesAMotsView.swift in Sources */,
+				A1000033 /* MotsEnEtoileView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		I1000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8V4RJ7VX6Z;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		I1000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8V4RJ7VX6Z;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		I1000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PsychoTest;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.psychotest.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		I1000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PsychoTest;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.psychotest.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		G1000001 /* Build configuration list for PBXProject "PsychoTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				I1000001 /* Debug */,
+				I1000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		G1000003 /* Build configuration list for PBXNativeTarget "PsychoTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				I1000003 /* Debug */,
+				I1000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = H1000001 /* Project object */;
+}

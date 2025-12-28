@@ -1,0 +1,385 @@
+import SwiftUI
+
+// MARK: - ViewModel
+@MainActor
+@Observable
+final class M2BackViewModel {
+    var currentNumber: Int = 0
+    var history: [Int] = []
+    var currentIndex: Int = 0
+    var totalNumbers: Int = 42
+    var correctAnswers: Int = 0
+    var wrongAnswers: Int = 0
+    var isShowingNumber: Bool = false
+    var isWaitingForAnswer: Bool = false
+    var isGameActive: Bool = false
+    var isGameOver: Bool = false
+    var feedback: AnswerFeedback?
+    var timeRemaining: Double = 3.0
+
+    private var sequence: [Int] = []
+    private var timerTask: Task<Void, Never>?
+    private var answerTimerTask: Task<Void, Never>?
+
+    enum AnswerFeedback {
+        case correct
+        case wrong
+    }
+
+    var accuracy: Double {
+        let total = correctAnswers + wrongAnswers
+        guard total > 0 else { return 0 }
+        return Double(correctAnswers) / Double(total) * 100
+    }
+
+    func startGame() {
+        history = []
+        currentIndex = 0
+        correctAnswers = 0
+        wrongAnswers = 0
+        isGameActive = true
+        isGameOver = false
+        feedback = nil
+        generateSequence()
+        showNextNumber()
+    }
+
+    private func generateSequence() {
+        // Générer une séquence avec environ 30% de correspondances M2
+        sequence = []
+        for i in 0..<totalNumbers {
+            if i >= 2 && Bool.random() && Double.random(in: 0...1) < 0.3 {
+                // 30% de chance de répéter le nombre d'il y a 2 positions
+                sequence.append(sequence[i - 2])
+            } else {
+                sequence.append(Int.random(in: 0...9))
+            }
+        }
+    }
+
+    private func showNextNumber() {
+        guard currentIndex < totalNumbers else {
+            endGame()
+            return
+        }
+
+        feedback = nil
+        currentNumber = sequence[currentIndex]
+        isShowingNumber = true
+        isWaitingForAnswer = false
+
+        // Afficher le nombre pendant 1 seconde
+        timerTask = Task {
+            try? await Task.sleep(for: .seconds(1))
+            if !Task.isCancelled {
+                isShowingNumber = false
+                isWaitingForAnswer = true
+                timeRemaining = 3.0
+                startAnswerTimer()
+            }
+        }
+    }
+
+    private func startAnswerTimer() {
+        answerTimerTask = Task {
+            while !Task.isCancelled && timeRemaining > 0 {
+                try? await Task.sleep(for: .milliseconds(100))
+                if !Task.isCancelled {
+                    timeRemaining -= 0.1
+                }
+            }
+            if !Task.isCancelled && isWaitingForAnswer {
+                // Temps écoulé = mauvaise réponse
+                handleTimeout()
+            }
+        }
+    }
+
+    private func handleTimeout() {
+        wrongAnswers += 1
+        feedback = .wrong
+        moveToNext()
+    }
+
+    func answer(isMatch: Bool) {
+        guard isWaitingForAnswer else { return }
+
+        answerTimerTask?.cancel()
+        isWaitingForAnswer = false
+
+        // Vérifier si c'est un M2 match
+        let actualMatch: Bool
+        if currentIndex >= 2 {
+            actualMatch = sequence[currentIndex] == sequence[currentIndex - 2]
+        } else {
+            actualMatch = false
+        }
+
+        if isMatch == actualMatch {
+            correctAnswers += 1
+            feedback = .correct
+        } else {
+            wrongAnswers += 1
+            feedback = .wrong
+        }
+
+        moveToNext()
+    }
+
+    private func moveToNext() {
+        history.append(currentNumber)
+        currentIndex += 1
+
+        Task {
+            try? await Task.sleep(for: .milliseconds(500))
+            showNextNumber()
+        }
+    }
+
+    private func endGame() {
+        timerTask?.cancel()
+        answerTimerTask?.cancel()
+        isGameActive = false
+        isGameOver = true
+    }
+
+    func stopGame() {
+        timerTask?.cancel()
+        answerTimerTask?.cancel()
+    }
+}
+
+// MARK: - View
+struct M2BackView: View {
+    @State private var viewModel = M2BackViewModel()
+
+    var body: some View {
+        VStack(spacing: 20) {
+            if viewModel.isGameActive {
+                gameActiveView
+            } else if viewModel.isGameOver {
+                gameOverView
+            } else {
+                startView
+            }
+        }
+        .padding()
+        .navigationTitle("M2 Back")
+        .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            viewModel.stopGame()
+        }
+    }
+
+    private var startView: some View {
+        VStack(spacing: 32) {
+            Spacer()
+
+            Image(systemName: "brain.head.profile")
+                .font(.system(size: 80))
+                .foregroundStyle(.purple)
+
+            Text("M2 Back")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            VStack(spacing: 16) {
+                Text("Règles du jeu")
+                    .font(.headline)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Un chiffre s'affiche pendant 1s", systemImage: "eye")
+                    Label("Tu as 3s pour répondre", systemImage: "timer")
+                    Label("OUI si le chiffre = celui d'il y a 2 coups", systemImage: "checkmark.circle")
+                    Label("NON sinon", systemImage: "xmark.circle")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            Text("42 chiffres au total")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            Button {
+                viewModel.startGame()
+            } label: {
+                Text("Commencer")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.purple)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+    }
+
+    private var gameActiveView: some View {
+        VStack(spacing: 24) {
+            // Header
+            HStack {
+                Text("\(viewModel.currentIndex + 1)/\(viewModel.totalNumbers)")
+                    .font(.headline)
+
+                Spacer()
+
+                HStack(spacing: 16) {
+                    Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                    Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
+                        .foregroundStyle(.red)
+                }
+                .font(.subheadline)
+            }
+
+            Spacer()
+
+            // Zone d'affichage du nombre
+            ZStack {
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(Color(.systemGray6))
+                    .frame(width: 200, height: 200)
+
+                if viewModel.isShowingNumber {
+                    Text("\(viewModel.currentNumber)")
+                        .font(.system(size: 100, weight: .bold, design: .rounded))
+                } else if viewModel.isWaitingForAnswer {
+                    Text("?")
+                        .font(.system(size: 80, weight: .bold, design: .rounded))
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            // Historique (2 derniers)
+            HStack(spacing: 20) {
+                if viewModel.history.count >= 2 {
+                    VStack {
+                        Text("n-2")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("\(viewModel.history[viewModel.history.count - 2])")
+                            .font(.title2.weight(.semibold))
+                            .padding(12)
+                            .background(Color.purple.opacity(0.2))
+                            .clipShape(Circle())
+                    }
+                }
+                if viewModel.history.count >= 1 {
+                    VStack {
+                        Text("n-1")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("\(viewModel.history[viewModel.history.count - 1])")
+                            .font(.title2.weight(.semibold))
+                            .padding(12)
+                            .background(Color(.systemGray5))
+                            .clipShape(Circle())
+                    }
+                }
+            }
+            .frame(height: 80)
+
+            // Feedback
+            if let feedback = viewModel.feedback {
+                Text(feedback == .correct ? "Correct !" : "Faux !")
+                    .font(.headline)
+                    .foregroundStyle(feedback == .correct ? .green : .red)
+            }
+
+            // Timer bar
+            if viewModel.isWaitingForAnswer {
+                GeometryReader { geo in
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.purple.opacity(0.3))
+                        .frame(height: 8)
+                        .overlay(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.purple)
+                                .frame(width: geo.size.width * (viewModel.timeRemaining / 3.0))
+                        }
+                }
+                .frame(height: 8)
+            }
+
+            Spacer()
+
+            // Boutons de réponse
+            if viewModel.isWaitingForAnswer {
+                HStack(spacing: 20) {
+                    Button {
+                        viewModel.answer(isMatch: false)
+                    } label: {
+                        Text("NON")
+                            .font(.title2.weight(.bold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(.red)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+
+                    Button {
+                        viewModel.answer(isMatch: true)
+                    } label: {
+                        Text("OUI")
+                            .font(.title2.weight(.bold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 20)
+                            .background(.green)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                }
+            }
+        }
+    }
+
+    private var gameOverView: some View {
+        VStack(spacing: 32) {
+            Spacer()
+
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 80))
+                .foregroundStyle(.green)
+
+            Text("Terminé !")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            VStack(spacing: 16) {
+                ResultRow(label: "Bonnes réponses", value: "\(viewModel.correctAnswers)")
+                ResultRow(label: "Mauvaises réponses", value: "\(viewModel.wrongAnswers)")
+                ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            Spacer()
+
+            Button {
+                viewModel.startGame()
+            } label: {
+                Text("Rejouer")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.purple)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        M2BackView()
+    }
+}
