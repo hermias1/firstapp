@@ -937,3 +937,18 @@ func cubesPasDeFuiteParConsensus() {
     // cette heuristique atteignait alors 87 % de réussite.
     #expect(taux < 0.45, "Le consensus positionnel réussit \(Int(taux * 100)) %")
 }
+
+@MainActor
+@Test("Le bouton PAIR répond dès la première question d'une nouvelle partie")
+func psychomoteurDrapeauReinitialise() {
+    let vm = PsychomoteurViewModel()
+    vm.startGame()
+    vm.signalerPair()          // arme le drapeau
+    let erreursAvant = vm.erreursSecondaires
+
+    vm.startGame()             // nouvelle partie
+    vm.signalerPair()
+    // Si le drapeau était resté armé, ce second appel serait ignoré
+    #expect(vm.erreursSecondaires == 1,
+            "Le bouton est resté inerte (\(erreursAvant) erreurs avant relance)")
+}

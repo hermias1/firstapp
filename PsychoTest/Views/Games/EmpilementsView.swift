@@ -349,10 +349,15 @@ struct EmpilementsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    GameStatsView(type: .empilementsCubes)
-                } label: {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                // Masqué pendant la partie : empiler cette destination
+                // déclenche le onDisappear de la vue, donc stopGame(),
+                // ce qui effacerait la partie en cours sans prévenir.
+                if !viewModel.isGameActive {
+                    NavigationLink {
+                        GameStatsView(type: .empilementsCubes)
+                    } label: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -468,6 +473,14 @@ struct EmpilementsView: View {
                         .buttonStyle(.plain)
                         .disabled(viewModel.showFeedback)
                     }
+                }
+
+                if viewModel.showFeedback {
+                    Text(viewModel.selectedIndex == nil
+                         ? "Temps écoulé"
+                         : (viewModel.selectedIndex == question.indexSymetrie ? "Correct !" : "Raté"))
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(viewModel.selectedIndex == question.indexSymetrie ? .green : .red)
                 }
 
                 Spacer()

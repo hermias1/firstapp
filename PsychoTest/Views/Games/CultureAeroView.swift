@@ -306,10 +306,15 @@ struct CultureAeroView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    GameStatsView(type: .cultureAero)
-                } label: {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                // Masqué pendant la partie : empiler cette destination
+                // déclenche le onDisappear de la vue, donc stopGame(),
+                // ce qui effacerait la partie en cours sans prévenir.
+                if !viewModel.isGameActive {
+                    NavigationLink {
+                        GameStatsView(type: .cultureAero)
+                    } label: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {

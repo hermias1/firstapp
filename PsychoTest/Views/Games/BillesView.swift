@@ -208,6 +208,11 @@ final class BillesViewModel {
 
 private let couleursBilles: [Color] = [.red, .blue, .green, .orange]
 
+/// Un symbole par couleur : le rouge et le vert sont indiscernables pour une
+/// personne deutéranope ou protanope, soit environ 8 % des hommes. Sans second
+/// canal, ces joueurs ne peuvent pas apparier les tubes de départ et de cible.
+private let symbolesBilles = ["circle.fill", "triangle.fill", "square.fill", "diamond.fill"]
+
 struct TubeView: View {
     let billes: [Int]
     let capacite: Int
@@ -216,9 +221,14 @@ struct TubeView: View {
         VStack(spacing: 4) {
             Spacer(minLength: 0)
             ForEach(Array(billes.enumerated().reversed()), id: \.offset) { _, bille in
-                Circle()
-                    .fill(couleursBilles[bille % couleursBilles.count])
-                    .frame(width: 26, height: 26)
+                ZStack {
+                    Circle()
+                        .fill(couleursBilles[bille % couleursBilles.count])
+                    Image(systemName: symbolesBilles[bille % symbolesBilles.count])
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.white)
+                }
+                .frame(width: 26, height: 26)
             }
         }
         .padding(6)
@@ -274,10 +284,15 @@ struct BillesView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    GameStatsView(type: .billes)
-                } label: {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                // Masqué pendant la partie : empiler cette destination
+                // déclenche le onDisappear de la vue, donc stopGame(),
+                // ce qui effacerait la partie en cours sans prévenir.
+                if !viewModel.isGameActive {
+                    NavigationLink {
+                        GameStatsView(type: .billes)
+                    } label: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -351,10 +366,10 @@ struct BillesView: View {
                     TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 45)
                 }
 
-                HStack(spacing: 24) {
+                VStack(spacing: 8) {
                     EtatView(titre: "Départ", tubes: puzzle.depart, capacite: puzzle.capacite)
-                    Image(systemName: "arrow.right")
-                        .font(.title2)
+                    Image(systemName: "arrow.down")
+                        .font(.title3)
                         .foregroundStyle(.secondary)
                     EtatView(titre: "Cible", tubes: puzzle.cible, capacite: puzzle.capacite)
                 }

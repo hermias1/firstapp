@@ -66,6 +66,9 @@ final class PsychomoteurViewModel {
         chiffre = nil
         feedbackSecondaire = nil
         timeRemaining = Int(Self.duree)
+        // Sans cette remise à zéro, un drapeau resté armé à la fin d'une partie
+        // rendait le bouton PAIR inerte au début de la suivante.
+        chiffreRepondu = false
         isGameActive = true
         isGameOver = false
         debut = Date()
@@ -196,10 +199,15 @@ struct PsychomoteurView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    GameStatsView(type: .psychomoteur)
-                } label: {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                // Masqué pendant la partie : empiler cette destination
+                // déclenche le onDisappear de la vue, donc stopGame(),
+                // ce qui effacerait la partie en cours sans prévenir.
+                if !viewModel.isGameActive {
+                    NavigationLink {
+                        GameStatsView(type: .psychomoteur)
+                    } label: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {

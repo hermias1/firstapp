@@ -342,10 +342,15 @@ struct CubesPatronsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    GameStatsView(type: .cubes2D3D)
-                } label: {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                // Masqué pendant la partie : empiler cette destination
+                // déclenche le onDisappear de la vue, donc stopGame(),
+                // ce qui effacerait la partie en cours sans prévenir.
+                if !viewModel.isGameActive {
+                    NavigationLink {
+                        GameStatsView(type: .cubes2D3D)
+                    } label: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -442,6 +447,14 @@ struct CubesPatronsView: View {
                         .buttonStyle(.plain)
                         .disabled(viewModel.showFeedback)
                     }
+                }
+
+                if viewModel.showFeedback {
+                    Text(viewModel.selectedIndex == nil
+                         ? "Temps écoulé"
+                         : (viewModel.selectedIndex == question.indexCorrect ? "Correct !" : "Raté"))
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(viewModel.selectedIndex == question.indexCorrect ? .green : .red)
                 }
 
                 Spacer()
