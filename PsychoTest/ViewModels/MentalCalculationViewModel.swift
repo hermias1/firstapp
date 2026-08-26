@@ -65,7 +65,7 @@ final class MentalCalculationViewModel {
         timerTask?.cancel()
         timerTask = nil
         isGameActive = false
-        isGameOver = true
+        isGameOver = false
     }
 
     func submitAnswer() {
@@ -127,7 +127,9 @@ final class MentalCalculationViewModel {
                     timeRemaining -= 1
                 }
                 if timeRemaining == 0 {
-                    stopGame()
+                    // Fin du jeu
+                    isGameActive = false
+                    isGameOver = true
                 }
             }
         }

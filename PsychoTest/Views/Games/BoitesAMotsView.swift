@@ -127,7 +127,7 @@ final class BoitesAMotsViewModel {
     var wordQueue: [(word: String, categoryIndex: Int)] = []
     var currentWordIndex: Int = 0
     var currentSeries: Int = 0
-    var totalSeries: Int = 10
+    var totalSeries: Int = 5
     var correctAnswers: Int = 0
     var wrongAnswers: Int = 0
     var isGameActive: Bool = false
@@ -136,6 +136,7 @@ final class BoitesAMotsViewModel {
     var feedback: String?
 
     private var wordTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     var accuracy: Double {
         let total = correctAnswers + wrongAnswers
@@ -182,8 +183,10 @@ final class BoitesAMotsViewModel {
             if currentSeries >= totalSeries {
                 endGame()
             } else {
-                Task {
+                transitionTask?.cancel()
+                transitionTask = Task { @MainActor in
                     try? await Task.sleep(for: .seconds(1))
+                    if Task.isCancelled { return }
                     startNewSeries()
                 }
             }
@@ -197,11 +200,11 @@ final class BoitesAMotsViewModel {
         feedback = nil
 
         // Afficher le mot brièvement
-        wordTask = Task {
+        wordTask?.cancel()
+        wordTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1.5))
-            if !Task.isCancelled {
-                showingWord = false
-            }
+            if Task.isCancelled { return }
+            showingWord = false
         }
     }
 
@@ -222,33 +225,41 @@ final class BoitesAMotsViewModel {
                 feedback = "Cette boîte est déjà utilisée !"
             }
         } else {
-            // Vérifier si le choix est correct
+            // Vérifier si le choix est correct (mais ne pas donner de point supplémentaire)
             if boxAssignments[currentCategoryIndex] == boxIndex {
-                correctAnswers += 1
+                // Pas de point supplémentaire - juste validation
                 feedback = "Correct !"
+                HapticManager.success()
             } else {
                 wrongAnswers += 1
                 let correctBox = boxAssignments[currentCategoryIndex]!
                 feedback = "Erreur ! C'était boîte \(correctBox + 1)"
+                HapticManager.error()
             }
         }
 
         currentWordIndex += 1
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(800))
+            if Task.isCancelled { return }
             showNextWord()
         }
     }
 
     private func endGame() {
         wordTask?.cancel()
+        transitionTask?.cancel()
         isGameActive = false
         isGameOver = true
     }
 
     func stopGame() {
         wordTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 
     func boxLabel(_ index: Int) -> String {
@@ -282,6 +293,20 @@ struct BoitesAMotsView: View {
         .padding()
         .navigationTitle("Boîtes à Mots")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Boîtes à Mots",
+                    rules: [
+                        RuleItem(icon: "tray", text: "4 à 6 boîtes vides"),
+                        RuleItem(icon: "eye", text: "Un mot apparaît brièvement"),
+                        RuleItem(icon: "hand.tap", text: "Range-le dans la boîte de son thème"),
+                        RuleItem(icon: "lightbulb", text: "Tu définis toi-même les associations")
+                    ],
+                    accentColor: .brown
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }
@@ -316,7 +341,7 @@ struct BoitesAMotsView: View {
             .background(Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
-            Text("5 séries, minimum d'erreurs")
+            Text("5 séries, fais le minimum d'erreurs")
                 .font(.callout)
                 .foregroundStyle(.secondary)
 

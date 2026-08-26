@@ -50,12 +50,26 @@ struct StarPuzzle {
             ["ABOLIRA", "BALISER", "CALIBRE", "DALIBEC", "ÉTALIR", "FAMILIÉ", "GALIBOT", "HALIBUT", "INALIÉ"],
         ]
 
-        let selectedSet = wordSets.randomElement() ?? wordSets[0]
-        let shuffled = selectedSet.shuffled()
+        // Choisir un set principal (6 mots corrects avec lettres communes)
+        let correctSetIndex = Int.random(in: 0..<wordSets.count)
+        let correctSet = wordSets[correctSetIndex].shuffled()
+        let correctWords = Array(correctSet.prefix(6))
+
+        // Choisir un set différent pour les 3 distracteurs
+        var distractorSetIndex: Int
+        repeat {
+            distractorSetIndex = Int.random(in: 0..<wordSets.count)
+        } while distractorSetIndex == correctSetIndex
+
+        let distractorSet = wordSets[distractorSetIndex].shuffled()
+        let distractorWords = Array(distractorSet.prefix(3))
+
+        // Mélanger les 9 mots ensemble
+        let allWords = (correctWords + distractorWords).shuffled()
 
         return StarPuzzle(
-            words: Array(shuffled.prefix(9)),
-            solution: Array(shuffled.prefix(6))
+            words: allWords,
+            solution: correctWords
         )
     }
 }
@@ -77,6 +91,7 @@ final class MotsEnEtoileViewModel {
     var showResult: Bool = false
 
     private var timerTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     func startGame() {
         currentQuestion = 0
@@ -98,12 +113,11 @@ final class MotsEnEtoileViewModel {
 
     private func startTimer() {
         timerTask?.cancel()
-        timerTask = Task {
+        timerTask = Task { @MainActor in
             while !Task.isCancelled && timeRemaining > 0 {
                 try? await Task.sleep(for: .seconds(1))
-                if !Task.isCancelled {
-                    timeRemaining -= 1
-                }
+                if Task.isCancelled { break }
+                timeRemaining -= 1
             }
             if !Task.isCancelled {
                 validatePuzzle()
@@ -144,14 +158,27 @@ final class MotsEnEtoileViewModel {
         timerTask?.cancel()
         showResult = true
 
-        // Vérifier si 6 mots sont placés
-        if placedWords.count == 6 {
-            // Simplified validation - just check if 6 words are placed
-            correctAnswers += 1
+        // Vérifier si 6 mots sont placés ET s'ils sont tous dans la solution
+        if placedWords.count == 6, let solution = puzzle?.solution {
+            let placedWordsList = Array(placedWords.values)
+            // Tous les mots placés doivent être dans la solution
+            let allCorrect = placedWordsList.allSatisfy { solution.contains($0) }
+
+            if allCorrect {
+                correctAnswers += 1
+                HapticManager.success()
+            } else {
+                HapticManager.error()
+            }
+        } else {
+            // Pas assez de mots placés
+            HapticManager.error()
         }
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(2))
+            if Task.isCancelled { return }
             currentQuestion += 1
             if currentQuestion >= totalQuestions {
                 endGame()
@@ -169,6 +196,9 @@ final class MotsEnEtoileViewModel {
 
     func stopGame() {
         timerTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -274,6 +304,20 @@ struct MotsEnEtoileView: View {
         .padding()
         .navigationTitle("Mots en Étoile")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Mots en Étoile",
+                    rules: [
+                        RuleItem(icon: "textformat.size", text: "9 mots affichés"),
+                        RuleItem(icon: "checkmark.circle", text: "6 mots partagent des lettres communes"),
+                        RuleItem(icon: "hand.tap", text: "Trouve et place les 6 bons mots"),
+                        RuleItem(icon: "timer", text: "50 secondes par puzzle")
+                    ],
+                    accentColor: .yellow
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }
@@ -296,10 +340,10 @@ struct MotsEnEtoileView: View {
                     .font(.headline)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("9 mots de 7 lettres affichés", systemImage: "textformat.size")
-                    Label("Sélectionne 6 mots", systemImage: "hand.tap")
-                    Label("Place-les sur l'étoile", systemImage: "star")
-                    Label("Les lettres communes doivent correspondre", systemImage: "link")
+                    Label("9 mots affichés", systemImage: "textformat.size")
+                    Label("6 mots font partie du groupe", systemImage: "checkmark.circle")
+                    Label("Trouve et place les 6 bons mots", systemImage: "hand.tap")
+                    Label("50 secondes pour résoudre", systemImage: "timer")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -310,6 +354,10 @@ struct MotsEnEtoileView: View {
 
             Text("10 puzzles, 50s chacun")
                 .font(.callout)
+                .foregroundStyle(.secondary)
+
+            Text("(Version entraînement simplifié)")
+                .font(.caption)
                 .foregroundStyle(.secondary)
 
             Spacer()

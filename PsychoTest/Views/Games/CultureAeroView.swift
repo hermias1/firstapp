@@ -190,17 +190,28 @@ final class CultureAeroViewModel {
     var score: Double = 0
     var answered: Int = 0
     var skipped: Int = 0
+    var correctAnswers: Int = 0
+    var wrongAnswers: Int = 0
     var isGameActive: Bool = false
     var isGameOver: Bool = false
     var selectedAnswer: String?
     var showFeedback: Bool = false
     var totalQuestions: Int = 30
+    var shuffledOptions: [String] = []
+
+    private var transitionTask: Task<Void, Never>?
 
     // Barème: +3 bonne, -1 mauvaise, 0 "je ne sais pas"
 
     var currentQuestion: AeroQuestion? {
         guard currentIndex < questions.count else { return nil }
         return questions[currentIndex]
+    }
+
+    private func shuffleCurrentOptions() {
+        if let question = currentQuestion {
+            shuffledOptions = question.options.shuffled()
+        }
     }
 
     func startGame() {
@@ -210,10 +221,13 @@ final class CultureAeroViewModel {
         score = 0
         answered = 0
         skipped = 0
+        correctAnswers = 0
+        wrongAnswers = 0
         isGameActive = true
         isGameOver = false
         selectedAnswer = nil
         showFeedback = false
+        shuffleCurrentOptions()
     }
 
     func selectAnswer(_ answer: String) {
@@ -225,12 +239,16 @@ final class CultureAeroViewModel {
 
         if answer == question.correctAnswer {
             score += 3
+            correctAnswers += 1
         } else {
             score -= 1
+            wrongAnswers += 1
         }
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
+            if Task.isCancelled { return }
             moveToNext()
         }
     }
@@ -248,7 +266,15 @@ final class CultureAeroViewModel {
         if currentIndex >= questions.count {
             isGameActive = false
             isGameOver = true
+        } else {
+            shuffleCurrentOptions()
         }
+    }
+
+    func stopGame() {
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -269,6 +295,23 @@ struct CultureAeroView: View {
         .padding()
         .navigationTitle("Culture Aéro")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Culture Aéro",
+                    rules: [
+                        RuleItem(icon: "airplane", text: "20 QCM sur l'aviation"),
+                        RuleItem(icon: "plus.circle", text: "+3 points si correct"),
+                        RuleItem(icon: "minus.circle", text: "-1 point si incorrect"),
+                        RuleItem(icon: "forward", text: "Tu peux passer une question")
+                    ],
+                    accentColor: .cyan
+                )
+            }
+        }
+        .onDisappear {
+            viewModel.stopGame()
+        }
     }
 
     private var startView: some View {
@@ -343,7 +386,7 @@ struct CultureAeroView: View {
 
                 // Options
                 VStack(spacing: 10) {
-                    ForEach(question.options, id: \.self) { option in
+                    ForEach(viewModel.shuffledOptions, id: \.self) { option in
                         Button {
                             viewModel.selectAnswer(option)
                         } label: {
@@ -397,15 +440,6 @@ struct CultureAeroView: View {
         return .primary
     }
 
-    private var correctCount: Int {
-        let wrongCount = Int((Double(viewModel.answered) * 3.0 - viewModel.score) / 4.0)
-        return viewModel.answered - wrongCount
-    }
-
-    private var wrongCount: Int {
-        Int((Double(viewModel.answered) * 3.0 - viewModel.score) / 4.0)
-    }
-
     private var gameOverView: some View {
         VStack(spacing: 32) {
             Spacer()
@@ -419,8 +453,8 @@ struct CultureAeroView: View {
                 .fontWeight(.bold)
 
             VStack(spacing: 16) {
-                ResultRow(label: "Réponses correctes", value: "\(correctCount)")
-                ResultRow(label: "Réponses incorrectes", value: "\(wrongCount)")
+                ResultRow(label: "Réponses correctes", value: "\(viewModel.correctAnswers)")
+                ResultRow(label: "Réponses incorrectes", value: "\(viewModel.wrongAnswers)")
                 ResultRow(label: "Questions passées", value: "\(viewModel.skipped)")
                 Divider()
                 ResultRow(label: "Score final", value: "\(Int(viewModel.score)) pts")

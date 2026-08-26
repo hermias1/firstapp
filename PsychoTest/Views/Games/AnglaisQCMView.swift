@@ -281,8 +281,10 @@ final class AnglaisQCMViewModel {
     var isGameOver: Bool = false
     var selectedAnswer: String?
     var showFeedback: Bool = false
+    var shuffledOptions: [String] = [] // Options mélangées pour la question actuelle
 
     private var timerTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     var currentQuestion: EnglishQuestion? {
         guard currentIndex < questions.count else { return nil }
@@ -313,16 +315,23 @@ final class AnglaisQCMViewModel {
         isGameOver = false
         selectedAnswer = nil
         showFeedback = false
+        shuffleCurrentOptions()
         startTimer()
     }
 
+    private func shuffleCurrentOptions() {
+        if let question = currentQuestion {
+            shuffledOptions = question.options.shuffled()
+        }
+    }
+
     private func startTimer() {
-        timerTask = Task {
+        timerTask?.cancel()
+        timerTask = Task { @MainActor in
             while !Task.isCancelled && timeRemaining > 0 {
                 try? await Task.sleep(for: .seconds(1))
-                if !Task.isCancelled {
-                    timeRemaining -= 1
-                }
+                if Task.isCancelled { break }
+                timeRemaining -= 1
             }
             if !Task.isCancelled {
                 endGame()
@@ -338,12 +347,16 @@ final class AnglaisQCMViewModel {
 
         if answer == question.correctAnswer {
             correctAnswers += 1
+            HapticManager.success()
         } else {
             wrongAnswers += 1
+            HapticManager.error()
         }
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(800))
+            if Task.isCancelled { return }
             moveToNext()
         }
     }
@@ -355,6 +368,8 @@ final class AnglaisQCMViewModel {
 
         if currentIndex >= totalQuestions {
             endGame()
+        } else {
+            shuffleCurrentOptions()
         }
     }
 
@@ -366,6 +381,9 @@ final class AnglaisQCMViewModel {
 
     func stopGame() {
         timerTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -386,6 +404,20 @@ struct AnglaisQCMView: View {
         .padding()
         .navigationTitle("Anglais")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Anglais QCM",
+                    rules: [
+                        RuleItem(icon: "list.bullet", text: "30 QCM (grammaire + vocabulaire)"),
+                        RuleItem(icon: "timer", text: "7 minutes 30 au total"),
+                        RuleItem(icon: "clock", text: "~15 secondes par question"),
+                        RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 200+")
+                    ],
+                    accentColor: .red
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }
@@ -484,9 +516,9 @@ struct AnglaisQCMView: View {
 
                 Spacer()
 
-                // Options
+                // Options (mélangées)
                 VStack(spacing: 10) {
-                    ForEach(question.options, id: \.self) { option in
+                    ForEach(viewModel.shuffledOptions, id: \.self) { option in
                         Button {
                             viewModel.selectAnswer(option)
                         } label: {

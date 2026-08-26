@@ -163,6 +163,8 @@ final class UnMotSurDeuxViewModel {
     var sortedWords1: [String] = []
     var sortedWords2: [String] = []
 
+    private var transitionTask: Task<Void, Never>?
+
     var averageTime: TimeInterval {
         guard !seriesTimes.isEmpty else { return 0 }
         return seriesTimes.reduce(0, +) / Double(seriesTimes.count)
@@ -247,8 +249,10 @@ final class UnMotSurDeuxViewModel {
 
     private func triggerError() {
         hasError = true
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
+            if Task.isCancelled { return }
             startNewSeries()
         }
     }
@@ -265,8 +269,10 @@ final class UnMotSurDeuxViewModel {
                 isGameActive = false
                 isGameOver = true
             } else {
-                Task {
+                transitionTask?.cancel()
+                transitionTask = Task { @MainActor in
                     try? await Task.sleep(for: .milliseconds(500))
+                    if Task.isCancelled { return }
                     startNewSeries()
                 }
             }
@@ -281,6 +287,12 @@ final class UnMotSurDeuxViewModel {
         if sortedWords1.contains(word) { return 1 }
         if sortedWords2.contains(word) { return 2 }
         return 0
+    }
+
+    func stopGame() {
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -301,6 +313,23 @@ struct UnMotSurDeuxView: View {
         .padding()
         .navigationTitle("Un Mot sur Deux")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Un Mot sur Deux",
+                    rules: [
+                        RuleItem(icon: "textformat.abc", text: "2 thématiques mélangées"),
+                        RuleItem(icon: "arrow.left.arrow.right", text: "Alterne entre les 2 thèmes"),
+                        RuleItem(icon: "textformat.abc.dottedunderline", text: "Ordre alphabétique dans chaque thème"),
+                        RuleItem(icon: "exclamationmark.triangle", text: "Erreur = recommencer la série")
+                    ],
+                    accentColor: .indigo
+                )
+            }
+        }
+        .onDisappear {
+            viewModel.stopGame()
+        }
     }
 
     private var startView: some View {

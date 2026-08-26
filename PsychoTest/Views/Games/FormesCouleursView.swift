@@ -67,6 +67,7 @@ final class FormesCouleursViewModel {
 
     private var displayTask: Task<Void, Never>?
     private var answerTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     var accuracy: Double {
         let total = correctAnswers + wrongAnswers
@@ -96,24 +97,24 @@ final class FormesCouleursViewModel {
         isWaitingForAnswer = false
         timeRemaining = 2.5
 
-        // Afficher la forme pendant 0.5s
-        displayTask = Task {
-            try? await Task.sleep(for: .milliseconds(500))
-            if !Task.isCancelled {
-                isShowingShape = false
-                isWaitingForAnswer = true
-                startAnswerTimer()
-            }
+        // Afficher la forme pendant 0.8s
+        displayTask?.cancel()
+        displayTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(800))
+            if Task.isCancelled { return }
+            isShowingShape = false
+            isWaitingForAnswer = true
+            startAnswerTimer()
         }
     }
 
     private func startAnswerTimer() {
-        answerTask = Task {
+        answerTask?.cancel()
+        answerTask = Task { @MainActor in
             while !Task.isCancelled && timeRemaining > 0 {
                 try? await Task.sleep(for: .milliseconds(100))
-                if !Task.isCancelled {
-                    timeRemaining -= 0.1
-                }
+                if Task.isCancelled { break }
+                timeRemaining -= 0.1
             }
             if !Task.isCancelled && isWaitingForAnswer {
                 handleTimeout()
@@ -136,9 +137,11 @@ final class FormesCouleursViewModel {
         if key == shape.expectedKey {
             correctAnswers += 1
             feedback = "Correct !"
+            HapticManager.success()
         } else {
             wrongAnswers += 1
             feedback = "Faux ! C'était \(shape.expectedKey)"
+            HapticManager.error()
         }
 
         moveToNext()
@@ -147,8 +150,10 @@ final class FormesCouleursViewModel {
     private func moveToNext() {
         currentIndex += 1
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(600))
+            if Task.isCancelled { return }
             showNextShape()
         }
     }
@@ -156,6 +161,7 @@ final class FormesCouleursViewModel {
     private func endGame() {
         displayTask?.cancel()
         answerTask?.cancel()
+        transitionTask?.cancel()
         isGameActive = false
         isGameOver = true
     }
@@ -163,6 +169,9 @@ final class FormesCouleursViewModel {
     func stopGame() {
         displayTask?.cancel()
         answerTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -236,6 +245,20 @@ struct FormesCouleursView: View {
         .padding()
         .navigationTitle("Formes et Couleurs")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Formes et Couleurs",
+                    rules: [
+                        RuleItem(icon: "square.dotted", text: "VIDE: N=Bleu, X=Orange"),
+                        RuleItem(icon: "square.fill", text: "REMPLI: N=Carré, X=Triangle"),
+                        RuleItem(icon: "timer", text: "3 secondes par forme"),
+                        RuleItem(icon: "eye", text: "Forme visible 0.8 seconde")
+                    ],
+                    accentColor: .pink
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }
@@ -288,7 +311,7 @@ struct FormesCouleursView: View {
             .background(Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
-            Text("30 formes • 0.5s affichage • 2.5s réponse")
+            Text("30 formes • 0.8s affichage • 2.5s réponse")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

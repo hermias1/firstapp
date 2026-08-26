@@ -20,6 +20,7 @@ final class M2BackViewModel {
     private var sequence: [Int] = []
     private var timerTask: Task<Void, Never>?
     private var answerTimerTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     enum AnswerFeedback {
         case correct
@@ -45,14 +46,44 @@ final class M2BackViewModel {
     }
 
     private func generateSequence() {
-        // Générer une séquence avec environ 30% de correspondances M2
+        // Générer une séquence probabiliste intelligente avec auto-équilibrage
         sequence = []
-        for i in 0..<totalNumbers {
-            if i >= 2 && Bool.random() && Double.random(in: 0...1) < 0.3 {
-                // 30% de chance de répéter le nombre d'il y a 2 positions
+
+        // Générer 2 premiers nombres aléatoires (pas de match possible)
+        sequence.append(Int.random(in: 0...9))
+        sequence.append(Int.random(in: 0...9))
+
+        var matchCount: Int = 0  // Nombre de matches générés
+        let targetMatchRate = 0.5  // Objectif : 50% de matches en moyenne
+
+        for i in 2..<totalNumbers {
+            // Calculer combien de matches on devrait avoir à ce stade
+            let expectedMatches = Double(i - 2) * targetMatchRate
+            let actualMatches = Double(matchCount)
+            let debt = expectedMatches - actualMatches  // Dette de matches
+
+            // Ajuster la probabilité selon la dette
+            // Si debt > 0 : on est en retard, augmenter la probabilité
+            // Si debt < 0 : on est en avance, diminuer la probabilité
+            let baseProbability = 0.5
+            let adjustment = debt * 0.1  // Facteur d'ajustement progressif
+            var probability = baseProbability + adjustment
+
+            // Limiter entre 20% et 80% pour garder de l'imprévisibilité
+            probability = min(max(probability, 0.2), 0.8)
+
+            // Décision probabiliste
+            if Double.random(in: 0...1) < probability {
+                // Match : répéter le nombre de n-2
                 sequence.append(sequence[i - 2])
+                matchCount += 1
             } else {
-                sequence.append(Int.random(in: 0...9))
+                // Pas de match : générer un nombre différent de n-2
+                var newNumber: Int
+                repeat {
+                    newNumber = Int.random(in: 0...9)
+                } while newNumber == sequence[i - 2]
+                sequence.append(newNumber)
             }
         }
     }
@@ -69,10 +100,18 @@ final class M2BackViewModel {
         isWaitingForAnswer = false
 
         // Afficher le nombre pendant 1 seconde
-        timerTask = Task {
+        timerTask?.cancel()
+        timerTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
-            if !Task.isCancelled {
-                isShowingNumber = false
+            if Task.isCancelled { return }
+            isShowingNumber = false
+
+            // Les 2 premiers nombres : pas de question (pas de n-2 encore)
+            if currentIndex < 2 {
+                // Passer directement au suivant sans demander de réponse
+                moveToNext()
+            } else {
+                // À partir du 3ème nombre : demander si ça match n-2
                 isWaitingForAnswer = true
                 timeRemaining = 3.0
                 startAnswerTimer()
@@ -81,12 +120,12 @@ final class M2BackViewModel {
     }
 
     private func startAnswerTimer() {
-        answerTimerTask = Task {
+        answerTimerTask?.cancel()
+        answerTimerTask = Task { @MainActor in
             while !Task.isCancelled && timeRemaining > 0 {
                 try? await Task.sleep(for: .milliseconds(100))
-                if !Task.isCancelled {
-                    timeRemaining -= 0.1
-                }
+                if Task.isCancelled { break }
+                timeRemaining -= 0.1
             }
             if !Task.isCancelled && isWaitingForAnswer {
                 // Temps écoulé = mauvaise réponse
@@ -118,9 +157,11 @@ final class M2BackViewModel {
         if isMatch == actualMatch {
             correctAnswers += 1
             feedback = .correct
+            HapticManager.success()
         } else {
             wrongAnswers += 1
             feedback = .wrong
+            HapticManager.error()
         }
 
         moveToNext()
@@ -130,8 +171,10 @@ final class M2BackViewModel {
         history.append(currentNumber)
         currentIndex += 1
 
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(500))
+            if Task.isCancelled { return }
             showNextNumber()
         }
     }
@@ -146,6 +189,9 @@ final class M2BackViewModel {
     func stopGame() {
         timerTask?.cancel()
         answerTimerTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 }
 
@@ -166,6 +212,21 @@ struct M2BackView: View {
         .padding()
         .navigationTitle("M2 Back")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - M2 Back",
+                    rules: [
+                        RuleItem(icon: "eye", text: "Un chiffre s'affiche pendant 1 seconde"),
+                        RuleItem(icon: "timer", text: "Tu as 3 secondes pour répondre"),
+                        RuleItem(icon: "checkmark.circle", text: "OUI si le chiffre = celui d'il y a 2 coups"),
+                        RuleItem(icon: "xmark.circle", text: "NON sinon"),
+                        RuleItem(icon: "number", text: "42 chiffres au total")
+                    ],
+                    accentColor: .purple
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }
@@ -256,34 +317,12 @@ struct M2BackView: View {
                 }
             }
 
-            // Historique (2 derniers)
-            HStack(spacing: 20) {
-                if viewModel.history.count >= 2 {
-                    VStack {
-                        Text("n-2")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(viewModel.history[viewModel.history.count - 2])")
-                            .font(.title2.weight(.semibold))
-                            .padding(12)
-                            .background(Color.purple.opacity(0.2))
-                            .clipShape(Circle())
-                    }
-                }
-                if viewModel.history.count >= 1 {
-                    VStack {
-                        Text("n-1")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(viewModel.history[viewModel.history.count - 1])")
-                            .font(.title2.weight(.semibold))
-                            .padding(12)
-                            .background(Color(.systemGray5))
-                            .clipShape(Circle())
-                    }
-                }
+            // Message d'aide
+            if viewModel.isWaitingForAnswer {
+                Text("Mémorise !")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .frame(height: 80)
 
             // Feedback
             if let feedback = viewModel.feedback {

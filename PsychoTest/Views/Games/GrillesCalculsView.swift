@@ -34,7 +34,9 @@ struct Calculation: Identifiable {
             correctResult = 2
         }
 
-        let isCorrect = !allowWrong || Bool.random()
+        // Si allowWrong=true, alors isCorrect=false (100% faux)
+        // Si allowWrong=false, alors isCorrect=true (100% correct)
+        let isCorrect = !allowWrong
         let displayedResult: Int
 
         if isCorrect {
@@ -69,6 +71,7 @@ final class GrillesCalculsViewModel {
     var lastGridScore: (correct: Int, wrong: Int, missed: Int)?
 
     private var timerTask: Task<Void, Never>?
+    private var transitionTask: Task<Void, Never>?
 
     var totalScore: Int {
         gridResults.reduce(0) { $0 + $1.correct - $1.wrong }
@@ -110,12 +113,12 @@ final class GrillesCalculsViewModel {
     }
 
     private func startTimer() {
-        timerTask = Task {
+        timerTask?.cancel()
+        timerTask = Task { @MainActor in
             while !Task.isCancelled && timeRemaining > 0 {
                 try? await Task.sleep(for: .seconds(1))
-                if !Task.isCancelled {
-                    timeRemaining -= 1
-                }
+                if Task.isCancelled { break }
+                timeRemaining -= 1
             }
             if !Task.isCancelled {
                 validateGrid()
@@ -144,9 +147,18 @@ final class GrillesCalculsViewModel {
         lastGridScore = (correctSelections, wrongSelections, missedWrong)
         gridResults.append((correctSelections, wrongSelections, missedWrong))
 
+        // Haptic feedback basé sur la performance
+        if wrongSelections == 0 && missedWrong == 0 {
+            HapticManager.success()
+        } else if wrongSelections > 0 || missedWrong > 0 {
+            HapticManager.warning()
+        }
+
         // Passer à la grille suivante après un délai
-        Task {
+        transitionTask?.cancel()
+        transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(2))
+            if Task.isCancelled { return }
             currentGrid += 1
             if currentGrid >= totalGrids {
                 isGameActive = false
@@ -159,6 +171,9 @@ final class GrillesCalculsViewModel {
 
     func stopGame() {
         timerTask?.cancel()
+        transitionTask?.cancel()
+        isGameActive = false
+        isGameOver = false
     }
 
     func isWrong(_ calc: Calculation) -> Bool {
@@ -183,6 +198,21 @@ struct GrillesCalculsView: View {
         .padding()
         .navigationTitle("Grilles de Calculs")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Grilles de Calculs",
+                    rules: [
+                        RuleItem(icon: "square.grid.3x3", text: "Grille de 9 calculs"),
+                        RuleItem(icon: "xmark.circle", text: "0 à 4 calculs sont faux"),
+                        RuleItem(icon: "hand.tap", text: "Clique sur les calculs faux"),
+                        RuleItem(icon: "checkmark.circle", text: "Valide après chaque grille"),
+                        RuleItem(icon: "timer", text: "45 secondes par grille")
+                    ],
+                    accentColor: .orange
+                )
+            }
+        }
         .onDisappear {
             viewModel.stopGame()
         }

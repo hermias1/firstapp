@@ -17,6 +17,23 @@ struct MentalCalculationView: View {
         .padding()
         .navigationTitle("Calcul Mental")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                GameRulesButton(
+                    title: "Règles - Calcul Mental",
+                    rules: [
+                        RuleItem(icon: "plus.forwardslash.minus", text: "Résous des opérations (+, -, ×, ÷)"),
+                        RuleItem(icon: "timer", text: "60 secondes au total"),
+                        RuleItem(icon: "flame", text: "Le max d'opérations possible"),
+                        RuleItem(icon: "star", text: "Bonus de temps pour les réponses rapides")
+                    ],
+                    accentColor: .blue
+                )
+            }
+        }
+        .onDisappear {
+            viewModel.stopGame()
+        }
     }
 
     // MARK: - Start View
