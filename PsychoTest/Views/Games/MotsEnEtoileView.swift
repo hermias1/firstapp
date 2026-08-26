@@ -1,75 +1,133 @@
 import SwiftUI
 
 // MARK: - Model
+
+/// Un puzzle vérifié : les 6 mots de `solution` partagent `commonLetters`,
+/// et aucun autre groupe de 6 mots parmi les 9 n'en partage autant.
+/// Cette unicité est garantie à la construction du corpus et vérifiée par les tests.
+struct StarPuzzleData {
+    let solution: [String]
+    let distractors: [String]
+    let commonLetters: String
+}
+
 struct StarPuzzle {
-    let words: [String] // 9 mots de 7 lettres
-    let solution: [String] // 6 mots qui forment une solution valide
+    let words: [String] // les 9 mots proposés
+    let solution: [String] // les 6 mots à retrouver
+    let commonLetters: String // les lettres que partagent les 6 mots
+
+    /// Corpus de mots français validés par le correcteur orthographique système.
+    /// Tous les mots d'un même puzzle ont la même longueur : une longueur
+    /// différente serait un indice visuel gratuit.
+    static let allPuzzles: [StarPuzzleData] = [
+        StarPuzzleData(
+            solution: ["GERMINAL", "ASPIRINE", "OREILLER", "REPLIQUE", "EUPHORIE", "SONNERIE"],
+            distractors: ["JUDAISME", "EMERAUDE", "CHEVALET"],
+            commonLetters: "EIR"
+        ),
+        StarPuzzleData(
+            solution: ["REUNION", "NEUTRON", "TERREUR", "MERCURE", "COULEUR", "MARTEAU"],
+            distractors: ["MEMOIRE", "CONSOLE", "MUSIQUE"],
+            commonLetters: "ERU"
+        ),
+        StarPuzzleData(
+            solution: ["TERRASSE", "EMERAUDE", "ASPIRINE", "LANTERNE", "PASSOIRE", "SCENARIO"],
+            distractors: ["BALTIQUE", "OREILLER", "PONCEUSE"],
+            commonLetters: "AER"
+        ),
+        StarPuzzleData(
+            solution: ["TENAILLE", "CANNELLE", "ALLEMAND", "GERMINAL", "ELECTRON", "LENTILLE"],
+            distractors: ["PASSOIRE", "ANGOISSE", "TONNERRE"],
+            commonLetters: "ELN"
+        ),
+        StarPuzzleData(
+            solution: ["ELEPHANT", "PATIENCE", "ASPIRINE", "PANCREAS", "PASSOIRE", "PANTHERE"],
+            distractors: ["COSTUMES", "SEIGNEUR", "DENTELLE"],
+            commonLetters: "AEP"
+        ),
+        StarPuzzleData(
+            solution: ["MURAILLE", "IMMEUBLE", "BALTIQUE", "ZOOLOGIE", "REPLIQUE", "TENAILLE"],
+            distractors: ["ASPIRINE", "JUDAISME", "NOUVELLE"],
+            commonLetters: "EIL"
+        ),
+        StarPuzzleData(
+            solution: ["ASPIRINE", "LENTILLE", "VENDREDI", "PROTEINE", "PEINTURE", "DIMANCHE"],
+            distractors: ["PANTHERE", "CHEVALET", "JUDAISME"],
+            commonLetters: "EIN"
+        ),
+        StarPuzzleData(
+            solution: ["EUPHORIE", "THYROIDE", "PYRAMIDE", "CUILLERE", "CHANTIER", "REPLIQUE"],
+            distractors: ["ANGOISSE", "IMMEUBLE", "BIOLOGIE"],
+            commonLetters: "EIR"
+        ),
+        StarPuzzleData(
+            solution: ["MERCURE", "GUEPARD", "TERREUR", "COURAGE", "CORBEAU", "HUMERUS"],
+            distractors: ["AMPOULE", "LOYAUTE", "BASILIC"],
+            commonLetters: "ERU"
+        ),
+        StarPuzzleData(
+            solution: ["TERRASSE", "BORDEAUX", "ESTUAIRE", "ESCARPIN", "SCARABEE", "ASPIRINE"],
+            distractors: ["EQUINOXE", "THYROIDE", "ESQUISSE"],
+            commonLetters: "AER"
+        ),
+        StarPuzzleData(
+            solution: ["PHYSIQUE", "MURAILLE", "JUDAISME", "ARCTIQUE", "REPLIQUE", "EUPHORIE"],
+            distractors: ["ELEPHANT", "ELECTRON", "LANTERNE"],
+            commonLetters: "EIU"
+        ),
+        StarPuzzleData(
+            solution: ["LANTERNE", "SCARABEE", "EMERAUDE", "BORDEAUX", "TRIANGLE", "MURAILLE"],
+            distractors: ["EQUINOXE", "PHYSIQUE", "CHOCOLAT"],
+            commonLetters: "AER"
+        ),
+        StarPuzzleData(
+            solution: ["BALTIQUE", "BASTILLE", "PATINAGE", "SOLSTICE", "ARCTIQUE", "THYROIDE"],
+            distractors: ["BORDEAUX", "PONCEUSE", "DENTELLE"],
+            commonLetters: "EIT"
+        ),
+        StarPuzzleData(
+            solution: ["BATTERIE", "CUILLERE", "REPLIQUE", "GERMINAL", "PYRAMIDE", "ARCTIQUE"],
+            distractors: ["JUDAISME", "LUNETTES", "NOVEMBRE"],
+            commonLetters: "EIR"
+        ),
+        StarPuzzleData(
+            solution: ["CEINTURE", "REPLIQUE", "PASSOIRE", "PYRAMIDE", "ESTUAIRE", "CUILLERE"],
+            distractors: ["BORDEAUX", "COSTUMES", "NATATION"],
+            commonLetters: "EIR"
+        ),
+        StarPuzzleData(
+            solution: ["PATINAGE", "SCENARIO", "TENAILLE", "INTESTIN", "PEINTURE", "CEINTURE"],
+            distractors: ["PASSOIRE", "PERCEUSE", "PAPILLON"],
+            commonLetters: "EIN"
+        ),
+        StarPuzzleData(
+            solution: ["PATINAGE", "GERMINAL", "SCENARIO", "ARCTIQUE", "BALTIQUE", "ESCARPIN"],
+            distractors: ["PORTRAIT", "PANCREAS", "ELECTRON"],
+            commonLetters: "AEI"
+        ),
+        StarPuzzleData(
+            solution: ["GERMINAL", "ASPIRINE", "PYRAMIDE", "BATTERIE", "CEINTURE", "SONNERIE"],
+            distractors: ["ANGOISSE", "NATATION", "LUNETTES"],
+            commonLetters: "EIR"
+        ),
+        StarPuzzleData(
+            solution: ["NOVEMBRE", "GERMINAL", "CHANTIER", "ESCARPIN", "PRUDENCE", "TRIANGLE"],
+            distractors: ["SCARABEE", "DENTELLE", "ALLEMAND"],
+            commonLetters: "ENR"
+        ),
+        StarPuzzleData(
+            solution: ["MAGAZINE", "PATIENCE", "TRIANGLE", "EQUINOXE", "PATINAGE", "LENTILLE"],
+            distractors: ["BOURGEON", "PORTRAIT", "ORCHIDEE"],
+            commonLetters: "EIN"
+        ),
+    ]
 
     static func generate() -> StarPuzzle {
-        // Mots de 6-8 lettres avec des lettres communes
-        let wordSets: [[String]] = [
-            // Set 1 - Lettres communes: A, E, R
-            ["ABRICOT", "ARBITRE", "CALIBRE", "DECIBEL", "ESCRIME", "GERBIER", "HERBIER", "LIBERAL", "MINERAL"],
-            // Set 2 - Lettres communes: I, O, N
-            ["ABEILLE", "CABINET", "DEBITER", "FENETRE", "GLACIER", "HABITUE", "INCITER", "JANVIER", "LIBERTÉ"],
-            // Set 3 - Lettres communes: E, R, T
-            ["ACROBAT", "BAROQUE", "CAPABLE", "DECORER", "ECARTER", "FABULER", "GALOPER", "HABITER", "IMPOSER"],
-            // Set 4 - Lettres communes: A, L, E
-            ["ADAPTER", "BALAYER", "CAPABLE", "DERNIER", "ECLATER", "FACETTE", "GALERIE", "HALETER", "IMPASSE"],
-            // Set 5 - Lettres communes: O, R, E
-            ["ADMIRER", "BALISER", "CAPORAL", "DECODER", "ECOLIER", "FABULER", "GAMBADE", "HABILLE", "IVRESSE"],
-            // Set 6 - Lettres communes: A, N, T
-            ["ABANDON", "BALANCE", "CABINET", "DANCING", "ELEGANT", "FANTOME", "GALANTE", "HABITANT", "INSTANT"],
-            // Set 7 - Lettres communes: E, S, T
-            ["ARTISTE", "BATISTE", "CELESTE", "DETESTE", "EGOISTE", "FACIÈS", "GESTION", "HISTOIRE", "INSISTE"],
-            // Set 8 - Lettres communes: I, R, E
-            ["ADMIRER", "BRUITER", "CITERAI", "DELITRE", "ECRITURE", "FILTRER", "GLISSER", "HERITER", "IGNORER"],
-            // Set 9 - Lettres communes: O, N, E
-            ["ABONNER", "BOUGONNE", "CANNONE", "DETONER", "ETONNER", "FLONNER", "GAZONN", "HONNETE", "IONISER"],
-            // Set 10 - Lettres communes: A, R, I
-            ["AFFIRME", "BÂTIR", "CHARITÉ", "DARLING", "ECRIRA", "FARCIR", "GARNIR", "HAIRAIT", "IMAGINA"],
-            // Set 11 - Lettres communes: E, L, A
-            ["ALERTER", "BALLADE", "CALEPIN", "DALMATE", "ELASTIQUE", "FALÁFEL", "GALETAS", "HALLEBARDE", "IDEALES"],
-            // Set 12 - Lettres communes: O, U, R
-            ["AMOUR", "BOUGRE", "COLOUR", "DETOUR", "EBOURGÉ", "FOUDRE", "GOURDE", "HOURRA", "INJURE"],
-            // Set 13 - Lettres communes: I, N, E
-            ["ANEMIE", "BENIGNE", "CANINE", "DIVINE", "ENIVRER", "FÉMININE", "GENUINE", "HIVERNE", "INANIME"],
-            // Set 14 - Lettres communes: A, T, E
-            ["ABATTRE", "BATTAGE", "CANTATE", "DATTERA", "EPATERA", "FATALE", "GÂTERIE", "HABITER", "IGNARE"],
-            // Set 15 - Lettres communes: O, S, E
-            ["ARROSER", "BOISÉES", "CHOISIE", "DEPOSIT", "EXPOSER", "FLOSSER", "GLOSSER", "HOSPICE", "IMPOSE"],
-            // Set 16 - Lettres communes: E, R, S
-            ["ADMIRES", "BRESSER", "CRISSER", "DRESSER", "EXPRESS", "FRESSER", "GRESSER", "HIESSER", "IVRESSE"],
-            // Set 17 - Lettres communes: A, N, E
-            ["ARCANES", "BANANES", "CANAPES", "DANOISE", "ENGANE", "FANFARE", "GANGRENE", "HANGAR", "INANITÉ"],
-            // Set 18 - Lettres communes: I, T, E
-            ["ABRITER", "BRUITER", "CITERAI", "DEBITER", "ECRITES", "FILTRER", "GÎTERA", "HÉRITER", "IMITERA"],
-            // Set 19 - Lettres communes: O, R, T
-            ["AVORTER", "BORTSCH", "CONFORT", "DISTORT", "EXHORTE", "FORT", "GORTEX", "HORTEUR", "IMPORT"],
-            // Set 20 - Lettres communes: A, L, I
-            ["ABOLIRA", "BALISER", "CALIBRE", "DALIBEC", "ÉTALIR", "FAMILIÉ", "GALIBOT", "HALIBUT", "INALIÉ"],
-        ]
-
-        // Choisir un set principal (6 mots corrects avec lettres communes)
-        let correctSetIndex = Int.random(in: 0..<wordSets.count)
-        let correctSet = wordSets[correctSetIndex].shuffled()
-        let correctWords = Array(correctSet.prefix(6))
-
-        // Choisir un set différent pour les 3 distracteurs
-        var distractorSetIndex: Int
-        repeat {
-            distractorSetIndex = Int.random(in: 0..<wordSets.count)
-        } while distractorSetIndex == correctSetIndex
-
-        let distractorSet = wordSets[distractorSetIndex].shuffled()
-        let distractorWords = Array(distractorSet.prefix(3))
-
-        // Mélanger les 9 mots ensemble
-        let allWords = (correctWords + distractorWords).shuffled()
-
+        let data = allPuzzles.randomElement()!
         return StarPuzzle(
-            words: allWords,
-            solution: correctWords
+            words: (data.solution + data.distractors).shuffled(),
+            solution: data.solution,
+            commonLetters: data.commonLetters
         )
     }
 }
@@ -89,6 +147,7 @@ final class MotsEnEtoileViewModel {
     var isGameActive: Bool = false
     var isGameOver: Bool = false
     var showResult: Bool = false
+    var lastAnswerCorrect: Bool = false
 
     private var timerTask: Task<Void, Never>?
     private var transitionTask: Task<Void, Never>?
@@ -107,6 +166,7 @@ final class MotsEnEtoileViewModel {
         placedWords = [:]
         selectedWord = nil
         showResult = false
+        lastAnswerCorrect = false
         timeRemaining = 50
         startTimer()
     }
@@ -166,6 +226,7 @@ final class MotsEnEtoileViewModel {
 
             if allCorrect {
                 correctAnswers += 1
+                lastAnswerCorrect = true
                 HapticManager.success()
             } else {
                 HapticManager.error()
@@ -310,7 +371,7 @@ struct MotsEnEtoileView: View {
                     title: "Règles - Mots en Étoile",
                     rules: [
                         RuleItem(icon: "textformat.size", text: "9 mots affichés"),
-                        RuleItem(icon: "checkmark.circle", text: "6 mots partagent des lettres communes"),
+                        RuleItem(icon: "checkmark.circle", text: "6 des 9 mots partagent 3 lettres"),
                         RuleItem(icon: "hand.tap", text: "Trouve et place les 6 bons mots"),
                         RuleItem(icon: "timer", text: "50 secondes par puzzle")
                     ],
@@ -388,6 +449,12 @@ struct MotsEnEtoileView: View {
                 TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 50)
             }
 
+            if let puzzle = viewModel.puzzle {
+                Text("Trouve les 6 mots qui partagent \(puzzle.commonLetters.count) lettres")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
             // Étoile
             StarPlacementView(
                 placedWords: viewModel.placedWords,
@@ -400,7 +467,19 @@ struct MotsEnEtoileView: View {
             )
 
             // Instructions
-            if let selected = viewModel.selectedWord {
+            if viewModel.showResult {
+                VStack(spacing: 4) {
+                    Text(viewModel.lastAnswerCorrect ? "Correct !" : "Raté")
+                        .font(.headline)
+                        .foregroundStyle(viewModel.lastAnswerCorrect ? .green : .red)
+                    if !viewModel.lastAnswerCorrect, let puzzle = viewModel.puzzle {
+                        Text("Solution : " + puzzle.solution.joined(separator: ", "))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+            } else if let selected = viewModel.selectedWord {
                 Text("Mot sélectionné: \(selected)")
                     .font(.subheadline)
                     .foregroundStyle(.yellow)

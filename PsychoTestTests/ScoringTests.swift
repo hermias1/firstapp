@@ -119,3 +119,64 @@ func boitesAMotsToutesLesSeriesJouables() {
     // Avec un tirage aléatoire, chaque série doit pouvoir ouvrir une partie
     #expect(vues.count > 5)
 }
+
+// MARK: - Mots en Étoile
+
+private func lettresCommunes(_ mots: [String]) -> Set<Character> {
+    guard let premier = mots.first else { return [] }
+    return mots.dropFirst().reduce(Set(premier)) { $0.intersection(Set($1)) }
+}
+
+/// Tous les sous-ensembles de 6 mots parmi les 9 proposés.
+private func groupesDeSix(_ mots: [String]) -> [[String]] {
+    var resultat: [[String]] = []
+    func choisir(_ debut: Int, _ courant: [String]) {
+        if courant.count == 6 { resultat.append(courant); return }
+        guard debut < mots.count else { return }
+        for i in debut..<mots.count {
+            choisir(i + 1, courant + [mots[i]])
+        }
+    }
+    choisir(0, [])
+    return resultat
+}
+
+@Test("Chaque puzzle propose 9 mots distincts")
+func etoileNeufMotsDistincts() {
+    for puzzle in StarPuzzle.allPuzzles {
+        let mots = puzzle.solution + puzzle.distractors
+        #expect(mots.count == 9)
+        #expect(Set(mots).count == 9)
+    }
+}
+
+@Test("La solution partage bien les lettres annoncées")
+func etoileLettresAnnonceesExactes() {
+    for puzzle in StarPuzzle.allPuzzles {
+        let communes = lettresCommunes(puzzle.solution)
+        #expect(communes == Set(puzzle.commonLetters),
+                "Puzzle \(puzzle.commonLetters) : lettres réelles \(communes.sorted())")
+    }
+}
+
+@Test("Aucun autre groupe de 6 mots ne partage autant de lettres")
+func etoileSolutionUnique() {
+    for puzzle in StarPuzzle.allPuzzles {
+        let mots = puzzle.solution + puzzle.distractors
+        let cible = lettresCommunes(puzzle.solution).count
+        for groupe in groupesDeSix(mots) where Set(groupe) != Set(puzzle.solution) {
+            // Un groupe concurrent aussi bon rendrait le puzzle indevinable
+            #expect(lettresCommunes(groupe).count < cible,
+                    "Groupe concurrent \(groupe) dans le puzzle \(puzzle.commonLetters)")
+        }
+    }
+}
+
+@Test("Les mots d'un puzzle ont tous la même longueur")
+func etoileLongueurHomogene() {
+    for puzzle in StarPuzzle.allPuzzles {
+        let longueurs = Set((puzzle.solution + puzzle.distractors).map(\.count))
+        // Une longueur différente serait un indice visuel gratuit
+        #expect(longueurs.count == 1)
+    }
+}
