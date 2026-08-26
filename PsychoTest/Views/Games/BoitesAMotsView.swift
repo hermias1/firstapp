@@ -316,7 +316,7 @@ struct BoitesAMotsView: View {
                 GameRulesButton(
                     title: "Règles - Boîtes à Mots",
                     rules: [
-                        RuleItem(icon: "tray", text: "4 à 6 boîtes vides"),
+                        RuleItem(icon: "tray", text: "4 boîtes vides à remplir"),
                         RuleItem(icon: "eye", text: "Un mot apparaît brièvement"),
                         RuleItem(icon: "hand.tap", text: "Range-le dans la boîte de son thème"),
                         RuleItem(icon: "lightbulb", text: "Tu définis toi-même les associations")
@@ -348,7 +348,7 @@ struct BoitesAMotsView: View {
                     .font(.headline)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("4 à 6 boîtes vides", systemImage: "tray")
+                    Label("4 boîtes vides à remplir", systemImage: "tray")
                     Label("Un mot apparaît brièvement", systemImage: "eye")
                     Label("Range-le dans la boîte de son thème", systemImage: "hand.tap")
                     Label("Tu définis toi-même les associations", systemImage: "lightbulb")
@@ -452,7 +452,7 @@ struct BoitesAMotsView: View {
             Spacer()
 
             // Progression
-            Text("Mot \(viewModel.currentWordIndex + 1)/\(viewModel.wordQueue.count)")
+            Text("Mot \(min(viewModel.currentWordIndex + 1, viewModel.wordQueue.count))/\(viewModel.wordQueue.count)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

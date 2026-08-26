@@ -130,6 +130,9 @@ final class GrillesCalculsViewModel {
     }
 
     func validateGrid() {
+        // Sans cette garde, un appui déjà en vol au moment où le chrono
+        // expire valide la grille une seconde fois et compte son score double.
+        guard !showingResult else { return }
         timerTask?.cancel()
         showingResult = true
 

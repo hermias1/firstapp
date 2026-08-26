@@ -360,7 +360,7 @@ final class AnglaisQCMViewModel {
         selectedAnswer = nil
         showFeedback = false
 
-        if currentIndex >= totalQuestions {
+        if currentIndex >= questions.count {
             endGame()
         } else {
             shuffleCurrentOptions()
@@ -369,6 +369,7 @@ final class AnglaisQCMViewModel {
 
     private func endGame() {
         timerTask?.cancel()
+        transitionTask?.cancel()
         isGameActive = false
         isGameOver = true
     }

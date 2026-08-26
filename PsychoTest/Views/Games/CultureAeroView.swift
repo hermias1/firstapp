@@ -253,6 +253,7 @@ final class CultureAeroViewModel {
     }
 
     func skipQuestion() {
+        guard selectedAnswer == nil else { return }
         skipped += 1
         moveToNext()
     }
