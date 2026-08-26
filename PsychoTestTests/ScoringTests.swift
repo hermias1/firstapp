@@ -385,6 +385,7 @@ struct PersistanceTests {
             { let v = GrillesCalculsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = BillesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = MentalCalculationViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -478,5 +479,63 @@ func billesOptionsBienFormees() {
         #expect(Set(puzzle.options).count == 4)
         #expect(puzzle.options.contains(puzzle.solution))
         #expect(puzzle.options.allSatisfy { $0 >= 1 })
+    }
+}
+
+// MARK: - Formes Glissées
+
+@Test("Superposer deux fois la même forme au même endroit annule son effet")
+func formesSuperpositionEstUnOuExclusif() {
+    let forme = FormesGlisseesGenerator.catalogue[0]
+    var grille = FormesGlisseesGenerator.grilleVide(5)
+    let position = FormeGlissee.Position(ligne: 1, colonne: 1)
+
+    FormesGlisseesGenerator.appliquer(forme, en: position, sur: &grille)
+    #expect(grille.flatMap { $0 }.contains(true))
+
+    // Gris + gris = marine : la grille redevient vide
+    FormesGlisseesGenerator.appliquer(forme, en: position, sur: &grille)
+    #expect(grille == FormesGlisseesGenerator.grilleVide(5))
+}
+
+@Test("Une forme tient toujours entièrement dans la grille")
+func formesPositionsDansLaGrille() {
+    for forme in FormesGlisseesGenerator.catalogue {
+        for position in FormesGlisseesGenerator.positionsValides(forme, taille: 5) {
+            #expect(position.ligne + forme.hauteur <= 5)
+            #expect(position.colonne + forme.largeur <= 5)
+        }
+    }
+}
+
+@Test("Le catalogue ne contient pas deux fois la même forme")
+func formesCatalogueDistinct() {
+    let cat = FormesGlisseesGenerator.catalogue
+    for i in cat.indices {
+        for j in cat.indices where j > i {
+            let a = Set(cat[i].cases), b = Set(cat[j].cases)
+            #expect(!(a == b && cat[i].hauteur == cat[j].hauteur
+                      && cat[i].largeur == cat[j].largeur),
+                    "Formes \(i) et \(j) identiques")
+        }
+    }
+}
+
+@Test("Chaque grille générée a exactement une solution")
+func formesSolutionUnique() {
+    for _ in 0..<10 {
+        let puzzle = FormesGlisseesGenerator.generate()
+
+        // La solution annoncée doit reproduire la cible
+        var grille = FormesGlisseesGenerator.grilleVide(puzzle.taille)
+        for (forme, position) in zip(puzzle.formes, puzzle.solution) {
+            FormesGlisseesGenerator.appliquer(forme, en: position, sur: &grille)
+        }
+        #expect(grille == puzzle.cible)
+
+        // Et aucun autre placement ne doit y parvenir
+        let solutions = FormesGlisseesGenerator.nombreDeSolutions(
+            formes: puzzle.formes, cible: puzzle.cible, taille: puzzle.taille)
+        #expect(solutions == 1, "\(solutions) placements différents donnent la cible")
     }
 }

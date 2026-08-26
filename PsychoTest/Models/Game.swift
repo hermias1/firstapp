@@ -191,12 +191,12 @@ extension Game {
         Game(
             type: .formesGlissees,
             name: "Formes Glissées",
-            description: "Glisse des formes pour reproduire une figure cible",
+            description: "Superpose des formes pour reproduire une figure cible",
             icon: "square.on.square",
             color: .gray,
             category: .spatial,
             difficulty: .hard,
-            isImplemented: false
+            isImplemented: true
         ),
         Game(
             type: .cubes2D3D,
