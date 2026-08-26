@@ -11,6 +11,7 @@ final class PairImpairViewModel {
     var isGameActive: Bool = false
     var isGameOver: Bool = false
     var hasError: Bool = false
+    var errorCount: Int = 0
     var startTime: Date?
     var seriesTimes: [TimeInterval] = []
     var nextExpectedPair: Int = 0
@@ -32,12 +33,13 @@ final class PairImpairViewModel {
     func startGame() {
         currentSeries = 0
         seriesTimes = []
+        errorCount = 0
         isGameActive = true
         isGameOver = false
         startNewSeries()
     }
 
-    func startNewSeries() {
+    func startNewSeries(resetTimer: Bool = true) {
         hasError = false
         selectedNumbers = []
         hasStarted = false
@@ -65,7 +67,7 @@ final class PairImpairViewModel {
 
         // Mélanger pour affichage + ajouter "START" (représenté par 0)
         numbers = ([0] + selectedPairs + selectedImpairs).shuffled()
-        startTime = Date()
+        if resetTimer { startTime = Date() }
     }
 
     func selectNumber(_ number: Int) {
@@ -124,13 +126,14 @@ final class PairImpairViewModel {
 
     private func triggerError() {
         hasError = true
+        errorCount += 1
         HapticManager.error()
-        // Après une courte pause, on recommence la série
+        // Après une courte pause, une nouvelle série est tirée
         transitionTask?.cancel()
         transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
             if Task.isCancelled { return }
-            startNewSeries()
+            startNewSeries(resetTimer: false)
         }
     }
 
@@ -339,6 +342,7 @@ struct PairImpairView: View {
 
             VStack(spacing: 16) {
                 ResultRow(label: "Séries complétées", value: "\(viewModel.currentSeries)")
+                ResultRow(label: "Erreurs", value: "\(viewModel.errorCount)")
                 ResultRow(label: "Temps moyen", value: String(format: "%.1fs", viewModel.averageTime))
                 ResultRow(label: "Temps total", value: String(format: "%.1fs", viewModel.seriesTimes.reduce(0, +)))
             }

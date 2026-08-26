@@ -74,7 +74,7 @@ final class GrillesCalculsViewModel {
     private var transitionTask: Task<Void, Never>?
 
     var totalScore: Int {
-        gridResults.reduce(0) { $0 + $1.correct - $1.wrong }
+        gridResults.reduce(0) { $0 + $1.correct - $1.wrong - $1.missed }
     }
 
     var averageAccuracy: Double {
@@ -100,7 +100,7 @@ final class GrillesCalculsViewModel {
         timeRemaining = 45
 
         // Générer 9 calculs avec 0 à 4 faux
-        let wrongCount = Int.random(in: 0...4)
+        let wrongCount = Int.random(in: 1...4)
         var calcs: [Calculation] = []
 
         for i in 0..<9 {

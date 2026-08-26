@@ -152,6 +152,7 @@ final class UnMotSurDeuxViewModel {
     var isGameActive: Bool = false
     var isGameOver: Bool = false
     var hasError: Bool = false
+    var errorCount: Int = 0
     var startTime: Date?
     var seriesTimes: [TimeInterval] = []
 
@@ -181,12 +182,13 @@ final class UnMotSurDeuxViewModel {
     func startGame() {
         currentSeries = 0
         seriesTimes = []
+        errorCount = 0
         isGameActive = true
         isGameOver = false
         startNewSeries()
     }
 
-    func startNewSeries() {
+    func startNewSeries(resetTimer: Bool = true) {
         hasError = false
         selectedWords = []
         expectingTheme1 = true
@@ -205,7 +207,7 @@ final class UnMotSurDeuxViewModel {
         // Mélanger tous les mots pour l'affichage
         allWords = (sortedWords1 + sortedWords2).shuffled()
 
-        startTime = Date()
+        if resetTimer { startTime = Date() }
     }
 
     func selectWord(_ word: String) {
@@ -249,11 +251,12 @@ final class UnMotSurDeuxViewModel {
 
     private func triggerError() {
         hasError = true
+        errorCount += 1
         transitionTask?.cancel()
         transitionTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
             if Task.isCancelled { return }
-            startNewSeries()
+            startNewSeries(resetTimer: false)
         }
     }
 
@@ -473,6 +476,7 @@ struct UnMotSurDeuxView: View {
 
             VStack(spacing: 16) {
                 ResultRow(label: "Séries complétées", value: "\(viewModel.currentSeries)")
+                ResultRow(label: "Erreurs", value: "\(viewModel.errorCount)")
                 ResultRow(label: "Temps moyen", value: String(format: "%.1fs", viewModel.averageTime))
                 ResultRow(label: "Temps total", value: String(format: "%.1fs", viewModel.seriesTimes.reduce(0, +)))
             }

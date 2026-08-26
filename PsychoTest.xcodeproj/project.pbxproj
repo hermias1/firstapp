@@ -29,6 +29,7 @@
 		A1000032 /* BoitesAMotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000032 /* BoitesAMotsView.swift */; };
 		A1000033 /* MotsEnEtoileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000033 /* MotsEnEtoileView.swift */; };
 		A1000040 /* GameRulesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000040 /* GameRulesButton.swift */; };
+		A1000090 /* ScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000090 /* ScoringTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,10 +56,37 @@
 		B1000033 /* MotsEnEtoileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotsEnEtoileView.swift; sourceTree = "<group>"; };
 		B1000040 /* GameRulesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRulesButton.swift; sourceTree = "<group>"; };
 		C1000001 /* PsychoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PsychoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1000090 /* ScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringTests.swift; sourceTree = "<group>"; };
+		C1000090 /* PsychoTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PsychoTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+		J1000090 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = H1000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1000001;
+			remoteInfo = PsychoTest;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		K1000090 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1000001 /* PsychoTest */;
+			targetProxy = J1000090 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D1000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1000090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				E1000002 /* PsychoTest */,
+				E1000090 /* PsychoTestTests */,
 				E1000010 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,8 +194,17 @@
 			isa = PBXGroup;
 			children = (
 				C1000001 /* PsychoTest.app */,
+				C1000090 /* PsychoTestTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E1000090 /* PsychoTestTests */ = {
+			isa = PBXGroup;
+			children = (
+				B1000090 /* ScoringTests.swift */,
+			);
+			path = PsychoTestTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +227,23 @@
 			productReference = C1000001 /* PsychoTest.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F1000090 /* PsychoTestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G1000090 /* Build configuration list for PBXNativeTarget "PsychoTestTests" */;
+			buildPhases = (
+				F1000091 /* Sources */,
+				D1000090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				K1000090 /* PBXTargetDependency */,
+			);
+			name = PsychoTestTests;
+			productName = PsychoTestTests;
+			productReference = C1000090 /* PsychoTestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -201,6 +256,10 @@
 				TargetAttributes = {
 					F1000001 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					F1000090 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = F1000001;
 					};
 				};
 			};
@@ -219,6 +278,7 @@
 			projectRoot = "";
 			targets = (
 				F1000001 /* PsychoTest */,
+				F1000090 /* PsychoTestTests */,
 			);
 		};
 /* End PBXProject section */
@@ -260,6 +320,14 @@
 				A1000032 /* BoitesAMotsView.swift in Sources */,
 				A1000033 /* MotsEnEtoileView.swift in Sources */,
 				A1000040 /* GameRulesButton.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1000091 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000090 /* ScoringTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +523,44 @@
 			};
 			name = Release;
 		};
+		I1000090 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8V4RJ7VX6Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colombani.psy0training.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PsychoTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PsychoTest";
+			};
+			name = Debug;
+		};
+		I1000091 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8V4RJ7VX6Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colombani.psy0training.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PsychoTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PsychoTest";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -472,6 +578,15 @@
 			buildConfigurations = (
 				I1000003 /* Debug */,
 				I1000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		G1000090 /* Build configuration list for PBXNativeTarget "PsychoTestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				I1000090 /* Debug */,
+				I1000091 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

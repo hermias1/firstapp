@@ -298,9 +298,8 @@ final class AnglaisQCMViewModel {
     }
 
     var accuracy: Double {
-        let total = correctAnswers + wrongAnswers
-        guard total > 0 else { return 0 }
-        return Double(correctAnswers) / Double(total) * 100
+        guard totalQuestions > 0 else { return 0 }
+        return Double(correctAnswers) / Double(totalQuestions) * 100
     }
 
     func startGame() {
