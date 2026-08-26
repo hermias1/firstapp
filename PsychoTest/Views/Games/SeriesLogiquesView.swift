@@ -66,7 +66,7 @@ struct LogicSequence: Identifiable {
         let step = Int.random(in: 2...8)
         let sequence = (0..<4).map { String(start + step * $0) }
         let answer = String(start + step * 4)
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Suite arithmétique : chaque terme = précédent + \(step)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .arithmetic, explanation: explanation)
     }
@@ -77,15 +77,16 @@ struct LogicSequence: Identifiable {
         let step = Int.random(in: 2...8)
         let sequence = (0..<4).map { String(start - step * $0) }
         let answer = String(start - step * 4)
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Suite décroissante : chaque terme = précédent - \(step)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .arithmeticNeg, explanation: explanation)
     }
 
     // Suite géométrique (limitée à 99)
     private static func generateGeometric() -> LogicSequence {
-        let start = Int.random(in: 2...3)
-        let multiplier = 2  // Limité à ×2 pour ne pas dépasser 99
+        // Combinaisons dont le 5e terme reste sous 100, en évitant les
+        // puissances de 2 pures, déjà couvertes par le type powersOfTwo.
+        let (start, multiplier) = [(3, 2), (5, 2), (6, 2), (1, 3)].randomElement()!
         var current = start
         var sequence: [String] = []
         for _ in 0..<4 {
@@ -93,7 +94,7 @@ struct LogicSequence: Identifiable {
             current *= multiplier
         }
         let answer = String(current)
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Suite géométrique : chaque terme = précédent × \(multiplier)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .geometric, explanation: explanation)
     }
@@ -112,7 +113,7 @@ struct LogicSequence: Identifiable {
             if seq.count >= 5 {
                 let sequence = seq.prefix(4).map { String($0) }
                 let answer = String(seq[4])
-                let options = generateOptions(correct: answer, isNumber: true)
+                let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
                 let explanation = "Suite de Fibonacci : chaque terme = somme des 2 précédents"
                 return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .fibonacci, explanation: explanation)
             }
@@ -131,8 +132,8 @@ struct LogicSequence: Identifiable {
             String(start2 + step)
         ]
         let answer = String(start1 + step * 2)
-        let options = generateOptions(correct: answer, isNumber: true)
-        let explanation = "Alternance de 2 suites : +\(step) sur positions impaires"
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
+        let explanation = "Deux suites entrelacées, chacune progressant de +\(step)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .alternating, explanation: explanation)
     }
 
@@ -144,7 +145,7 @@ struct LogicSequence: Identifiable {
         let start = Int.random(in: 0...maxStart)
         let sequence = (0..<4).map { String(letters[start + step * $0]) }
         let answer = String(letters[start + step * 4])
-        let options = generateOptions(correct: answer, isNumber: false)
+        let options = generateOptions(correct: answer, isNumber: false, shown: sequence)
         let explanation = "Alphabet : saut de \(step) lettre\(step > 1 ? "s" : "")"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .letters, explanation: explanation)
     }
@@ -154,8 +155,8 @@ struct LogicSequence: Identifiable {
         let start = Int.random(in: 1...3)
         let sequence = (start..<start+4).map { String($0 * $0) }
         let answer = String((start + 4) * (start + 4))
-        let options = generateOptions(correct: answer, isNumber: true)
-        let explanation = "Carrés parfaits : 1², 2², 3², 4²..."
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
+        let explanation = "Carrés parfaits : \(start)², \(start + 1)², \(start + 2)², \(start + 3)²..."
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .squares, explanation: explanation)
     }
 
@@ -164,8 +165,8 @@ struct LogicSequence: Identifiable {
         let start = Int.random(in: 0...2)  // 2^0, 2^1, ou 2^2 comme début
         let sequence = (start..<start+4).map { String(1 << $0) }
         let answer = String(1 << (start + 4))
-        let options = generateOptions(correct: answer, isNumber: true)
-        let explanation = "Puissances de 2 : 2⁰, 2¹, 2², 2³, 2⁴..."
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
+        let explanation = "Puissances de 2 successives, à partir de 2^\(start)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .powersOfTwo, explanation: explanation)
     }
 
@@ -175,7 +176,7 @@ struct LogicSequence: Identifiable {
         let start = Int.random(in: 0...primes.count-6)
         let sequence = (0..<4).map { String(primes[start + $0]) }
         let answer = String(primes[start + 4])
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Nombres premiers : divisibles uniquement par 1 et eux-mêmes"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .primes, explanation: explanation)
     }
@@ -186,14 +187,16 @@ struct LogicSequence: Identifiable {
         let start = Int.random(in: 1...3)
         let sequence = (start..<start+4).map { String($0 * base) }
         let answer = String((start + 4) * base)
-        let options = generateOptions(correct: answer, isNumber: true)
-        let explanation = "Multiples de \(base) : \(base), \(base*2), \(base*3)..."
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
+        let explanation = "Multiples de \(base), à partir de \(start * base)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .multiples, explanation: explanation)
     }
 
     // Double step (1, 2, 4, 7, 11, 16... +1, +2, +3, +4, +5...)
     private static func generateDoubleStep() -> LogicSequence {
-        let start = Int.random(in: 1...5)
+        // start = 2 produirait 2, 3, 5, 8 : une suite de Fibonacci tout aussi
+        // valable, dont la réponse (13) diffère de celle attendue ici (12).
+        let start = [1, 3, 4, 5, 6, 7, 8, 9].randomElement()!
         var current = start
         var sequence: [String] = [String(current)]
         var step = 1
@@ -206,7 +209,7 @@ struct LogicSequence: Identifiable {
 
         current += step
         let answer = String(current)
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Pas croissant : +1, +2, +3, +4..."
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .doubleStep, explanation: explanation)
     }
@@ -216,37 +219,46 @@ struct LogicSequence: Identifiable {
         let offset = Int.random(in: 1...2)
         let sequence = (1..<5).map { String($0 * $0 + offset) }
         let answer = String(5 * 5 + offset)
-        let options = generateOptions(correct: answer, isNumber: true)
+        let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
         let explanation = "Formule : n² + \(offset)"
         return LogicSequence(sequence: sequence, options: options, correctAnswer: answer, type: .squarePlusOne, explanation: explanation)
     }
 
-    private static func generateOptions(correct: String, isNumber: Bool) -> [String] {
+    private static func generateOptions(correct: String, isNumber: Bool,
+                                        shown: [String] = []) -> [String] {
         var options = [correct]
+        // Un distracteur déjà visible dans la série la trahit
+        let interdits = Set(shown)
 
         if isNumber, let num = Int(correct) {
             // Générer 3 mauvaises réponses proches
-            let offsets = [-4, -3, -2, -1, 1, 2, 3, 4, 5, 6].shuffled()
-            var added = 0
-
-            for offset in offsets {
-                let candidate = num + offset
-                if candidate > 0 && candidate <= 99 && !options.contains(String(candidate)) {
-                    options.append(String(candidate))
-                    added += 1
-                    if added >= 3 { break }
+            // On élargit progressivement l'écart tant que 3 distracteurs
+            // valides n'ont pas été trouvés : près des bornes ou quand la
+            // série occupe déjà les valeurs proches, les petits écarts
+            // ne suffisent pas.
+            var candidats: [String] = []
+            for ecart in 1...20 {
+                for signe in [-1, 1] {
+                    let candidate = num + signe * ecart
+                    let texte = String(candidate)
+                    if candidate > 0 && candidate <= 99
+                        && !options.contains(texte)
+                        && !interdits.contains(texte)
+                        && !candidats.contains(texte) {
+                        candidats.append(texte)
+                    }
                 }
+                if candidats.count >= 6 { break }
             }
+            options.append(contentsOf: candidats.shuffled().prefix(3))
         } else {
             // Pour les lettres
-            let letters = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-            if let index = letters.firstIndex(of: Character(correct)) {
-                let offsets = [-3, -2, -1, 1, 2, 3].shuffled().prefix(3)
-                for offset in offsets {
-                    let newIndex = (Int(index) + offset + 26) % 26
-                    options.append(String(letters[newIndex]))
-                }
-            }
+            // Toute lettre de l'alphabet peut servir de distracteur,
+            // sauf celles déjà visibles dans la série.
+            let candidats = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                .map(String.init)
+                .filter { !options.contains($0) && !interdits.contains($0) }
+            options.append(contentsOf: candidats.shuffled().prefix(3))
         }
 
         return options.shuffled()

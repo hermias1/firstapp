@@ -206,3 +206,40 @@ func aeroBanqueCoherente() {
     let libelles = AeroQuestion.allQuestions.map(\.question)
     #expect(Set(libelles).count == libelles.count, "Question dupliquée")
 }
+
+// MARK: - Séries Logiques
+
+@Test("Une option n'est jamais un terme déjà affiché dans la série")
+func seriesDistracteursInedits() {
+    for _ in 0..<3000 {
+        let q = LogicSequence.generate()
+        let affiches = Set(q.sequence)
+        for option in q.options where option != q.correctAnswer {
+            // « A B C D ? » proposant B, C ou D se résout sans lire la série
+            #expect(!affiches.contains(option),
+                    "Option \(option) déjà visible dans \(q.sequence)")
+        }
+    }
+}
+
+@Test("Chaque question propose 4 options distinctes dont la bonne")
+func seriesOptionsBienFormees() {
+    for _ in 0..<3000 {
+        let q = LogicSequence.generate()
+        #expect(q.options.count == 4, "\(q.sequence) -> \(q.options)")
+        #expect(Set(q.options).count == 4, "Doublon dans \(q.options)")
+        #expect(q.options.contains(q.correctAnswer))
+    }
+}
+
+@Test("La série 2 3 5 8, qui admet deux lectures valables, n'est plus générée")
+func seriesPasDeSequenceAmbigue() {
+    for _ in 0..<5000 {
+        let q = LogicSequence.generate()
+        if q.sequence == ["2", "3", "5", "8"] {
+            // Lecture Fibonacci : 13. Lecture à pas croissant : 12.
+            // Une seule doit rester possible, celle de Fibonacci.
+            #expect(q.correctAnswer == "13", "2 3 5 8 attend 13, pas \(q.correctAnswer)")
+        }
+    }
+}
