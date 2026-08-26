@@ -123,6 +123,7 @@ final class FormesCouleursViewModel {
     }
 
     private func handleTimeout() {
+        isWaitingForAnswer = false
         wrongAnswers += 1
         feedback = "Temps écoulé !"
         moveToNext()
@@ -252,7 +253,7 @@ struct FormesCouleursView: View {
                     rules: [
                         RuleItem(icon: "square.dotted", text: "VIDE: N=Bleu, X=Orange"),
                         RuleItem(icon: "square.fill", text: "REMPLI: N=Carré, X=Triangle"),
-                        RuleItem(icon: "timer", text: "3 secondes par forme"),
+                        RuleItem(icon: "timer", text: "2.5 secondes par forme"),
                         RuleItem(icon: "eye", text: "Forme visible 0.8 seconde")
                     ],
                     accentColor: .pink

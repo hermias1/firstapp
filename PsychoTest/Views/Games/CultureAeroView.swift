@@ -8,7 +8,7 @@ struct AeroQuestion: Identifiable {
     let correctAnswer: String
 }
 
-// MARK: - Questions Database (150+ questions)
+// MARK: - Questions Database (140 questions)
 extension AeroQuestion {
     static let allQuestions: [AeroQuestion] = [
         // PHYSIQUE DU VOL
@@ -164,12 +164,12 @@ extension AeroQuestion {
         AeroQuestion(question: "Le premier vol de l'A380 date de :", options: ["2005", "2000", "2010", "1998"], correctAnswer: "2005"),
         AeroQuestion(question: "Louis Blériot a traversé la Manche en :", options: ["1909", "1903", "1920", "1915"], correctAnswer: "1909"),
         AeroQuestion(question: "Antoine de Saint-Exupéry était :", options: ["Pilote et écrivain", "Ingénieur", "Mécanicien", "Contrôleur aérien"], correctAnswer: "Pilote et écrivain"),
-        AeroQuestion(question: "L'aéropostale transportait principalement :", options: ["Du courrier", "Des passagers", "Du fret", "Des militaires"], correctAnswer: "Du courrier"),
+        AeroQuestion(question: "L'Aéropostale transportait principalement :", options: ["Du courrier", "Des passagers", "Du fret", "Des militaires"], correctAnswer: "Du courrier"),
         AeroQuestion(question: "Jean Mermoz est célèbre pour :", options: ["Ses traversées de l'Atlantique Sud", "Le premier vol motorisé", "La traversée de la Manche", "Le mur du son"], correctAnswer: "Ses traversées de l'Atlantique Sud"),
 
         // QUESTIONS DIVERSES
         AeroQuestion(question: "Le carburant des avions de ligne est :", options: ["Du kérosène (Jet A1)", "De l'essence", "Du diesel", "Du GPL"], correctAnswer: "Du kérosène (Jet A1)"),
-        AeroQuestion(question: "Un noeud (kt) équivaut à :", options: ["1 mille nautique par heure", "1 km/h", "1 mph", "1 m/s"], correctAnswer: "1 mille nautique par heure"),
+        AeroQuestion(question: "Un nœud (kt) équivaut à :", options: ["1 mille nautique par heure", "1 km/h", "1 mph", "1 m/s"], correctAnswer: "1 mille nautique par heure"),
         AeroQuestion(question: "La boîte noire est généralement :", options: ["Orange", "Noire", "Rouge", "Blanche"], correctAnswer: "Orange"),
         AeroQuestion(question: "Le CVR enregistre :", options: ["Les conversations du cockpit", "Les paramètres de vol", "La vidéo", "Le carburant"], correctAnswer: "Les conversations du cockpit"),
         AeroQuestion(question: "Le FDR enregistre :", options: ["Les paramètres de vol", "Les conversations", "La vidéo", "La météo"], correctAnswer: "Les paramètres de vol"),
@@ -215,7 +215,7 @@ final class CultureAeroViewModel {
     }
 
     func startGame() {
-        // Sélectionner 30 questions aléatoires parmi 150+
+        // Sélectionner 30 questions aléatoires parmi 140
         questions = Array(AeroQuestion.allQuestions.shuffled().prefix(totalQuestions))
         currentIndex = 0
         score = 0
@@ -300,7 +300,7 @@ struct CultureAeroView: View {
                 GameRulesButton(
                     title: "Règles - Culture Aéro",
                     rules: [
-                        RuleItem(icon: "airplane", text: "20 QCM sur l'aviation"),
+                        RuleItem(icon: "airplane", text: "30 QCM sur l'aviation"),
                         RuleItem(icon: "plus.circle", text: "+3 points si correct"),
                         RuleItem(icon: "minus.circle", text: "-1 point si incorrect"),
                         RuleItem(icon: "forward", text: "Tu peux passer une question")
@@ -331,7 +331,7 @@ struct CultureAeroView: View {
                     .font(.headline)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("30 questions aléatoires parmi 150+", systemImage: "shuffle")
+                    Label("30 questions aléatoires parmi 140", systemImage: "shuffle")
                     Label("+3 points bonne réponse", systemImage: "plus.circle.fill")
                     Label("-1 point mauvaise réponse", systemImage: "minus.circle.fill")
                     Label("0 point si 'Je ne sais pas'", systemImage: "hand.raised.fill")

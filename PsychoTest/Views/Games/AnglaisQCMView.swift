@@ -14,7 +14,7 @@ struct EnglishQuestion: Identifiable {
     }
 }
 
-// MARK: - Questions Database (200+ questions)
+// MARK: - Questions Database (190 questions)
 extension EnglishQuestion {
     static let allQuestions: [EnglishQuestion] = grammarQuestions + vocabularyQuestions
 
@@ -173,7 +173,7 @@ extension EnglishQuestion {
         EnglishQuestion(question: "'ETA' stands for:", options: ["Estimated Time of Arrival", "Engine Test Alert", "Exit Through Aisle", "Emergency Team Action"], correctAnswer: "Estimated Time of Arrival", category: .vocabulary),
         EnglishQuestion(question: "A 'briefing' is a:", options: ["short meeting for information", "long report", "written document", "technical manual"], correctAnswer: "short meeting for information", category: .vocabulary),
         EnglishQuestion(question: "A 'tailwind' helps the plane to:", options: ["slow down", "speed up", "turn", "climb"], correctAnswer: "speed up", category: .vocabulary),
-        EnglishQuestion(question: "'To navigate' means to:", options: ["fly fast", "direct course", "land", "take off"], correctAnswer: "direct course", category: .vocabulary),
+        EnglishQuestion(question: "'To navigate' means to:", options: ["fly fast", "direct a course", "land", "take off"], correctAnswer: "direct a course", category: .vocabulary),
         EnglishQuestion(question: "The 'runway' is used for:", options: ["parking", "takeoff and landing", "maintenance", "refueling"], correctAnswer: "takeoff and landing", category: .vocabulary),
 
         // Common Synonyms
@@ -304,7 +304,7 @@ final class AnglaisQCMViewModel {
     }
 
     func startGame() {
-        // Sélectionner 30 questions aléatoires parmi 200+
+        // Sélectionner 30 questions aléatoires parmi 190
         questions = Array(EnglishQuestion.allQuestions.shuffled().prefix(totalQuestions))
 
         currentIndex = 0
@@ -412,7 +412,7 @@ struct AnglaisQCMView: View {
                         RuleItem(icon: "list.bullet", text: "30 QCM (grammaire + vocabulaire)"),
                         RuleItem(icon: "timer", text: "7 minutes 30 au total"),
                         RuleItem(icon: "clock", text: "~15 secondes par question"),
-                        RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 200+")
+                        RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 190")
                     ],
                     accentColor: .red
                 )
@@ -443,7 +443,7 @@ struct AnglaisQCMView: View {
                     Label("30 QCM (grammaire + vocabulaire)", systemImage: "list.bullet")
                     Label("7 minutes 30 au total", systemImage: "timer")
                     Label("~15 secondes par question", systemImage: "clock")
-                    Label("Questions aléatoires parmi 200+", systemImage: "shuffle")
+                    Label("Questions aléatoires parmi 190", systemImage: "shuffle")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)

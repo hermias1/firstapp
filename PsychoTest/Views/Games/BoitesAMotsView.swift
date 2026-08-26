@@ -135,6 +135,8 @@ final class BoitesAMotsViewModel {
     var showingWord: Bool = false
     var feedback: String?
 
+    private var seriesOrder: [Int] = []
+
     private var wordTask: Task<Void, Never>?
     private var transitionTask: Task<Void, Never>?
 
@@ -146,6 +148,7 @@ final class BoitesAMotsViewModel {
 
     func startGame() {
         currentSeries = 0
+        seriesOrder = Array(0..<WordCategory.allCategories.count).shuffled()
         correctAnswers = 0
         wrongAnswers = 0
         isGameActive = true
@@ -154,12 +157,12 @@ final class BoitesAMotsViewModel {
     }
 
     func startNewSeries() {
-        guard currentSeries < WordCategory.allCategories.count else {
+        guard currentSeries < seriesOrder.count else {
             endGame()
             return
         }
 
-        categories = WordCategory.allCategories[currentSeries]
+        categories = WordCategory.allCategories[seriesOrder[currentSeries]]
         boxAssignments = [:]
         feedback = nil
 

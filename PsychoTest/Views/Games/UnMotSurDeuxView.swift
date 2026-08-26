@@ -95,7 +95,7 @@ extension WordPair {
             words2: ["Arabe", "Cyrillique", "Grec", "Hébraïque", "Latin"]),
         WordPair(theme1: "Sens", theme2: "Organes",
             words1: ["Goût", "Odorat", "Ouïe", "Toucher", "Vue"],
-            words2: ["Cerveau", "Coeur", "Foie", "Poumon", "Rein"]),
+            words2: ["Cerveau", "Cœur", "Foie", "Poumon", "Rein"]),
         WordPair(theme1: "Émotions", theme2: "Vertus",
             words1: ["Amour", "Colère", "Joie", "Peur", "Tristesse"],
             words2: ["Courage", "Générosité", "Patience", "Prudence", "Sagesse"]),
@@ -199,8 +199,8 @@ final class UnMotSurDeuxViewModel {
         guard let pair = currentPair else { return }
 
         // Trier les mots par ordre alphabétique
-        sortedWords1 = pair.words1.sorted()
-        sortedWords2 = pair.words2.sorted()
+        sortedWords1 = pair.words1.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+        sortedWords2 = pair.words2.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
 
         // Mélanger tous les mots pour l'affichage
         allWords = (sortedWords1 + sortedWords2).shuffled()
@@ -321,7 +321,7 @@ struct UnMotSurDeuxView: View {
                         RuleItem(icon: "textformat.abc", text: "2 thématiques mélangées"),
                         RuleItem(icon: "arrow.left.arrow.right", text: "Alterne entre les 2 thèmes"),
                         RuleItem(icon: "textformat.abc.dottedunderline", text: "Ordre alphabétique dans chaque thème"),
-                        RuleItem(icon: "exclamationmark.triangle", text: "Erreur = recommencer la série")
+                        RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
                     accentColor: .indigo
                 )
@@ -352,7 +352,7 @@ struct UnMotSurDeuxView: View {
                     Label("2 thématiques de mots mélangées", systemImage: "text.word.spacing")
                     Label("Alterne entre les 2 thèmes", systemImage: "arrow.left.arrow.right")
                     Label("Ordre alphabétique dans chaque thème", systemImage: "textformat.abc")
-                    Label("Erreur = recommencer la série", systemImage: "exclamationmark.triangle")
+                    Label("Erreur = nouvelle série", systemImage: "exclamationmark.triangle")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)

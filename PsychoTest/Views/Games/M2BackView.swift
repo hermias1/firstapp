@@ -135,6 +135,7 @@ final class M2BackViewModel {
     }
 
     private func handleTimeout() {
+        isWaitingForAnswer = false
         wrongAnswers += 1
         feedback = .wrong
         moveToNext()

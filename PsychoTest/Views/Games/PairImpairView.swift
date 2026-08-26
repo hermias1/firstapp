@@ -194,7 +194,7 @@ struct PairImpairView: View {
                         RuleItem(icon: "2.circle", text: "Pairs: 2, 4, 6, 8..."),
                         RuleItem(icon: "1.circle", text: "Impairs: 1, 3, 5, 7..."),
                         RuleItem(icon: "arrow.up", text: "Ordre croissant obligatoire"),
-                        RuleItem(icon: "exclamationmark.triangle", text: "Erreur = recommencer")
+                        RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
                     accentColor: .blue
                 )
@@ -227,7 +227,7 @@ struct PairImpairView: View {
                     Label("Pairs: 2, 4, 6, 8...", systemImage: "2.circle")
                     Label("Impairs: 1, 3, 5, 7...", systemImage: "1.circle")
                     Label("Ordre croissant obligatoire", systemImage: "arrow.up")
-                    Label("Erreur = recommencer", systemImage: "exclamationmark.triangle")
+                    Label("Erreur = nouvelle série", systemImage: "exclamationmark.triangle")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
