@@ -952,3 +952,13 @@ func psychomoteurDrapeauReinitialise() {
     #expect(vm.erreursSecondaires == 1,
             "Le bouton est resté inerte (\(erreursAvant) erreurs avant relance)")
 }
+
+@Test("L'assemblage montré ne cache aucun cube")
+func objets3DAssemblageLisible() {
+    for _ in 0..<60 {
+        let question = Objets3DGenerator.generate()
+        // Un cube masqué rendrait la silhouette attendue indéductible du dessin
+        #expect(EmpilementsGenerator.lisible(question.empilement),
+                "Un cube est masqué dans \(question.empilement)")
+    }
+}

@@ -61,7 +61,11 @@ enum Objets3DGenerator {
     static func generate(nombreDeCubes: Int = 6) -> Question {
         for _ in 0..<200 {
             let empilement = EmpilementsGenerator.formeAleatoire(nombreDeCubes: nombreDeCubes)
+            // La silhouette attendue se calcule sur TOUS les cubes ; si le
+            // dessin isométrique en masque un, le joueur ne peut pas la
+            // déduire de ce qu'il voit.
             guard empilement.count == nombreDeCubes,
+                  EmpilementsGenerator.lisible(empilement),
                   let vue = PointDeVue.allCases.randomElement() else { continue }
 
             let correcte = projection(empilement, vue: vue)
@@ -90,7 +94,7 @@ enum Objets3DGenerator {
         }
 
         let empilement = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
-                          Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1)]
+                          Cube(x: 2, y: 0, z: 0), Cube(x: 2, y: 1, z: 0)]
         let correcte = projection(empilement, vue: .dessus)
         return Question(empilement: empilement, vue: .dessus,
                         propositions: [correcte, muter(correcte),
