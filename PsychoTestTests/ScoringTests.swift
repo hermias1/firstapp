@@ -386,6 +386,7 @@ struct PersistanceTests {
             { let v = BillesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = MentalCalculationViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -572,4 +573,62 @@ func tauxReussiteChronometre() {
     // 10 séries réussies pour 10 erreurs : la moitié des tentatives
     #expect(resultat?.correctAnswers == 10)
     #expect(resultat?.totalItems == 20)
+}
+
+// MARK: - Empilements
+
+@Test("Le nombre d'orientations reflète les symétries de la forme")
+func empilementsOrientations() {
+    // Un cube isolé est invariant par rotation : une seule forme normalisée
+    #expect(EmpilementsGenerator.toutesLesRotations([Cube(x: 0, y: 0, z: 0)]).count == 1)
+
+    // Une forme sans symétrie propre occupe les 24 orientations du cube
+    let coude = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+                 Cube(x: 2, y: 0, z: 0), Cube(x: 2, y: 1, z: 0)]
+    #expect(EmpilementsGenerator.toutesLesRotations(coude).count == 24)
+
+    // Une forme possédant une symétrie d'ordre 2 n'en a que la moitié
+    let tordue = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+                  Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1)]
+    #expect(EmpilementsGenerator.toutesLesRotations(tordue).count == 12)
+}
+
+@Test("Une forme plane est reconnue comme non chirale")
+func empilementsChiraliteDetectee() {
+    // Toute forme plate est superposable à son miroir : elle ne peut pas servir,
+    // même quand elle occupe les 24 orientations.
+    let barre = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0), Cube(x: 2, y: 0, z: 0)]
+    #expect(EmpilementsGenerator.estChirale(barre) == false)
+    let coude = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+                 Cube(x: 2, y: 0, z: 0), Cube(x: 2, y: 1, z: 0)]
+    #expect(EmpilementsGenerator.estChirale(coude) == false)
+
+    // Un tétracube tordu ne l'est pas
+    let tordue = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+                  Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1)]
+    #expect(EmpilementsGenerator.estChirale(tordue) == true)
+}
+
+@Test("Chaque question a une réponse et une seule")
+func empilementsQuestionSoluble() {
+    for cubes in [4, 5, 6] {
+        for _ in 0..<20 {
+            let question = EmpilementsGenerator.generate(nombreDeCubes: cubes)
+            #expect(question.figures.count == 3)
+
+            let reflet = question.figures[question.indexSymetrie]
+            let autres = question.figures.indices
+                .filter { $0 != question.indexSymetrie }
+                .map { question.figures[$0] }
+
+            // Les deux autres doivent être superposables entre elles par rotation
+            let rotations = EmpilementsGenerator.toutesLesRotations(autres[0])
+            #expect(rotations.contains(EmpilementsGenerator.normaliser(autres[1])),
+                    "Les deux figures non symétriques ne sont pas identiques")
+
+            // Et le reflet ne doit PAS l'être, sinon la question n'a pas de réponse
+            #expect(!rotations.contains(EmpilementsGenerator.normaliser(reflet)),
+                    "La figure symétrique est superposable aux autres")
+        }
+    }
 }

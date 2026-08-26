@@ -38,6 +38,7 @@
 		A1000097 /* BillesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000097 /* BillesView.swift */; };
 		A1000098 /* FormesGlisseesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000098 /* FormesGlisseesView.swift */; };
 		A1000099 /* ProfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000099 /* ProfilView.swift */; };
+		A1000100 /* EmpilementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000100 /* EmpilementsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		B1000097 /* BillesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillesView.swift; sourceTree = "<group>"; };
 		B1000098 /* FormesGlisseesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormesGlisseesView.swift; sourceTree = "<group>"; };
 		B1000099 /* ProfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilView.swift; sourceTree = "<group>"; };
+		B1000100 /* EmpilementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmpilementsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,6 +173,7 @@
 				B1000033 /* MotsEnEtoileView.swift */,
 				B1000097 /* BillesView.swift */,
 				B1000098 /* FormesGlisseesView.swift */,
+				B1000100 /* EmpilementsView.swift */,
 			);
 			path = Games;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				A1000033 /* MotsEnEtoileView.swift in Sources */,
 				A1000097 /* BillesView.swift in Sources */,
 				A1000098 /* FormesGlisseesView.swift in Sources */,
+				A1000100 /* EmpilementsView.swift in Sources */,
 				A1000040 /* GameRulesButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

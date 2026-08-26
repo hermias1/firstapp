@@ -171,12 +171,12 @@ extension Game {
         Game(
             type: .empilementsCubes,
             name: "Empilements",
-            description: "Identifie le cube qui a subi une symétrie",
+            description: "Identifie l'empilement qui a subi une symétrie",
             icon: "cube.fill",
             color: .mint,
             category: .spatial,
             difficulty: .hard,
-            isImplemented: false
+            isImplemented: true
         ),
         Game(
             type: .billes,
