@@ -215,7 +215,8 @@ struct PairImpairView: View {
                         RuleItem(icon: "arrow.up", text: "Ordre croissant obligatoire"),
                         RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
-                    accentColor: .blue
+                    accentColor: .blue,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

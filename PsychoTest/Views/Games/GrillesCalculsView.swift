@@ -114,15 +114,10 @@ final class GrillesCalculsViewModel {
 
     private func startTimer() {
         timerTask?.cancel()
-        timerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
-                if Task.isCancelled { break }
-                timeRemaining -= 1
-            }
-            if !Task.isCancelled {
-                validateGrid()
-            }
+        timerTask = Countdown.start(seconds: 45) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            validateGrid()
         }
     }
 
@@ -225,7 +220,8 @@ struct GrillesCalculsView: View {
                         RuleItem(icon: "checkmark.circle", text: "Valide après chaque grille"),
                         RuleItem(icon: "timer", text: "45 secondes par grille")
                     ],
-                    accentColor: .orange
+                    accentColor: .orange,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

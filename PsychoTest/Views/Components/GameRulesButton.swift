@@ -12,10 +12,19 @@ struct GameRulesButton: View {
     let title: String
     let rules: [RuleItem]
     let accentColor: Color
+    /// Pendant une partie, la feuille des règles laissait les chronos courir
+    /// derrière elle : le bouton est donc retiré tant que le jeu tourne.
+    var isGameActive: Bool = false
 
     @State private var showingRules = false
 
     var body: some View {
+        if !isGameActive {
+            bouton
+        }
+    }
+
+    private var bouton: some View {
         Button {
             showingRules = true
             HapticManager.light()

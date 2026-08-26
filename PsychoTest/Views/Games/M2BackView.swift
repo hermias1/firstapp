@@ -121,16 +121,11 @@ final class M2BackViewModel {
 
     private func startAnswerTimer() {
         answerTimerTask?.cancel()
-        answerTimerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .milliseconds(100))
-                if Task.isCancelled { break }
-                timeRemaining -= 0.1
-            }
-            if !Task.isCancelled && isWaitingForAnswer {
-                // Temps écoulé = mauvaise réponse
-                handleTimeout()
-            }
+        answerTimerTask = Countdown.start(seconds: 3.0) { [self] restant in
+            timeRemaining = restant
+        } onFinish: { [self] in
+            // Temps écoulé = mauvaise réponse
+            if isWaitingForAnswer { handleTimeout() }
         }
     }
 
@@ -239,7 +234,8 @@ struct M2BackView: View {
                         RuleItem(icon: "xmark.circle", text: "NON sinon"),
                         RuleItem(icon: "number", text: "42 chiffres au total")
                     ],
-                    accentColor: .purple
+                    accentColor: .purple,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

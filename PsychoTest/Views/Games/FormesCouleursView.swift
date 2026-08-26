@@ -110,15 +110,10 @@ final class FormesCouleursViewModel {
 
     private func startAnswerTimer() {
         answerTask?.cancel()
-        answerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .milliseconds(100))
-                if Task.isCancelled { break }
-                timeRemaining -= 0.1
-            }
-            if !Task.isCancelled && isWaitingForAnswer {
-                handleTimeout()
-            }
+        answerTask = Countdown.start(seconds: 2.5) { [self] restant in
+            timeRemaining = restant
+        } onFinish: { [self] in
+            if isWaitingForAnswer { handleTimeout() }
         }
     }
 
@@ -271,7 +266,8 @@ struct FormesCouleursView: View {
                         RuleItem(icon: "timer", text: "2.5 secondes par forme"),
                         RuleItem(icon: "eye", text: "Forme visible 0.8 seconde")
                     ],
-                    accentColor: .pink
+                    accentColor: .pink,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

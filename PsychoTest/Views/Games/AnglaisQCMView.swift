@@ -326,15 +326,10 @@ final class AnglaisQCMViewModel {
 
     private func startTimer() {
         timerTask?.cancel()
-        timerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
-                if Task.isCancelled { break }
-                timeRemaining -= 1
-            }
-            if !Task.isCancelled {
-                endGame()
-            }
+        timerTask = Countdown.start(seconds: 450) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            endGame()
         }
     }
 
@@ -428,7 +423,8 @@ struct AnglaisQCMView: View {
                         RuleItem(icon: "clock", text: "~15 secondes par question"),
                         RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 190")
                     ],
-                    accentColor: .red
+                    accentColor: .red,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

@@ -320,7 +320,8 @@ struct CultureAeroView: View {
                         RuleItem(icon: "minus.circle", text: "-1 point si incorrect"),
                         RuleItem(icon: "forward", text: "Tu peux passer une question")
                     ],
-                    accentColor: .cyan
+                    accentColor: .cyan,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

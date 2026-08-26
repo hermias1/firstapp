@@ -321,7 +321,8 @@ struct BoitesAMotsView: View {
                         RuleItem(icon: "hand.tap", text: "Range-le dans la boîte de son thème"),
                         RuleItem(icon: "lightbulb", text: "Tu définis toi-même les associations")
                     ],
-                    accentColor: .brown
+                    accentColor: .brown,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

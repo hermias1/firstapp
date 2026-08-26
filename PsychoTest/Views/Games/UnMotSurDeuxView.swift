@@ -342,7 +342,8 @@ struct UnMotSurDeuxView: View {
                         RuleItem(icon: "textformat.abc.dottedunderline", text: "Ordre alphabétique dans chaque thème"),
                         RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
-                    accentColor: .indigo
+                    accentColor: .indigo,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

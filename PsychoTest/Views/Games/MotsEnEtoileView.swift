@@ -173,15 +173,10 @@ final class MotsEnEtoileViewModel {
 
     private func startTimer() {
         timerTask?.cancel()
-        timerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
-                if Task.isCancelled { break }
-                timeRemaining -= 1
-            }
-            if !Task.isCancelled {
-                validatePuzzle()
-            }
+        timerTask = Countdown.start(seconds: 50) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            validatePuzzle()
         }
     }
 
@@ -390,7 +385,8 @@ struct MotsEnEtoileView: View {
                         RuleItem(icon: "hand.tap", text: "Trouve et place les 6 bons mots"),
                         RuleItem(icon: "timer", text: "50 secondes par puzzle")
                     ],
-                    accentColor: .yellow
+                    accentColor: .yellow,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

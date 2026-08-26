@@ -309,15 +309,10 @@ final class SeriesLogiquesViewModel {
 
     private func startTimer() {
         timerTask?.cancel()
-        timerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
-                if Task.isCancelled { break }
-                timeRemaining -= 1
-            }
-            if !Task.isCancelled {
-                handleTimeout()
-            }
+        timerTask = Countdown.start(seconds: 30) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            handleTimeout()
         }
     }
 
@@ -414,7 +409,8 @@ struct SeriesLogiquesView: View {
                         RuleItem(icon: "plus.circle", text: "+1 point si correct"),
                         RuleItem(icon: "minus.circle", text: "-1/3 point si incorrect")
                     ],
-                    accentColor: .green
+                    accentColor: .green,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

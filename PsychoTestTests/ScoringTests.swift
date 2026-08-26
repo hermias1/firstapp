@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 import SwiftData
 @testable import PsychoTest
 
@@ -386,4 +387,42 @@ struct PersistanceTests {
         let types = Set(vms.compactMap { $0()?.gameType })
         #expect(types.count == 10, "Types produits : \(types.map(\.rawValue).sorted())")
     }
+}
+
+// MARK: - Compte à rebours
+
+@MainActor
+private final class Temoin {
+    var fini = false
+    var dernier: TimeInterval = 99
+    var appels = 0
+}
+
+@MainActor
+@Test("Le compte à rebours atteint zéro et signale la fin")
+func countdownSeTermine() async {
+    let temoin = Temoin()
+    let tache = Countdown.start(seconds: 0.2) { restant in
+        temoin.dernier = restant
+        temoin.appels += 1
+    } onFinish: {
+        temoin.fini = true
+    }
+    try? await Task.sleep(for: .milliseconds(600))
+    tache.cancel()
+
+    #expect(temoin.fini)
+    #expect(temoin.dernier == 0)
+    #expect(temoin.appels > 1, "Le temps restant doit être rafraîchi en continu")
+}
+
+@MainActor
+@Test("Un compte à rebours annulé ne déclenche pas la fin")
+func countdownAnnule() async {
+    let temoin = Temoin()
+    let tache = Countdown.start(seconds: 0.3) { _ in } onFinish: { temoin.fini = true }
+    tache.cancel()
+    try? await Task.sleep(for: .milliseconds(500))
+
+    #expect(temoin.fini == false)
 }
