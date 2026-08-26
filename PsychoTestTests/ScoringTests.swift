@@ -809,3 +809,42 @@ func psychomoteurDoubleTacheCompte() {
     vm.signalerPair()
     #expect(vm.scoreGlobal <= avant, "Un faux signalement doit coûter des points")
 }
+
+// MARK: - Formes Glissées : dépôt au doigt
+
+@MainActor
+@Test("La forme se centre sous le doigt et reste dans la grille")
+func formesDepotCentre() {
+    let vm = FormesGlisseesViewModel()
+    vm.startGame()
+    guard let puzzle = vm.puzzle else { return }
+
+    let carre = FormesGlisseesGenerator.catalogue[0]   // 2x2
+    // Au milieu de la grille : la forme est centrée sur la case visée
+    let centre = vm.coinPourCentre(forme: carre, ligne: 2, colonne: 2)
+    #expect(centre == FormeGlissee.Position(ligne: 1, colonne: 1))
+
+    // Contre un bord : la forme est ramenée à l'intérieur au lieu de déborder
+    for (ligne, colonne) in [(0, 0), (4, 4), (0, 4), (4, 0)] {
+        let position = vm.coinPourCentre(forme: carre, ligne: ligne, colonne: colonne)
+        let p = try! #require(position)
+        #expect(p.ligne >= 0 && p.ligne + carre.hauteur <= puzzle.taille)
+        #expect(p.colonne >= 0 && p.colonne + carre.largeur <= puzzle.taille)
+    }
+}
+
+@MainActor
+@Test("Une forme déjà posée ne peut pas être déposée deux fois")
+func formesDepotUnique() {
+    let vm = FormesGlisseesViewModel()
+    vm.startGame()
+    guard vm.puzzle != nil else { return }
+
+    let position = FormeGlissee.Position(ligne: 0, colonne: 0)
+    vm.deposer(index: 0, en: position)
+    let grilleApres = vm.grille
+
+    // Un second dépôt de la même forme inverserait les cases par le OU exclusif
+    vm.deposer(index: 0, en: position)
+    #expect(vm.grille == grilleApres)
+}

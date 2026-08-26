@@ -201,18 +201,31 @@ final class FormesGlisseesViewModel {
         }
     }
 
-    /// Pose la forme sélectionnée avec son coin haut-gauche sur la case visée.
-    func poser(ligne: Int, colonne: Int) {
-        guard let puzzle, !showFeedback else { return }
-        guard let index = formesRestantes.first(where: { $0 == formeSelectionnee })
-                ?? formesRestantes.first else { return }
+    /// Coin haut-gauche correspondant à une case survolée, la forme étant
+    /// centrée sur le doigt plutôt qu'accrochée par un coin invisible.
+    func coinPourCentre(forme: FormeGlissee, ligne: Int, colonne: Int) -> FormeGlissee.Position? {
+        guard let puzzle else { return nil }
+        let cible = puzzle.taille
+        let l = min(max(0, ligne - forme.hauteur / 2), cible - forme.hauteur)
+        let c = min(max(0, colonne - forme.largeur / 2), cible - forme.largeur)
+        return FormeGlissee.Position(ligne: l, colonne: c)
+    }
+
+    /// Cases que la forme en cours de déplacement recouvrirait.
+    func apercu(forme: FormeGlissee, en position: FormeGlissee.Position) -> Set<FormeGlissee.Position> {
+        Set(forme.cases.map {
+            FormeGlissee.Position(ligne: position.ligne + $0.ligne,
+                                  colonne: position.colonne + $0.colonne)
+        })
+    }
+
+    /// Dépose une forme donnée à une position déjà validée.
+    func deposer(index: Int, en position: FormeGlissee.Position) {
+        guard let puzzle, !showFeedback, placements[index] == nil else { return }
         let forme = puzzle.formes[index]
+        guard position.ligne + forme.hauteur <= puzzle.taille,
+              position.colonne + forme.largeur <= puzzle.taille else { return }
 
-        // La forme doit tenir entièrement dans la grille
-        guard ligne + forme.hauteur <= puzzle.taille,
-              colonne + forme.largeur <= puzzle.taille else { return }
-
-        let position = FormeGlissee.Position(ligne: ligne, colonne: colonne)
         placements[index] = position
         FormesGlisseesGenerator.appliquer(forme, en: position, sur: &grille)
         HapticManager.light()
@@ -287,6 +300,8 @@ private let couleurGrise = Color(red: 0.72, green: 0.74, blue: 0.78)
 struct GrilleView: View {
     let grille: [[Bool]]
     let cote: CGFloat
+    /// Cases que la forme en cours de déplacement viendrait recouvrir.
+    var apercu: Set<FormeGlissee.Position> = []
     var onTap: ((Int, Int) -> Void)? = nil
 
     var body: some View {
@@ -297,6 +312,11 @@ struct GrilleView: View {
                         Rectangle()
                             .fill(grille[ligne][colonne] ? couleurGrise : couleurMarine)
                             .frame(width: cote, height: cote)
+                            .overlay(
+                                apercu.contains(.init(ligne: ligne, colonne: colonne))
+                                ? Rectangle().stroke(Color.yellow, lineWidth: 3)
+                                : nil
+                            )
                             .onTapGesture { onTap?(ligne, colonne) }
                     }
                 }
@@ -341,6 +361,40 @@ private struct FormeApercu: View {
 
 struct FormesGlisseesView: View {
     @State private var viewModel = FormesGlisseesViewModel()
+
+    /// Cadre de la grille de travail, pour convertir la position du doigt en case.
+    @State private var cadreGrille: CGRect = .zero
+    @State private var formeEnMain: Int?
+    @State private var positionDoigt: CGPoint?
+
+    private let coteCase: CGFloat = 34
+
+    /// Case survolée par le doigt, si celui-ci est au-dessus de la grille.
+    private func caseSurvolee(_ point: CGPoint) -> (ligne: Int, colonne: Int)? {
+        guard cadreGrille.contains(point), let puzzle = viewModel.puzzle else { return nil }
+        let pas = coteCase + 2
+        let colonne = Int((point.x - cadreGrille.minX - 4) / pas)
+        let ligne = Int((point.y - cadreGrille.minY - 4) / pas)
+        guard (0..<puzzle.taille).contains(ligne), (0..<puzzle.taille).contains(colonne) else {
+            return nil
+        }
+        return (ligne, colonne)
+    }
+
+    /// Position de dépôt visée par le doigt, forme centrée sous lui.
+    private func positionVisee() -> FormeGlissee.Position? {
+        guard let index = formeEnMain, let point = positionDoigt,
+              let puzzle = viewModel.puzzle,
+              let survolee = caseSurvolee(point) else { return nil }
+        return viewModel.coinPourCentre(forme: puzzle.formes[index],
+                                        ligne: survolee.ligne, colonne: survolee.colonne)
+    }
+
+    private var apercuCases: Set<FormeGlissee.Position> {
+        guard let index = formeEnMain, let puzzle = viewModel.puzzle,
+              let position = positionVisee() else { return [] }
+        return viewModel.apercu(forme: puzzle.formes[index], en: position)
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -440,55 +494,89 @@ struct FormesGlisseesView: View {
     @ViewBuilder
     private var gameView: some View {
         if let puzzle = viewModel.puzzle {
-            VStack(spacing: 14) {
-                HStack {
-                    Text("Grille \(viewModel.currentQuestion + 1)/\(viewModel.totalQuestions)")
-                        .font(.headline)
-                    Spacer()
-                    TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 60)
-                }
-
-                HStack(alignment: .top, spacing: 20) {
-                    VStack(spacing: 6) {
-                        Text("Cible").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                        GrilleView(grille: puzzle.cible, cote: 20)
+            ZStack {
+                VStack(spacing: 14) {
+                    HStack {
+                        Text("Grille \(viewModel.currentQuestion + 1)/\(viewModel.totalQuestions)")
+                            .font(.headline)
+                        Spacer()
+                        TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 60)
                     }
-                    VStack(spacing: 6) {
-                        Text("Ta grille").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                        GrilleView(grille: viewModel.grille, cote: 20) { ligne, colonne in
-                            viewModel.poser(ligne: ligne, colonne: colonne)
+
+                    HStack(alignment: .top, spacing: 16) {
+                        VStack(spacing: 6) {
+                            Text("Cible").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                            GrilleView(grille: puzzle.cible, cote: 18)
+                        }
+                        VStack(spacing: 6) {
+                            Text("Ta grille").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                            GrilleView(grille: viewModel.grille, cote: coteCase, apercu: apercuCases)
+                                .background(
+                                    GeometryReader { geo in
+                                        Color.clear.onAppear {
+                                            cadreGrille = geo.frame(in: .named("plateau"))
+                                        }
+                                        .onChange(of: geo.frame(in: .named("plateau"))) { _, cadre in
+                                            cadreGrille = cadre
+                                        }
+                                    }
+                                )
                         }
                     }
-                }
+                    .frame(maxWidth: .infinity)
 
-                if !viewModel.formesRestantes.isEmpty {
-                    VStack(spacing: 6) {
-                        Text("Formes à poser")
+                    if !viewModel.formesRestantes.isEmpty {
+                        Text("Fais glisser une forme sur la grille")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        HStack(spacing: 10) {
+
+                        HStack(spacing: 12) {
                             ForEach(viewModel.formesRestantes, id: \.self) { index in
                                 FormeApercu(forme: puzzle.formes[index],
-                                            selectionnee: index == viewModel.formeSelectionnee)
-                                    .onTapGesture { viewModel.formeSelectionnee = index }
+                                            selectionnee: formeEnMain == index)
+                                    .opacity(formeEnMain == index ? 0.35 : 1)
+                                    .gesture(
+                                        DragGesture(minimumDistance: 0, coordinateSpace: .named("plateau"))
+                                            .onChanged { valeur in
+                                                guard !viewModel.showFeedback else { return }
+                                                formeEnMain = index
+                                                positionDoigt = valeur.location
+                                            }
+                                            .onEnded { _ in
+                                                if let position = positionVisee() {
+                                                    viewModel.deposer(index: index, en: position)
+                                                }
+                                                formeEnMain = nil
+                                                positionDoigt = nil
+                                            }
+                                    )
                             }
                         }
                     }
-                }
 
-                if viewModel.showFeedback {
-                    Text(viewModel.derniereReussie ? "Correct !" : "Raté")
-                        .font(.headline)
-                        .foregroundStyle(viewModel.derniereReussie ? .green : .red)
-                } else {
-                    Button("Recommencer le placement") {
-                        viewModel.recommencer()
+                    if viewModel.showFeedback {
+                        Text(viewModel.derniereReussie ? "Correct !" : "Raté")
+                            .font(.headline)
+                            .foregroundStyle(viewModel.derniereReussie ? .green : .red)
+                    } else {
+                        Button("Recommencer le placement") {
+                            viewModel.recommencer()
+                        }
+                        .font(.subheadline)
                     }
-                    .font(.subheadline)
+
+                    Spacer(minLength: 0)
                 }
 
-                Spacer()
+                // La forme suit le doigt, décalée vers le haut pour rester visible
+                if let index = formeEnMain, let point = positionDoigt {
+                    FormeApercu(forme: puzzle.formes[index], selectionnee: true)
+                        .opacity(0.9)
+                        .allowsHitTesting(false)
+                        .position(x: point.x, y: point.y - 46)
+                }
             }
+            .coordinateSpace(.named("plateau"))
         }
     }
 
