@@ -15,9 +15,17 @@ struct MentalCalculationView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Calcul Mental")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .calculMental)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Calcul Mental",
@@ -27,7 +35,8 @@ struct MentalCalculationView: View {
                         RuleItem(icon: "flame", text: "Le max d'opérations possible"),
                         RuleItem(icon: "star", text: "Bonus de temps pour les réponses rapides")
                     ],
-                    accentColor: .blue
+                    accentColor: .blue,
+                    isGameActive: viewModel.isGameActive
                 )
             }
         }

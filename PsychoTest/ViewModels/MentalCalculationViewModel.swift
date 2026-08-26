@@ -117,21 +117,19 @@ final class MentalCalculationViewModel {
     }
 
     private func startTimer() {
-        // Cancel any existing timer before starting a new one
         timerTask?.cancel()
-        timerTask = Task { @MainActor in
-            while !Task.isCancelled && timeRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
-                if Task.isCancelled { break }
-                if timeRemaining > 0 {
-                    timeRemaining -= 1
-                }
-                if timeRemaining == 0 {
-                    // Fin du jeu
-                    isGameActive = false
-                    isGameOver = true
-                }
-            }
+        timerTask = Countdown.start(seconds: 60) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            isGameActive = false
+            isGameOver = true
         }
+    }
+
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .calculMental, score: Double(score),
+                          correctAnswers: correctCount, totalItems: totalQuestions,
+                          duration: 60)
     }
 }

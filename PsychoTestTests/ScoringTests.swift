@@ -368,8 +368,8 @@ struct PersistanceTests {
         #expect(enregistre.score == 75.0)   // 30 / 40
     }
 
-    @Test("Les dix jeux savent produire un résultat")
-    func lesDixJeuxProduisentUnResultat() {
+    @Test("Tous les jeux jouables savent produire un résultat")
+    func tousLesJeuxProduisentUnResultat() {
         // Chaque jeu doit alimenter la persistance, sinon sa progression
         // ne serait jamais enregistrée.
         let vms: [() -> GameResult?] = [
@@ -383,9 +383,15 @@ struct PersistanceTests {
             { let v = CultureAeroViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = MotsEnEtoileViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = GrillesCalculsViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = BillesViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = MentalCalculationViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
-        #expect(types.count == 10, "Types produits : \(types.map(\.rawValue).sorted())")
+        // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
+        // progression : le compte doit suivre les jeux marqués comme implémentés.
+        let jouables = Game.implementedGames.count
+        #expect(types.count == jouables,
+                "\(types.count) jeux alimentent la persistance pour \(jouables) jouables")
     }
 }
 

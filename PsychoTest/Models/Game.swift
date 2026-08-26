@@ -40,6 +40,7 @@ enum GameType: String, CaseIterable {
     case formesEtCouleurs
     case boitesAMots
     case motsEnEtoile
+    case calculMental
     case empilementsCubes
     case billes
     case formesGlissees
@@ -151,6 +152,17 @@ extension Game {
             icon: "star.fill",
             color: .yellow,
             category: .logic,
+            difficulty: .medium,
+            isImplemented: true
+        ),
+
+        Game(
+            type: .calculMental,
+            name: "Calcul Mental",
+            description: "Un maximum d'opérations en 60 secondes",
+            icon: "plusminus.circle.fill",
+            color: .mint,
+            category: .cognitive,
             difficulty: .medium,
             isImplemented: true
         ),

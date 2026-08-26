@@ -85,6 +85,7 @@ struct MainMenuView: View {
         case .formesEtCouleurs: FormesCouleursView()
         case .boitesAMots: BoitesAMotsView()
         case .motsEnEtoile: MotsEnEtoileView()
+        case .calculMental: MentalCalculationView()
         case .billes: BillesView()
         case .empilementsCubes, .formesGlissees, .cubes2D3D,
              .psychomoteur, .airways, .objets3D:
