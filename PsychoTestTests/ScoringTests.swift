@@ -388,6 +388,7 @@ struct PersistanceTests {
             { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = Objets3DViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -684,6 +685,37 @@ func cubesQuestionBienFormee() {
                 #expect(!possibles.contains(proposition),
                         "Le distracteur \(proposition) est un cube valide")
             }
+        }
+    }
+}
+
+// MARK: - Objets 3D
+
+@Test("La projection écrase la profondeur")
+func objets3DProjectionEcraseLaProfondeur() {
+    // Trois cubes alignés en profondeur ne font qu'une case vus de dessus…
+    let colonne = [Cube(x: 0, y: 0, z: 0), Cube(x: 0, y: 0, z: 1), Cube(x: 0, y: 0, z: 2)]
+    let dessus = Objets3DGenerator.projection(colonne, vue: .dessus)
+    #expect(dessus.flatMap { $0 }.filter { $0 }.count == 1)
+
+    // … mais trois cases vues de face
+    let face = Objets3DGenerator.projection(colonne, vue: .face)
+    #expect(face.flatMap { $0 }.filter { $0 }.count == 3)
+}
+
+@Test("Chaque question a une seule silhouette correcte")
+func objets3DQuestionBienFormee() {
+    for _ in 0..<100 {
+        let question = Objets3DGenerator.generate()
+        #expect(question.propositions.count == 4)
+
+        let vraie = Objets3DGenerator.projection(question.empilement, vue: question.vue)
+        #expect(question.propositions[question.indexCorrect] == vraie)
+
+        for (index, proposition) in question.propositions.enumerated() where index != question.indexCorrect {
+            // Un distracteur égal à la vraie silhouette donnerait deux réponses
+            #expect(proposition != vraie)
+            #expect(proposition.flatMap { $0 }.contains(true), "Silhouette vide proposée")
         }
     }
 }

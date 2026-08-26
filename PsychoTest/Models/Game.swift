@@ -233,12 +233,12 @@ extension Game {
         Game(
             type: .objets3D,
             name: "Objets 3D",
-            description: "Identifie le point de vue d'une scène 3D",
+            description: "Retrouve la silhouette d'un assemblage vu sous un angle",
             icon: "view.3d",
             color: .green,
             category: .spatial,
             difficulty: .veryHard,
-            isImplemented: false
+            isImplemented: true
         )
     ]
 

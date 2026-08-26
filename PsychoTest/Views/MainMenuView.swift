@@ -99,7 +99,8 @@ struct MainMenuView: View {
         case .formesGlissees: FormesGlisseesView()
         case .empilementsCubes: EmpilementsView()
         case .cubes2D3D: CubesPatronsView()
-        case .psychomoteur, .airways, .objets3D:
+        case .objets3D: Objets3DView()
+        case .psychomoteur, .airways:
             ComingSoonView(game: game)
         }
     }

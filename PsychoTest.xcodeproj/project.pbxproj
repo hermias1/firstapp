@@ -40,6 +40,7 @@
 		A1000099 /* ProfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000099 /* ProfilView.swift */; };
 		A1000100 /* EmpilementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000100 /* EmpilementsView.swift */; };
 		A1000101 /* CubesPatronsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000101 /* CubesPatronsView.swift */; };
+		A1000102 /* Objets3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000102 /* Objets3DView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		B1000099 /* ProfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilView.swift; sourceTree = "<group>"; };
 		B1000100 /* EmpilementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmpilementsView.swift; sourceTree = "<group>"; };
 		B1000101 /* CubesPatronsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubesPatronsView.swift; sourceTree = "<group>"; };
+		B1000102 /* Objets3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Objets3DView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +179,7 @@
 				B1000098 /* FormesGlisseesView.swift */,
 				B1000100 /* EmpilementsView.swift */,
 				B1000101 /* CubesPatronsView.swift */,
+				B1000102 /* Objets3DView.swift */,
 			);
 			path = Games;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				A1000098 /* FormesGlisseesView.swift in Sources */,
 				A1000100 /* EmpilementsView.swift in Sources */,
 				A1000101 /* CubesPatronsView.swift in Sources */,
+				A1000102 /* Objets3DView.swift in Sources */,
 				A1000040 /* GameRulesButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
