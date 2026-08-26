@@ -35,6 +35,7 @@
 		A1000094 /* RecordSessionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000094 /* RecordSessionModifier.swift */; };
 		A1000095 /* GameStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000095 /* GameStatsView.swift */; };
 		A1000096 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000096 /* Countdown.swift */; };
+		A1000097 /* BillesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000097 /* BillesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		B1000094 /* RecordSessionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSessionModifier.swift; sourceTree = "<group>"; };
 		B1000095 /* GameStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsView.swift; sourceTree = "<group>"; };
 		B1000096 /* Countdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countdown.swift; sourceTree = "<group>"; };
+		B1000097 /* BillesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +164,7 @@
 				B1000031 /* FormesCouleursView.swift */,
 				B1000032 /* BoitesAMotsView.swift */,
 				B1000033 /* MotsEnEtoileView.swift */,
+				B1000097 /* BillesView.swift */,
 			);
 			path = Games;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				A1000031 /* FormesCouleursView.swift in Sources */,
 				A1000032 /* BoitesAMotsView.swift in Sources */,
 				A1000033 /* MotsEnEtoileView.swift in Sources */,
+				A1000097 /* BillesView.swift in Sources */,
 				A1000040 /* GameRulesButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

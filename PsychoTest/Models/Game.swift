@@ -174,7 +174,7 @@ extension Game {
             color: .teal,
             category: .spatial,
             difficulty: .hard,
-            isImplemented: false
+            isImplemented: true
         ),
         Game(
             type: .formesGlissees,

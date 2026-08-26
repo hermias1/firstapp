@@ -426,3 +426,51 @@ func countdownAnnule() async {
 
     #expect(temoin.fini == false)
 }
+
+// MARK: - Billes
+
+@Test("Le calcul du nombre minimal de coups est juste sur des cas connus")
+func billesDistanceConnue() {
+    // Une seule bille à déplacer d'un tube à l'autre
+    #expect(BillesGenerator.distanceMinimale(de: [[0], [], []], a: [[], [0], []]) == 1)
+    // Deux billes empilées : il faut dépiler puis déplacer
+    #expect(BillesGenerator.distanceMinimale(de: [[0, 1], [], []], a: [[], [1], [0]]) == 2)
+    // Départ et cible identiques
+    #expect(BillesGenerator.distanceMinimale(de: [[0], [1], []], a: [[0], [1], []]) == 0)
+}
+
+@Test("Un coup déplace une seule bille, depuis le dessus d'un tube")
+func billesCoupsValides() {
+    let etat = [[0, 1], [2], []]
+    for suivant in BillesGenerator.coupsPossibles(etat) {
+        let avant = etat.flatMap { $0 }.sorted()
+        let apres = suivant.flatMap { $0 }.sorted()
+        #expect(avant == apres, "Une bille a été créée ou perdue")
+        #expect(suivant.allSatisfy { $0.count <= BillesGenerator.capacite })
+    }
+}
+
+@Test("Chaque puzzle généré a une solution atteignable et annoncée juste")
+func billesPuzzlesSolubles() {
+    for _ in 0..<100 {
+        let puzzle = BillesGenerator.generate()
+        // La solution annoncée doit être exactement la distance réelle
+        let reelle = BillesGenerator.distanceMinimale(de: puzzle.depart, a: puzzle.cible)
+        #expect(reelle == puzzle.solution,
+                "Annoncé \(puzzle.solution), réel \(String(describing: reelle))")
+        #expect(puzzle.solution >= 1)
+        // Aucune bille ne doit apparaître ni disparaître entre les deux états
+        #expect(puzzle.depart.flatMap { $0 }.sorted() == puzzle.cible.flatMap { $0 }.sorted())
+    }
+}
+
+@Test("Les options proposent la bonne réponse parmi quatre valeurs distinctes")
+func billesOptionsBienFormees() {
+    for _ in 0..<100 {
+        let puzzle = BillesGenerator.generate()
+        #expect(puzzle.options.count == 4)
+        #expect(Set(puzzle.options).count == 4)
+        #expect(puzzle.options.contains(puzzle.solution))
+        #expect(puzzle.options.allSatisfy { $0 >= 1 })
+    }
+}
