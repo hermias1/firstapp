@@ -187,6 +187,13 @@ final class M2BackViewModel {
         isGameOver = true
     }
 
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .m2Back, score: accuracy,
+                          correctAnswers: correctAnswers,
+                          totalItems: correctAnswers + wrongAnswers, duration: 0)
+    }
+
     func stopGame() {
         timerTask?.cancel()
         answerTimerTask?.cancel()
@@ -211,9 +218,17 @@ struct M2BackView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("M2 Back")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .m2Back)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - M2 Back",

@@ -255,6 +255,13 @@ final class MotsEnEtoileViewModel {
         isGameOver = true
     }
 
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .motsEnEtoile, score: Double(correctAnswers),
+                          correctAnswers: correctAnswers, totalItems: totalQuestions,
+                          duration: 0)
+    }
+
     func stopGame() {
         timerTask?.cancel()
         transitionTask?.cancel()
@@ -363,9 +370,17 @@ struct MotsEnEtoileView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Mots en Étoile")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .motsEnEtoile)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Mots en Étoile",

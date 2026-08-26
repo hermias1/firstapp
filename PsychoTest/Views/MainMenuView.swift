@@ -1,6 +1,11 @@
 import SwiftUI
+import SwiftData
 
 struct MainMenuView: View {
+    /// Une seule requête pour toutes les parties : le meilleur score de chaque
+    /// jeu est ensuite calculé en mémoire.
+    @Query private var sessions: [GameSession]
+
     let implementedGames = Game.implementedGames
     let comingSoonGames = Game.comingSoonGames
 
@@ -21,7 +26,7 @@ struct MainMenuView: View {
                         ], spacing: 12) {
                             ForEach(implementedGames) { game in
                                 NavigationLink(destination: destinationView(for: game)) {
-                                    GameCard(game: game)
+                                    GameCard(game: game, record: record(for: game.type))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -56,6 +61,15 @@ struct MainMenuView: View {
         }
     }
 
+    /// Meilleur score du jeu, ou nil s'il n'a jamais été joué.
+    private func record(for type: GameType) -> String? {
+        let scores = sessions.filter { $0.gameType == type.rawValue }.map(\.score)
+        guard let meilleur = type.lowerIsBetter ? scores.min() : scores.max() else {
+            return nil
+        }
+        return type.format(meilleur)
+    }
+
     @ViewBuilder
     private func destinationView(for game: Game) -> some View {
         // Routage par type : exhaustif et vérifié à la compilation, là où une
@@ -80,4 +94,5 @@ struct MainMenuView: View {
 
 #Preview {
     MainMenuView()
+        .modelContainer(for: GameSession.self, inMemory: true)
 }

@@ -362,6 +362,14 @@ final class SeriesLogiquesViewModel {
         }
     }
 
+    /// Le score du jeu applique le barème -1/3 par erreur.
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .seriesLogiques, score: finalScore,
+                          correctAnswers: correctAnswers, totalItems: totalQuestions,
+                          duration: 0)
+    }
+
     func stopGame() {
         timerTask?.cancel()
         transitionTask?.cancel()
@@ -385,9 +393,17 @@ struct SeriesLogiquesView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Séries Logiques")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .seriesLogiques)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Séries Logiques",

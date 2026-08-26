@@ -167,6 +167,13 @@ final class FormesCouleursViewModel {
         isGameOver = true
     }
 
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .formesEtCouleurs, score: accuracy,
+                          correctAnswers: correctAnswers,
+                          totalItems: correctAnswers + wrongAnswers, duration: 0)
+    }
+
     func stopGame() {
         displayTask?.cancel()
         answerTask?.cancel()
@@ -244,9 +251,17 @@ struct FormesCouleursView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Formes et Couleurs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .formesEtCouleurs)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Formes et Couleurs",

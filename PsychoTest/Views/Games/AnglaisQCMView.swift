@@ -378,6 +378,13 @@ final class AnglaisQCMViewModel {
         isGameOver = true
     }
 
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .anglaisQCM, score: Double(correctAnswers),
+                          correctAnswers: correctAnswers, totalItems: totalQuestions,
+                          duration: Double(450 - timeRemaining))
+    }
+
     func stopGame() {
         timerTask?.cancel()
         transitionTask?.cancel()
@@ -401,9 +408,17 @@ struct AnglaisQCMView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Anglais")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .anglaisQCM)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Anglais QCM",

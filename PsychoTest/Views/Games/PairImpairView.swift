@@ -163,6 +163,14 @@ final class PairImpairViewModel {
         selectedNumbers.contains(number)
     }
 
+    /// Temps moyen par série : plus bas est meilleur.
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .pairImpair, score: averageTime,
+                          correctAnswers: currentSeries, totalItems: totalSeries,
+                          duration: seriesTimes.reduce(0, +))
+    }
+
     func stopGame() {
         transitionTask?.cancel()
         isGameActive = false
@@ -185,9 +193,17 @@ struct PairImpairView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Pair ou Impair")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .pairImpair)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Pair ou Impair",

@@ -3,6 +3,8 @@ import SwiftUI
 struct GameCard: View {
     let game: Game
     var isDisabled: Bool = false
+    /// Meilleur score déjà réalisé, mis en forme dans l'unité du jeu.
+    var record: String? = nil
 
     var body: some View {
         VStack(spacing: 12) {
@@ -24,6 +26,12 @@ struct GameCard: View {
                     .lineLimit(2)
             }
 
+            if let record {
+                Label(record, systemImage: "trophy.fill")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(game.color)
+            }
+
             // Indicateur de difficulté
             HStack(spacing: 2) {
                 ForEach(0..<4) { index in
@@ -34,7 +42,7 @@ struct GameCard: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 140)
+        .frame(height: 160)
         .padding(.vertical, 12)
         .padding(.horizontal, 8)
         .background(Color(.systemBackground))
@@ -46,7 +54,7 @@ struct GameCard: View {
 
 #Preview {
     HStack {
-        GameCard(game: Game.allGames[0])
+        GameCard(game: Game.allGames[0], record: "12,4 s")
         GameCard(game: Game.allGames[0], isDisabled: true)
     }
     .padding()

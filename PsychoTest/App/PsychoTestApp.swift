@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct PsychoTestApp: App {
@@ -6,5 +7,6 @@ struct PsychoTestApp: App {
         WindowGroup {
             MainMenuView()
         }
+        .modelContainer(for: GameSession.self)
     }
 }

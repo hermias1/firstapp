@@ -341,4 +341,49 @@ struct PersistanceTests {
         #expect(store.count(for: .m2Back) == 0)
         #expect(store.count(for: .anglaisQCM) == 1)
     }
+    @Test("Un ViewModel ne produit un résultat qu'une fois la partie finie")
+    func resultatSeulementSiPartieFinie() {
+        let vm = M2BackViewModel()
+        vm.startGame()
+        #expect(vm.makeResult() == nil)
+        vm.isGameOver = true
+        #expect(vm.makeResult() != nil)
+    }
+
+    @Test("Le résultat d'une partie arrive intact dans le magasin")
+    func chaineComplete() throws {
+        let store = try storeVide()
+        let vm = M2BackViewModel()
+        vm.correctAnswers = 30
+        vm.wrongAnswers = 10
+        vm.isGameOver = true
+
+        let resultat = try #require(vm.makeResult())
+        #expect(store.record(resultat) == true)
+
+        let enregistre = try #require(store.best(for: .m2Back))
+        #expect(enregistre.correctAnswers == 30)
+        #expect(enregistre.totalItems == 40)
+        #expect(enregistre.score == 75.0)   // 30 / 40
+    }
+
+    @Test("Les dix jeux savent produire un résultat")
+    func lesDixJeuxProduisentUnResultat() {
+        // Chaque jeu doit alimenter la persistance, sinon sa progression
+        // ne serait jamais enregistrée.
+        let vms: [() -> GameResult?] = [
+            { let v = PairImpairViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = UnMotSurDeuxViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = M2BackViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = FormesCouleursViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = BoitesAMotsViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = AnglaisQCMViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = SeriesLogiquesViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = CultureAeroViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = MotsEnEtoileViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = GrillesCalculsViewModel(); v.isGameOver = true; return v.makeResult() },
+        ]
+        let types = Set(vms.compactMap { $0()?.gameType })
+        #expect(types.count == 10, "Types produits : \(types.map(\.rawValue).sorted())")
+    }
 }

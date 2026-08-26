@@ -169,6 +169,14 @@ final class GrillesCalculsViewModel {
         }
     }
 
+    /// Trouvés moins fausses sélections moins ratés : peut être négatif.
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .grillesCalculs, score: Double(totalScore),
+                          correctAnswers: gridResults.reduce(0) { $0 + $1.correct },
+                          totalItems: totalGrids, duration: 0)
+    }
+
     func stopGame() {
         timerTask?.cancel()
         transitionTask?.cancel()
@@ -196,9 +204,17 @@ struct GrillesCalculsView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Grilles de Calculs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .grillesCalculs)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Grilles de Calculs",

@@ -292,6 +292,14 @@ final class UnMotSurDeuxViewModel {
         return 0
     }
 
+    /// Temps moyen par série : plus bas est meilleur.
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .unMotSurDeux, score: averageTime,
+                          correctAnswers: currentSeries, totalItems: totalSeries,
+                          duration: seriesTimes.reduce(0, +))
+    }
+
     func stopGame() {
         transitionTask?.cancel()
         isGameActive = false
@@ -314,9 +322,17 @@ struct UnMotSurDeuxView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Un Mot sur Deux")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .unMotSurDeux)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Un Mot sur Deux",

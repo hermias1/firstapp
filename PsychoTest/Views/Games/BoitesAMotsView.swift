@@ -258,6 +258,13 @@ final class BoitesAMotsViewModel {
         isGameOver = true
     }
 
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .boitesAMots, score: accuracy,
+                          correctAnswers: correctAnswers,
+                          totalItems: correctAnswers + wrongAnswers, duration: 0)
+    }
+
     func stopGame() {
         wordTask?.cancel()
         transitionTask?.cancel()
@@ -294,9 +301,17 @@ struct BoitesAMotsView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Boîtes à Mots")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .boitesAMots)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Boîtes à Mots",

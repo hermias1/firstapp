@@ -270,6 +270,14 @@ final class CultureAeroViewModel {
         }
     }
 
+    /// Barème à points négatifs : le score peut être inférieur à zéro.
+    func makeResult() -> GameResult? {
+        guard isGameOver else { return nil }
+        return GameResult(gameType: .cultureAero, score: score,
+                          correctAnswers: correctAnswers, totalItems: totalQuestions,
+                          duration: 0)
+    }
+
     func stopGame() {
         transitionTask?.cancel()
         isGameActive = false
@@ -292,9 +300,17 @@ struct CultureAeroView: View {
             }
         }
         .padding()
+        .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
         .navigationTitle("Culture Aéro")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    GameStatsView(type: .cultureAero)
+                } label: {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 GameRulesButton(
                     title: "Règles - Culture Aéro",
