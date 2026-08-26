@@ -12,7 +12,7 @@ extension WordCategory {
         [
             WordCategory(name: "Fruits", words: ["Pomme", "Banane", "Orange", "Fraise", "Cerise", "Mangue"]),
             WordCategory(name: "Légumes", words: ["Carotte", "Tomate", "Haricot", "Oignon", "Poivron", "Salade"]),
-            WordCategory(name: "Viandes", words: ["Poulet", "Boeuf", "Porc", "Agneau", "Canard", "Dinde"]),
+            WordCategory(name: "Viandes", words: ["Poulet", "Bœuf", "Porc", "Agneau", "Canard", "Dinde"]),
             WordCategory(name: "Poissons", words: ["Saumon", "Thon", "Cabillaud", "Truite", "Sardine", "Bar"])
         ],
         // Série 2 - Arts
@@ -73,7 +73,7 @@ extension WordCategory {
         ],
         // Série 10 - Corps
         [
-            WordCategory(name: "Organes", words: ["Coeur", "Poumon", "Foie", "Rein", "Cerveau", "Estomac"]),
+            WordCategory(name: "Organes", words: ["Cœur", "Poumon", "Foie", "Rein", "Cerveau", "Estomac"]),
             WordCategory(name: "Os", words: ["Fémur", "Tibia", "Crâne", "Vertèbre", "Côte", "Humérus"]),
             WordCategory(name: "Muscles", words: ["Biceps", "Triceps", "Abdominaux", "Quadriceps", "Mollet", "Pectoraux"]),
             WordCategory(name: "Sens", words: ["Vue", "Ouïe", "Odorat", "Goût", "Toucher", "Équilibre"])
@@ -89,7 +89,7 @@ extension WordCategory {
         [
             WordCategory(name: "Informatique", words: ["Ordinateur", "Clavier", "Souris", "Écran", "Processeur", "Mémoire"]),
             WordCategory(name: "Internet", words: ["Site", "Email", "Réseau", "Serveur", "Cloud", "Wi-Fi"]),
-            WordCategory(name: "Téléphone", words: ["Mobile", "Appel", "SMS", "Application", "Batterie", "Écran"]),
+            WordCategory(name: "Téléphone", words: ["Mobile", "Appel", "SMS", "Application", "Batterie", "Sonnerie"]),
             WordCategory(name: "Jeux vidéo", words: ["Console", "Manette", "Avatar", "Niveau", "Score", "Boss"])
         ],
         // Série 13 - Économie
@@ -228,9 +228,9 @@ final class BoitesAMotsViewModel {
                 feedback = "Cette boîte est déjà utilisée !"
             }
         } else {
-            // Vérifier si le choix est correct (mais ne pas donner de point supplémentaire)
+            // Vérifier si le choix est correct
             if boxAssignments[currentCategoryIndex] == boxIndex {
-                // Pas de point supplémentaire - juste validation
+                correctAnswers += 1
                 feedback = "Correct !"
                 HapticManager.success()
             } else {

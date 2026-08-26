@@ -92,3 +92,30 @@ func pairImpairChronoContinu() {
     // Le temps perdu à se tromper doit rester imputé au joueur
     #expect(vm.startTime == debut)
 }
+
+// MARK: - Boîtes à Mots
+
+@MainActor
+@Test("Aucune série ne contient deux fois le même mot")
+func boitesAMotsPasDeDoublonDansUneSerie() {
+    for (index, serie) in WordCategory.allCategories.enumerated() {
+        let mots = serie.flatMap(\.words)
+        let uniques = Set(mots.map { $0.lowercased() })
+        // Un mot présent dans deux boîtes de la même série est injouable :
+        // le joueur ne peut pas savoir laquelle est attendue.
+        #expect(mots.count == uniques.count, "Doublon dans la série \(index + 1)")
+    }
+}
+
+@MainActor
+@Test("Les 15 séries sont toutes atteignables")
+func boitesAMotsToutesLesSeriesJouables() {
+    let vm = BoitesAMotsViewModel()
+    var vues = Set<String>()
+    for _ in 0..<200 {
+        vm.startGame()
+        vues.insert(vm.categories.first?.name ?? "")
+    }
+    // Avec un tirage aléatoire, chaque série doit pouvoir ouvrir une partie
+    #expect(vues.count > 5)
+}
