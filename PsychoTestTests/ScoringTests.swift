@@ -1,4 +1,5 @@
 import Testing
+import SwiftData
 @testable import PsychoTest
 
 // Ces tests verrouillent les barèmes corrigés au Lot 1.
@@ -241,5 +242,103 @@ func seriesPasDeSequenceAmbigue() {
             // Une seule doit rester possible, celle de Fibonacci.
             #expect(q.correctAnswer == "13", "2 3 5 8 attend 13, pas \(q.correctAnswer)")
         }
+    }
+}
+
+// MARK: - Persistance des scores
+
+/// SwiftData ne supporte pas la création concurrente de plusieurs conteneurs :
+/// ces tests doivent donc s'exécuter en série, sinon le processus s'arrête.
+@MainActor
+@Suite(.serialized)
+struct PersistanceTests {
+
+    /// Un seul conteneur pour toute la suite : en créer un par test faisait
+    /// tomber le processus de test entier.
+    @MainActor
+    private static let container: ModelContainer = {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        return try! ModelContainer(for: GameSession.self, configurations: config)
+    }()
+
+    private func storeVide() throws -> ScoreStore {
+        let store = ScoreStore(context: Self.container.mainContext)
+        for type in GameType.allCases {
+            store.reset(type)
+        }
+        return store
+    }
+
+    private func resultat(_ type: GameType, _ score: Double) -> GameResult {
+        GameResult(gameType: type, score: score, correctAnswers: 0,
+                   totalItems: 10, duration: 60)
+    }
+
+    @Test("La première partie d'un jeu est toujours un record")
+    func recordPremierePartie() throws {
+        let store = try storeVide()
+        #expect(store.record(resultat(.m2Back, 42)) == true)
+    }
+
+    @Test("Un meilleur score bat le record")
+    func recordScorePlusHaut() throws {
+        let store = try storeVide()
+        store.record(resultat(.m2Back, 50))
+        #expect(store.record(resultat(.m2Back, 80)) == true)
+        #expect(store.record(resultat(.m2Back, 60)) == false)
+    }
+
+    @Test("Égaler le record ne suffit pas")
+    func recordScoreEgal() throws {
+        let store = try storeVide()
+        store.record(resultat(.m2Back, 70))
+        #expect(store.record(resultat(.m2Back, 70)) == false)
+    }
+
+    @Test("Sur les jeux mesurés en temps, c'est le score le plus BAS qui gagne")
+    func recordTempsPlusBas() throws {
+        let store = try storeVide()
+        store.record(resultat(.pairImpair, 14.0))
+        #expect(store.record(resultat(.pairImpair, 11.0)) == true)
+        #expect(store.record(resultat(.pairImpair, 20.0)) == false)
+        #expect(store.best(for: .pairImpair)?.score == 11.0)
+    }
+
+    @Test("Un score négatif est traité correctement")
+    func recordScoreNegatif() throws {
+        let store = try storeVide()
+        store.record(resultat(.grillesCalculs, -5))
+        #expect(store.record(resultat(.grillesCalculs, -2)) == true)
+        #expect(store.best(for: .grillesCalculs)?.score == -2)
+    }
+
+    @Test("Les jeux ne mélangent pas leurs scores")
+    func recordCloisonneParJeu() throws {
+        let store = try storeVide()
+        store.record(resultat(.m2Back, 90))
+        #expect(store.record(resultat(.anglaisQCM, 10)) == true)
+        #expect(store.count(for: .m2Back) == 1)
+        #expect(store.count(for: .anglaisQCM) == 1)
+    }
+
+    @Test("L'historique est rendu du plus récent au plus ancien, dans la limite demandée")
+    func historiqueTrieEtLimite() throws {
+        let store = try storeVide()
+        for score in 1...5 {
+            store.record(resultat(.seriesLogiques, Double(score)))
+        }
+        let recentes = store.recent(for: .seriesLogiques, limit: 3)
+        #expect(recentes.count == 3)
+        #expect(recentes.first!.date >= recentes.last!.date)
+    }
+
+    @Test("La réinitialisation efface l'historique du seul jeu visé")
+    func reinitialisationCiblee() throws {
+        let store = try storeVide()
+        store.record(resultat(.m2Back, 50))
+        store.record(resultat(.anglaisQCM, 20))
+        store.reset(.m2Back)
+        #expect(store.count(for: .m2Back) == 0)
+        #expect(store.count(for: .anglaisQCM) == 1)
     }
 }

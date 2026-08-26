@@ -58,28 +58,21 @@ struct MainMenuView: View {
 
     @ViewBuilder
     private func destinationView(for game: Game) -> some View {
-        switch game.name {
-        case "Pair ou Impair":
-            PairImpairView()
-        case "M2 Back":
-            M2BackView()
-        case "Grilles de Calculs":
-            GrillesCalculsView()
-        case "Séries Logiques":
-            SeriesLogiquesView()
-        case "Anglais":
-            AnglaisQCMView()
-        case "Culture Aéronautique":
-            CultureAeroView()
-        case "Un Mot sur Deux":
-            UnMotSurDeuxView()
-        case "Formes et Couleurs":
-            FormesCouleursView()
-        case "Boîtes à Mots":
-            BoitesAMotsView()
-        case "Mots en Étoile":
-            MotsEnEtoileView()
-        default:
+        // Routage par type : exhaustif et vérifié à la compilation, là où une
+        // comparaison de noms cassait silencieusement au moindre renommage.
+        switch game.type {
+        case .pairImpair: PairImpairView()
+        case .m2Back: M2BackView()
+        case .grillesCalculs: GrillesCalculsView()
+        case .seriesLogiques: SeriesLogiquesView()
+        case .anglaisQCM: AnglaisQCMView()
+        case .cultureAero: CultureAeroView()
+        case .unMotSurDeux: UnMotSurDeuxView()
+        case .formesEtCouleurs: FormesCouleursView()
+        case .boitesAMots: BoitesAMotsView()
+        case .motsEnEtoile: MotsEnEtoileView()
+        case .empilementsCubes, .billes, .formesGlissees, .cubes2D3D,
+             .psychomoteur, .airways, .objets3D:
             ComingSoonView(game: game)
         }
     }
