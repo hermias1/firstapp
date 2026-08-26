@@ -213,12 +213,12 @@ extension Game {
         Game(
             type: .psychomoteur,
             name: "Psychomoteur",
-            description: "3 tâches en parallèle pendant 5 minutes",
+            description: "Suis la cible et réagis aux chiffres en même temps",
             icon: "hand.tap.fill",
             color: .red,
             category: .multitask,
             difficulty: .veryHard,
-            isImplemented: false
+            isImplemented: true
         ),
         Game(
             type: .airways,

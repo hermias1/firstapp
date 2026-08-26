@@ -101,8 +101,7 @@ struct MainMenuView: View {
         case .cubes2D3D: CubesPatronsView()
         case .objets3D: Objets3DView()
         case .airways: AirwaysView()
-        case .psychomoteur:
-            ComingSoonView(game: game)
+        case .psychomoteur: PsychomoteurView()
         }
     }
 }

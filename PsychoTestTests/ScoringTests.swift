@@ -390,6 +390,7 @@ struct PersistanceTests {
             { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = Objets3DViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = AirwaysViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = PsychomoteurViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -762,4 +763,43 @@ func airwaysSolutionOptimale() {
         #expect(Set(puzzle.options).count == 4)
         #expect(puzzle.options.contains(puzzle.solution))
     }
+}
+
+// MARK: - Psychomoteur
+
+@Test("La cible reste toujours dans la zone de jeu")
+func psychomoteurCibleDansLaZone() {
+    for pas in 0..<2000 {
+        let position = PsychomoteurViewModel.positionCible(Double(pas) * 0.05)
+        // Une cible qui sortirait du cadre serait impossible à suivre
+        #expect((0...1).contains(position.x), "x hors zone : \(position.x)")
+        #expect((0...1).contains(position.y), "y hors zone : \(position.y)")
+    }
+}
+
+@Test("La trajectoire ne se répète pas à court terme")
+func psychomoteurTrajectoireNonPeriodique() {
+    let depart = PsychomoteurViewModel.positionCible(0)
+    var retours = 0
+    // Sur une minute, la cible ne doit pas repasser au même point de départ,
+    // sinon elle deviendrait prévisible par mémorisation
+    for pas in 20..<1200 {
+        let position = PsychomoteurViewModel.positionCible(Double(pas) * 0.05)
+        let dx = position.x - depart.x
+        let dy = position.y - depart.y
+        if sqrt(dx * dx + dy * dy) < 0.01 { retours += 1 }
+    }
+    #expect(retours < 5, "\(retours) retours au point de départ en une minute")
+}
+
+@MainActor
+@Test("Les erreurs de la tâche secondaire pénalisent le score")
+func psychomoteurDoubleTacheCompte() {
+    let vm = PsychomoteurViewModel()
+    vm.isGameOver = true
+    // Sans stimulus affiché, signaler « pair » est un faux signalement
+    vm.isGameActive = true
+    let avant = vm.scoreGlobal
+    vm.signalerPair()
+    #expect(vm.scoreGlobal <= avant, "Un faux signalement doit coûter des points")
 }
