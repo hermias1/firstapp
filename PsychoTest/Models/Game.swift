@@ -201,12 +201,12 @@ extension Game {
         Game(
             type: .cubes2D3D,
             name: "Cubes 2D/3D",
-            description: "Reconstitue un patron de cube incomplet",
+            description: "Retrouve le cube correspondant au patron déplié",
             icon: "cube.transparent.fill",
             color: .purple,
             category: .spatial,
             difficulty: .hard,
-            isImplemented: false
+            isImplemented: true
         ),
 
         // TRÈS DIFFICILES - Multi-tâches

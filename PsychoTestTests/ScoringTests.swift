@@ -387,6 +387,7 @@ struct PersistanceTests {
             { let v = MentalCalculationViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -629,6 +630,60 @@ func empilementsQuestionSoluble() {
             // Et le reflet ne doit PAS l'être, sinon la question n'a pas de réponse
             #expect(!rotations.contains(EmpilementsGenerator.normaliser(reflet)),
                     "La figure symétrique est superposable aux autres")
+        }
+    }
+}
+
+// MARK: - Cubes 2D/3D
+
+@Test("Un cube offre exactement 24 vues possibles")
+func cubesVingtQuatreVues() {
+    let cube = CubeSymbolise(symboles: [0, 1, 2, 3, 4, 5])
+    #expect(CubesGenerator.toutesLesOrientations(cube).count == 24)
+    // Chaque orientation donne un triplet dessus/avant/droite différent
+    #expect(CubesGenerator.vuesPossibles(cube).count == 24)
+}
+
+@Test("Deux faces opposées ne peuvent jamais être vues ensemble")
+func cubesFacesOpposeesJamaisVisibles() {
+    let cube = CubeSymbolise(symboles: [0, 1, 2, 3, 4, 5])
+    let opposees: [(FaceCube, FaceCube)] = [(.haut, .bas), (.gauche, .droite), (.avant, .arriere)]
+    for vue in CubesGenerator.vuesPossibles(cube) {
+        for (a, b) in opposees {
+            #expect(!(vue.contains(cube[a]) && vue.contains(cube[b])),
+                    "La vue \(vue) montre deux faces opposées")
+        }
+    }
+}
+
+@Test("Inverser l'ordre de rotation d'un sommet rend le cube impossible")
+func cubesOrdreDeRotationCompte() {
+    let cube = CubeSymbolise(symboles: [0, 1, 2, 3, 4, 5])
+    let possibles = CubesGenerator.vuesPossibles(cube)
+    for vue in possibles {
+        // Les trois mêmes faces, mais tournées dans l'autre sens
+        let inversee = [vue[0], vue[2], vue[1]]
+        #expect(!possibles.contains(inversee),
+                "\(inversee) devrait être irréalisable")
+    }
+}
+
+@Test("Chaque question a une bonne réponse et trois cubes impossibles")
+func cubesQuestionBienFormee() {
+    for _ in 0..<100 {
+        let question = CubesGenerator.generate()
+        #expect(question.propositions.count == 4)
+        #expect(Set(question.propositions).count == 4, "Proposition dupliquée")
+
+        let possibles = CubesGenerator.vuesPossibles(question.cube)
+        for (index, proposition) in question.propositions.enumerated() {
+            if index == question.indexCorrect {
+                #expect(possibles.contains(proposition), "La bonne réponse est irréalisable")
+            } else {
+                // Un distracteur réalisable donnerait deux bonnes réponses
+                #expect(!possibles.contains(proposition),
+                        "Le distracteur \(proposition) est un cube valide")
+            }
         }
     }
 }
