@@ -71,13 +71,13 @@ enum BillesGenerator {
             // La cible est obtenue en jouant des coups au hasard : elle est
             // donc toujours atteignable.
             var cible = depart
-            for _ in 0..<Int.random(in: 3...7) {
+            for _ in 0..<Int.random(in: 3...9) {
                 guard let suivant = coupsPossibles(cible).randomElement() else { break }
                 cible = suivant
             }
 
             guard let solution = distanceMinimale(de: depart, a: cible),
-                  (2...6).contains(solution) else { continue }
+                  (2...8).contains(solution) else { continue }
 
             return BillesPuzzle(depart: depart, cible: cible, solution: solution,
                                 options: options(pour: solution), capacite: capacite)
@@ -91,16 +91,7 @@ enum BillesGenerator {
     }
 
     static func options(pour solution: Int) -> [Int] {
-        var valeurs = [solution]
-        for ecart in [1, 2, 3, 4] {
-            for candidat in [solution - ecart, solution + ecart] where candidat >= 1 {
-                if !valeurs.contains(candidat) && valeurs.count < 4 {
-                    valeurs.append(candidat)
-                }
-            }
-            if valeurs.count == 4 { break }
-        }
-        return valeurs.shuffled()
+        PropositionsQCM.autour(de: solution, minimum: 1)
     }
 }
 

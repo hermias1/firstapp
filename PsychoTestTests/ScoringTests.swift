@@ -848,3 +848,92 @@ func formesDepotUnique() {
     vm.deposer(index: 0, en: position)
     #expect(vm.grille == grilleApres)
 }
+
+// MARK: - Propositions de QCM
+
+@Test("La bonne réponse n'occupe pas toujours le même rang")
+func propositionsRangVariable() {
+    var rangs: [Int: Int] = [:]
+    let essais = 4000
+    for _ in 0..<essais {
+        let solution = Int.random(in: 4...12)
+        let options = PropositionsQCM.autour(de: solution, minimum: 0)
+        #expect(options.count == 4)
+        #expect(Set(options).count == 4)
+        #expect(options.contains(solution))
+        let rang = options.sorted().firstIndex(of: solution)!
+        rangs[rang, default: 0] += 1
+    }
+    // Les quatre rangs doivent tous être représentés : une version précédente
+    // plaçait toujours la solution au 3e rang, si bien qu'il suffisait de
+    // trier les boutons pour gagner sans lire l'énoncé.
+    #expect(rangs.count == 4, "Rangs observés : \(rangs)")
+    for (rang, nombre) in rangs {
+        #expect(nombre > essais / 12, "Rang \(rang) trop rare : \(nombre)/\(essais)")
+    }
+}
+
+@Test("Les propositions restent au-dessus du minimum autorisé")
+func propositionsRespectentLeMinimum() {
+    for _ in 0..<1000 {
+        let solution = Int.random(in: 2...8)
+        for option in PropositionsQCM.autour(de: solution, minimum: 1) {
+            #expect(option >= 1)
+        }
+    }
+}
+
+// MARK: - Corrections issues de l'audit
+
+@Test("La vue de face place les cubes hauts en haut de la silhouette")
+func objets3DSensVertical() {
+    // Un cube au sol à gauche, un cube en hauteur à droite
+    let empilement = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 1)]
+    let face = Objets3DGenerator.projection(empilement, vue: .face)
+    #expect(face.count == 2 && face[0].count == 2)
+    // Le dessin isométrique fait monter z : la silhouette doit faire de même
+    #expect(face[0][1], "Le cube en hauteur doit occuper la ligne du haut")
+    #expect(face[1][0], "Le cube au sol doit occuper la ligne du bas")
+}
+
+@Test("Aucun cube n'en masque un autre dans les figures proposées")
+func empilementsFiguresLisibles() {
+    for cubes in [4, 5, 6] {
+        for _ in 0..<25 {
+            let question = EmpilementsGenerator.generate(nombreDeCubes: cubes)
+            for figure in question.figures {
+                // Une figure qui affiche moins de blocs qu'elle ne contient de
+                // cubes rend la comparaison impossible
+                #expect(EmpilementsGenerator.empreinte(figure).count == figure.count,
+                        "Un cube est masqué dans \(figure)")
+            }
+            let empreintes = Set(question.figures.map(EmpilementsGenerator.empreinte))
+            #expect(empreintes.count == 3, "Deux figures ont le même dessin")
+        }
+    }
+}
+
+@Test("Le cube correct ne se devine pas au consensus des propositions")
+func cubesPasDeFuiteParConsensus() {
+    var succes = 0
+    let essais = 400
+    for _ in 0..<essais {
+        let question = CubesGenerator.generate()
+        // Heuristique aveugle : choisir la proposition dont chaque symbole est
+        // le plus souvent partagé, à la même position, par les autres.
+        var meilleur = 0
+        var scoreMax = -1
+        for (index, proposition) in question.propositions.enumerated() {
+            var score = 0
+            for position in 0..<3 {
+                score += question.propositions.filter { $0[position] == proposition[position] }.count
+            }
+            if score > scoreMax { scoreMax = score; meilleur = index }
+        }
+        if meilleur == question.indexCorrect { succes += 1 }
+    }
+    let taux = Double(succes) / Double(essais)
+    // Fabriquer les distracteurs en modifiant la bonne réponse la désignait :
+    // cette heuristique atteignait alors 87 % de réussite.
+    #expect(taux < 0.45, "Le consensus positionnel réussit \(Int(taux * 100)) %")
+}

@@ -31,9 +31,13 @@ enum Objets3DGenerator {
         var grille = Array(repeating: Array(repeating: false, count: maxA + 1),
                            count: maxB + 1)
         for (a, b) in points {
-            grille[b][a] = true
+            // De face et de côté, la seconde coordonnée est l'altitude : elle
+            // croît vers le haut, alors que les lignes d'une grille s'affichent
+            // du haut vers le bas. Sans cette inversion, la silhouette proposée
+            // est le reflet vertical de ce que montre le dessin.
+            let ligne = vue == .dessus ? b : maxB - b
+            grille[ligne][a] = true
         }
-        // La vue de dessus se lit avec les y croissants vers le bas
         return grille
     }
 

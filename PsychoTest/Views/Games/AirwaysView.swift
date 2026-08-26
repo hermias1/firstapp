@@ -50,7 +50,7 @@ enum AirwaysGenerator {
             let solution = manoeuvresMinimales(arrivees: arrivees, espacement: espacement)
 
             // Ni trivial, ni décourageant
-            guard (2...12).contains(solution) else { continue }
+            guard (2...14).contains(solution) else { continue }
 
             let avions = zip(arrivees.indices, arrivees).map { index, arrivee in
                 Avion(id: index,
@@ -71,16 +71,7 @@ enum AirwaysGenerator {
     }
 
     static func options(pour solution: Int) -> [Int] {
-        var valeurs = [solution]
-        for ecart in [1, 2, 3, 4, 5] {
-            for candidat in [solution - ecart, solution + ecart] where candidat >= 0 {
-                if !valeurs.contains(candidat) && valeurs.count < 4 {
-                    valeurs.append(candidat)
-                }
-            }
-            if valeurs.count == 4 { break }
-        }
-        return valeurs.shuffled()
+        PropositionsQCM.autour(de: solution, minimum: 0)
     }
 }
 

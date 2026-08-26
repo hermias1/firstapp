@@ -92,6 +92,23 @@ enum CubesGenerator {
 
     // MARK: Génération
 
+    /// Les agencements de trois faces distinctes qu'aucune rotation ne peut
+    /// produire : soit deux faces opposées y voisinent, soit l'ordre de
+    /// rotation autour du sommet est inversé.
+    static func tripletsImpossibles(pour cube: CubeSymbolise) -> [[Int]] {
+        let realisables = vuesPossibles(cube)
+        var resultat: [[Int]] = []
+        for premier in 0..<6 {
+            for deuxieme in 0..<6 where deuxieme != premier {
+                for troisieme in 0..<6 where troisieme != premier && troisieme != deuxieme {
+                    let triplet = [premier, deuxieme, troisieme]
+                    if !realisables.contains(triplet) { resultat.append(triplet) }
+                }
+            }
+        }
+        return resultat
+    }
+
     struct Question {
         let cube: CubeSymbolise
         /// Les quatre vues proposées, sous forme de triplets de symboles.
@@ -106,27 +123,13 @@ enum CubesGenerator {
             let possibles = vuesPossibles(cube)
             guard let correcte = possibles.randomElement() else { continue }
 
-            // Des vues fausses : mêmes symboles, agencement irréalisable
-            var fausses: Set<[Int]> = []
-            var tentatives = 0
-            while fausses.count < 3 && tentatives < 400 {
-                tentatives += 1
-                var candidate = correcte
-                switch Int.random(in: 0..<2) {
-                case 0:
-                    // Inverser deux faces : casse l'ordre autour du sommet
-                    candidate.swapAt(0, Int.random(in: 1...2))
-                default:
-                    // Remplacer une face par une autre du cube
-                    let position = Int.random(in: 0..<3)
-                    let autres = (0..<6).filter { !candidate.contains($0) }
-                    guard let remplacant = autres.randomElement() else { continue }
-                    candidate[position] = remplacant
-                }
-                if !possibles.contains(candidate) && candidate != correcte {
-                    fausses.insert(candidate)
-                }
-            }
+            // Les distracteurs sont tirés parmi TOUS les agencements
+            // irréalisables, jamais dérivés de la bonne réponse. Les fabriquer
+            // en modifiant une ou deux faces de la vue correcte la désignait :
+            // elle restait le consensus des quatre propositions, ce qui
+            // permettait de répondre à 87 % sans jamais lire le patron.
+            let impossibles = CubesGenerator.tripletsImpossibles(pour: cube)
+            let fausses = Array(impossibles.shuffled().prefix(3))
             guard fausses.count == 3 else { continue }
 
             var propositions = Array(fausses)

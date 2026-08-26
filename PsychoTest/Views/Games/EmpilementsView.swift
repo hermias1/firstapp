@@ -57,6 +57,26 @@ enum EmpilementsGenerator {
         normaliser(e.map { Cube(x: -$0.x, y: $0.y, z: $0.z) })
     }
 
+    /// Ce que la projection isométrique laisse réellement voir : les couples
+    /// (x - y, x + y - 2z), recentrés pour être comparables d'une figure à
+    /// l'autre.
+    ///
+    /// Deux cubes distants de (1, 1, 1) tombent exactement au même point à
+    /// l'écran : le plus proche masque totalement l'autre. Une figure dont
+    /// l'empreinte compte moins de points que de cubes affiche donc moins de
+    /// blocs qu'elle n'en contient, et la question devient indécidable.
+    static func empreinte(_ e: Empilement) -> Set<[Int]> {
+        let points = e.map { [$0.x - $0.y, $0.x + $0.y - 2 * $0.z] }
+        guard let minA = points.map({ $0[0] }).min(),
+              let minB = points.map({ $0[1] }).min() else { return [] }
+        return Set(points.map { [$0[0] - minA, $0[1] - minB] })
+    }
+
+    /// Vrai si aucun cube n'en masque un autre dans cette orientation.
+    static func lisible(_ e: Empilement) -> Bool {
+        empreinte(e).count == e.count
+    }
+
     /// Une forme est chirale si son miroir ne peut pas être obtenu par rotation.
     ///
     /// Sans cette vérification, un empilement symétrique donnerait trois figures
@@ -95,25 +115,38 @@ enum EmpilementsGenerator {
             let forme = formeAleatoire(nombreDeCubes: nombreDeCubes)
             guard forme.count == nombreDeCubes, estChirale(forme) else { continue }
 
-            let orientations = toutesLesRotations(forme).shuffled()
+            let orientations = toutesLesRotations(forme).filter(lisible).shuffled()
             guard orientations.count >= 2 else { continue }
-            let reflets = toutesLesRotations(miroir(forme)).shuffled()
+            let reflets = toutesLesRotations(miroir(forme)).filter(lisible).shuffled()
             guard let reflet = reflets.first else { continue }
 
             // Deux orientations différentes de la même forme, plus un reflet
             var figures = [orientations[0], orientations[1], reflet]
+
+            // Deux figures au dessin identique rendraient la troisième
+            // reconnaissable sans raisonnement, ou la question insoluble si
+            // c'est le reflet qui se confond avec une rotation.
+            guard Set(figures.map(empreinte)).count == 3 else { continue }
             let index = Int.random(in: 0..<3)
             figures.swapAt(2, index)
 
             return Question(figures: figures, indexSymetrie: index)
         }
 
-        // Repli déterministe : une forme en L tordu, chirale
-        let forme = [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
-                     Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1),
-                     Cube(x: 2, y: 1, z: 1)]
-        return Question(figures: [normaliser(forme), miroir(forme), normaliser(forme)],
-                        indexSymetrie: 1)
+        // Repli déterministe : une forme en L tordu, chirale. Les deux figures
+        // non symétriques doivent être vues sous des angles différents, sinon
+        // le doublon désigne la troisième.
+        let forme = normaliser([Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+                                Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1),
+                                Cube(x: 2, y: 1, z: 1)])
+        let vues = toutesLesRotations(forme).filter(lisible)
+        let reflets = toutesLesRotations(miroir(forme)).filter(lisible)
+        let premiere = vues.first ?? forme
+        let seconde = vues.first { empreinte($0) != empreinte(premiere) } ?? forme
+        let reflet = reflets.first { empreinte($0) != empreinte(premiere)
+                                     && empreinte($0) != empreinte(seconde) }
+                     ?? miroir(forme)
+        return Question(figures: [premiere, seconde, reflet], indexSymetrie: 2)
     }
 }
 
