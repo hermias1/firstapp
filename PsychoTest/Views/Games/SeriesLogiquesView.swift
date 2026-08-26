@@ -216,7 +216,9 @@ struct LogicSequence: Identifiable {
 
     // n² + 1 (2, 5, 10, 17, 26...)
     private static func generateSquarePlusOne() -> LogicSequence {
-        let offset = Int.random(in: 1...2)
+        // Deux valeurs seulement faisaient revenir la même question d'une
+        // partie à l'autre ; la réponse (25 + offset) reste sous 100.
+        let offset = Int.random(in: 1...9)
         let sequence = (1..<5).map { String($0 * $0 + offset) }
         let answer = String(5 * 5 + offset)
         let options = generateOptions(correct: answer, isNumber: true, shown: sequence)
