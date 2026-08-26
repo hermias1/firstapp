@@ -180,3 +180,29 @@ func etoileLongueurHomogene() {
         #expect(longueurs.count == 1)
     }
 }
+
+// MARK: - Cohérence des banques de questions
+
+@Test("Anglais : chaque question est bien formée")
+func anglaisBanqueCoherente() {
+    for q in EnglishQuestion.allQuestions {
+        #expect(q.options.count == 4, "\(q.question)")
+        #expect(Set(q.options).count == 4, "Option dupliquée : \(q.question)")
+        #expect(q.options.contains(q.correctAnswer),
+                "Réponse absente des options : \(q.question)")
+    }
+    let libelles = EnglishQuestion.allQuestions.map(\.question)
+    #expect(Set(libelles).count == libelles.count, "Question dupliquée")
+}
+
+@Test("Culture Aéro : chaque question est bien formée")
+func aeroBanqueCoherente() {
+    for q in AeroQuestion.allQuestions {
+        #expect(q.options.count == 4, "\(q.question)")
+        #expect(Set(q.options).count == 4, "Option dupliquée : \(q.question)")
+        #expect(q.options.contains(q.correctAnswer),
+                "Réponse absente des options : \(q.question)")
+    }
+    let libelles = AeroQuestion.allQuestions.map(\.question)
+    #expect(Set(libelles).count == libelles.count, "Question dupliquée")
+}

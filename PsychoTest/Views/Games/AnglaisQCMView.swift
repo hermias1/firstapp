@@ -31,7 +31,7 @@ extension EnglishQuestion {
         EnglishQuestion(question: "He has been working here ___ 2019.", options: ["for", "since", "during", "while"], correctAnswer: "since", category: .grammar),
         EnglishQuestion(question: "I have lived in London ___ five years.", options: ["for", "since", "during", "while"], correctAnswer: "for", category: .grammar),
         EnglishQuestion(question: "She has ___ finished her homework.", options: ["yet", "already", "still", "ever"], correctAnswer: "already", category: .grammar),
-        EnglishQuestion(question: "Have you ___ been to Japan?", options: ["never", "ever", "already", "yet"], correctAnswer: "ever", category: .grammar),
+        EnglishQuestion(question: "This is the best film I have ___ seen.", options: ["ever", "never", "already", "yet"], correctAnswer: "ever", category: .grammar),
         EnglishQuestion(question: "They haven't arrived ___.", options: ["yet", "already", "still", "ever"], correctAnswer: "yet", category: .grammar),
 
         // Tenses - Future
@@ -43,7 +43,7 @@ extension EnglishQuestion {
 
         // Conditionals
         EnglishQuestion(question: "If I ___ you, I would accept the offer.", options: ["am", "was", "were", "be"], correctAnswer: "were", category: .grammar),
-        EnglishQuestion(question: "If it rains, we ___ stay home.", options: ["will", "would", "could", "might"], correctAnswer: "will", category: .grammar),
+        EnglishQuestion(question: "If it rains, we ___ stay home.", options: ["will", "would", "were", "have"], correctAnswer: "will", category: .grammar),
         EnglishQuestion(question: "I would help if I ___ time.", options: ["have", "has", "had", "having"], correctAnswer: "had", category: .grammar),
         EnglishQuestion(question: "If she ___ harder, she would pass.", options: ["study", "studies", "studied", "studying"], correctAnswer: "studied", category: .grammar),
         EnglishQuestion(question: "What ___ you do if you won the lottery?", options: ["will", "would", "do", "did"], correctAnswer: "would", category: .grammar),
@@ -56,10 +56,10 @@ extension EnglishQuestion {
         EnglishQuestion(question: "The work ___ by tomorrow.", options: ["will finish", "will be finished", "finishes", "finished"], correctAnswer: "will be finished", category: .grammar),
 
         // Subject-Verb Agreement
-        EnglishQuestion(question: "Neither the pilot nor the co-pilot ___ aware.", options: ["was", "were", "are", "is"], correctAnswer: "was", category: .grammar),
+        EnglishQuestion(question: "Neither the pilot nor the co-pilot ___ aware of the failure at that time.", options: ["was", "were", "are", "is"], correctAnswer: "was", category: .grammar),
         EnglishQuestion(question: "The news ___ shocking.", options: ["is", "are", "were", "have"], correctAnswer: "is", category: .grammar),
         EnglishQuestion(question: "Everyone ___ ready for the test.", options: ["is", "are", "were", "have"], correctAnswer: "is", category: .grammar),
-        EnglishQuestion(question: "The team ___ playing well.", options: ["is", "are", "were", "has"], correctAnswer: "is", category: .grammar),
+        EnglishQuestion(question: "The team ___ playing well.", options: ["is", "has", "have", "being"], correctAnswer: "is", category: .grammar),
         EnglishQuestion(question: "Mathematics ___ my favorite subject.", options: ["is", "are", "were", "have"], correctAnswer: "is", category: .grammar),
 
         // Comparatives and Superlatives
@@ -74,7 +74,7 @@ extension EnglishQuestion {
         EnglishQuestion(question: "You ___ smoke here. It's forbidden.", options: ["mustn't", "don't have to", "shouldn't", "couldn't"], correctAnswer: "mustn't", category: .grammar),
         EnglishQuestion(question: "She ___ be at home. Her car is here.", options: ["must", "can", "should", "would"], correctAnswer: "must", category: .grammar),
         EnglishQuestion(question: "You ___ work so hard. Take a break.", options: ["shouldn't", "mustn't", "can't", "won't"], correctAnswer: "shouldn't", category: .grammar),
-        EnglishQuestion(question: "___ you help me with this?", options: ["Could", "Would", "Should", "Must"], correctAnswer: "Could", category: .grammar),
+        EnglishQuestion(question: "___ you help me with this?", options: ["Could", "May", "Ought", "Must"], correctAnswer: "Could", category: .grammar),
 
         // Gerunds and Infinitives
         EnglishQuestion(question: "He suggested ___ the flight.", options: ["to delay", "delaying", "delay", "delayed"], correctAnswer: "delaying", category: .grammar),
@@ -91,18 +91,18 @@ extension EnglishQuestion {
         EnglishQuestion(question: "I'll see you ___ 3 o'clock.", options: ["in", "on", "at", "by"], correctAnswer: "at", category: .grammar),
 
         // Relative Clauses
-        EnglishQuestion(question: "The weather, ___ was forecasted, turned bad.", options: ["which", "that", "as", "what"], correctAnswer: "as", category: .grammar),
+        EnglishQuestion(question: "The weather, ___ was forecast, turned bad.", options: ["as", "that", "what", "whom"], correctAnswer: "as", category: .grammar),
         EnglishQuestion(question: "The man ___ called is my uncle.", options: ["who", "which", "what", "whom"], correctAnswer: "who", category: .grammar),
         EnglishQuestion(question: "The book ___ I read was great.", options: ["who", "which", "what", "whom"], correctAnswer: "which", category: .grammar),
         EnglishQuestion(question: "This is the house ___ I grew up.", options: ["where", "which", "that", "what"], correctAnswer: "where", category: .grammar),
-        EnglishQuestion(question: "The reason ___ I'm late is traffic.", options: ["why", "which", "that", "what"], correctAnswer: "why", category: .grammar),
+        EnglishQuestion(question: "The reason ___ I'm late is traffic.", options: ["why", "which", "when", "what"], correctAnswer: "why", category: .grammar),
 
         // Articles
         EnglishQuestion(question: "She is ___ engineer.", options: ["a", "an", "the", "—"], correctAnswer: "an", category: .grammar),
         EnglishQuestion(question: "___ sun rises in the east.", options: ["A", "An", "The", "—"], correctAnswer: "The", category: .grammar),
-        EnglishQuestion(question: "I need ___ information.", options: ["a", "an", "some", "the"], correctAnswer: "some", category: .grammar),
+        EnglishQuestion(question: "I need ___ information.", options: ["a", "an", "some", "many"], correctAnswer: "some", category: .grammar),
         EnglishQuestion(question: "He plays ___ piano beautifully.", options: ["a", "an", "the", "—"], correctAnswer: "the", category: .grammar),
-        EnglishQuestion(question: "She went to ___ university in London.", options: ["a", "an", "the", "—"], correctAnswer: "a", category: .grammar),
+        EnglishQuestion(question: "She went to ___ university in London.", options: ["a", "an", "these", "much"], correctAnswer: "a", category: .grammar),
 
         // Present Perfect vs Past Simple
         EnglishQuestion(question: "The passengers ___ board yet.", options: ["haven't", "hasn't", "didn't", "don't"], correctAnswer: "haven't", category: .grammar),
@@ -114,9 +114,9 @@ extension EnglishQuestion {
         // Inversion
         EnglishQuestion(question: "Not only ___ he arrive late, but he forgot his ID.", options: ["did", "does", "was", "had"], correctAnswer: "did", category: .grammar),
         EnglishQuestion(question: "Rarely ___ I seen such beauty.", options: ["have", "had", "do", "did"], correctAnswer: "have", category: .grammar),
-        EnglishQuestion(question: "Never ___ I forget this day.", options: ["will", "would", "shall", "should"], correctAnswer: "will", category: .grammar),
+        EnglishQuestion(question: "Never before ___ I seen such a storm.", options: ["had", "have", "did", "was"], correctAnswer: "had", category: .grammar),
         EnglishQuestion(question: "Hardly ___ he arrived when it started raining.", options: ["had", "has", "did", "was"], correctAnswer: "had", category: .grammar),
-        EnglishQuestion(question: "Only then ___ I understand.", options: ["did", "do", "have", "had"], correctAnswer: "did", category: .grammar),
+        EnglishQuestion(question: "Only then ___ I understand what had happened.", options: ["did", "was", "have", "am"], correctAnswer: "did", category: .grammar),
 
         // Question Tags
         EnglishQuestion(question: "You're coming, ___?", options: ["aren't you", "isn't it", "don't you", "won't you"], correctAnswer: "aren't you", category: .grammar),
@@ -128,7 +128,7 @@ extension EnglishQuestion {
         // Reported Speech
         EnglishQuestion(question: "She said she ___ tired.", options: ["is", "was", "has been", "will be"], correctAnswer: "was", category: .grammar),
         EnglishQuestion(question: "He told me he ___ help.", options: ["will", "would", "can", "may"], correctAnswer: "would", category: .grammar),
-        EnglishQuestion(question: "They asked if I ___ coming.", options: ["am", "was", "will be", "would be"], correctAnswer: "was", category: .grammar),
+        EnglishQuestion(question: "They asked if I ___ coming.", options: ["am", "was", "will be", "being"], correctAnswer: "was", category: .grammar),
         EnglishQuestion(question: "She asked where I ___.", options: ["live", "lived", "living", "lives"], correctAnswer: "lived", category: .grammar),
         EnglishQuestion(question: "He said he ___ the answer.", options: ["knows", "knew", "knowing", "know"], correctAnswer: "knew", category: .grammar),
 
@@ -141,7 +141,7 @@ extension EnglishQuestion {
 
         // Mixed Grammar
         EnglishQuestion(question: "If I ___ known, I would have helped.", options: ["have", "has", "had", "having"], correctAnswer: "had", category: .grammar),
-        EnglishQuestion(question: "She ___ to be very kind.", options: ["seems", "seem", "seeming", "seemed"], correctAnswer: "seems", category: .grammar),
+        EnglishQuestion(question: "She ___ to be very kind, judging by her smile.", options: ["seems", "seem", "seeming", "seemingly"], correctAnswer: "seems", category: .grammar),
         EnglishQuestion(question: "I'd rather you ___ smoking.", options: ["stop", "stopped", "stopping", "stops"], correctAnswer: "stopped", category: .grammar),
         EnglishQuestion(question: "It's time we ___.", options: ["leave", "left", "leaving", "leaves"], correctAnswer: "left", category: .grammar),
         EnglishQuestion(question: "I wish I ___ taller.", options: ["am", "was", "were", "be"], correctAnswer: "were", category: .grammar),
@@ -232,7 +232,7 @@ extension EnglishQuestion {
         EnglishQuestion(question: "'Complement' completes; 'compliment' means:", options: ["to add", "to praise", "to complete", "to finish"], correctAnswer: "to praise", category: .vocabulary),
         EnglishQuestion(question: "'Loose' means not tight; 'lose' means:", options: ["to win", "to fail to keep", "to loosen", "to release"], correctAnswer: "to fail to keep", category: .vocabulary),
         EnglishQuestion(question: "'Their' is possessive; 'there' indicates:", options: ["ownership", "place", "time", "action"], correctAnswer: "place", category: .vocabulary),
-        EnglishQuestion(question: "'Weather' is climate; 'whether' is:", options: ["climate", "a conjunction", "temperature", "rain"], correctAnswer: "a conjunction", category: .vocabulary),
+        EnglishQuestion(question: "'Weather' refers to atmospheric conditions; 'whether' is:", options: ["a conjunction", "a noun", "an adjective", "a verb"], correctAnswer: "a conjunction", category: .vocabulary),
         EnglishQuestion(question: "'Advice' (noun) vs 'advise' (verb) - I ___ you to study.", options: ["advice", "advise", "both", "neither"], correctAnswer: "advise", category: .vocabulary),
         EnglishQuestion(question: "'Ensure' means to make certain; 'insure' relates to:", options: ["certainty", "insurance", "security", "safety"], correctAnswer: "insurance", category: .vocabulary),
 

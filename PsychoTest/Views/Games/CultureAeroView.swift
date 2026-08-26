@@ -8,7 +8,7 @@ struct AeroQuestion: Identifiable {
     let correctAnswer: String
 }
 
-// MARK: - Questions Database (140 questions)
+// MARK: - Questions Database (139 questions)
 extension AeroQuestion {
     static let allQuestions: [AeroQuestion] = [
         // PHYSIQUE DU VOL
@@ -21,7 +21,7 @@ extension AeroQuestion {
         AeroQuestion(question: "Le centre de gravité d'un avion doit être :", options: ["Dans certaines limites", "Le plus en avant possible", "Le plus en arrière possible", "Exactement au centre"], correctAnswer: "Dans certaines limites"),
         AeroQuestion(question: "Le facteur de charge est :", options: ["Le rapport portance/poids", "La masse de l'avion", "La vitesse maximale", "Le nombre de passagers"], correctAnswer: "Le rapport portance/poids"),
         AeroQuestion(question: "En virage, le facteur de charge :", options: ["Augmente", "Diminue", "Reste constant", "Devient négatif"], correctAnswer: "Augmente"),
-        AeroQuestion(question: "La vitesse de décrochage augmente avec :", options: ["Le facteur de charge", "L'altitude", "La température", "Toutes ces réponses"], correctAnswer: "Toutes ces réponses"),
+        AeroQuestion(question: "À masse constante, la vitesse de décrochage indiquée augmente avec :", options: ["Le facteur de charge", "L'altitude", "La température extérieure", "Le cap suivi"], correctAnswer: "Le facteur de charge"),
 
         // AXES ET COMMANDES
         AeroQuestion(question: "Qu'est-ce que le roulis ?", options: ["Rotation autour de l'axe longitudinal", "Rotation autour de l'axe vertical", "Rotation autour de l'axe latéral", "Mouvement vers l'avant"], correctAnswer: "Rotation autour de l'axe longitudinal"),
@@ -43,7 +43,7 @@ extension AeroQuestion {
         AeroQuestion(question: "Le conservateur de cap indique :", options: ["La direction de l'avion", "L'altitude", "La vitesse", "L'assiette"], correctAnswer: "La direction de l'avion"),
         AeroQuestion(question: "L'indicateur de virage montre :", options: ["Le taux de virage et la symétrie", "L'altitude", "La vitesse", "Le cap"], correctAnswer: "Le taux de virage et la symétrie"),
         AeroQuestion(question: "L'altimètre fonctionne grâce à :", options: ["La pression atmosphérique", "Un radar", "Un GPS", "Un gyroscope"], correctAnswer: "La pression atmosphérique"),
-        AeroQuestion(question: "Un tube de Pitot mesure :", options: ["La pression dynamique", "La température", "L'altitude", "Le cap"], correctAnswer: "La pression dynamique"),
+        AeroQuestion(question: "Un tube de Pitot capte :", options: ["La pression totale", "La pression statique", "La température", "Le cap"], correctAnswer: "La pression totale"),
         AeroQuestion(question: "Le transpondeur sert à :", options: ["Identifier l'avion au radar", "Mesurer l'altitude", "Communiquer avec la tour", "Naviguer"], correctAnswer: "Identifier l'avion au radar"),
         AeroQuestion(question: "L'EFIS signifie :", options: ["Electronic Flight Instrument System", "Engine Fuel Indicator System", "Emergency Flight Information", "External Flight Input System"], correctAnswer: "Electronic Flight Instrument System"),
 
@@ -66,7 +66,7 @@ extension AeroQuestion {
         AeroQuestion(question: "Les cumulonimbus sont dangereux car ils :", options: ["Contiennent des turbulences et de la grêle", "Sont très hauts", "Sont difficiles à voir", "Contiennent de la neige"], correctAnswer: "Contiennent des turbulences et de la grêle"),
         AeroQuestion(question: "Le windshear est :", options: ["Un changement brutal de vent", "Un vent constant", "Un vent arrière", "Un vent de face"], correctAnswer: "Un changement brutal de vent"),
         AeroQuestion(question: "Le givrage se produit quand :", options: ["La température est proche de 0°C avec humidité", "Il fait très froid", "Il fait très chaud", "L'altitude est élevée"], correctAnswer: "La température est proche de 0°C avec humidité"),
-        AeroQuestion(question: "CAVOK signifie :", options: ["Ceiling And Visibility OK", "Clear Aviation OK", "Conditions Always Valid OK", "Cloud And Visibility OK"], correctAnswer: "Ceiling And Visibility OK"),
+        AeroQuestion(question: "CAVOK signifie :", options: ["Cloud And Visibility OK", "Ceiling And Vertical OK", "Clear Aviation OK", "Conditions Always Valid OK"], correctAnswer: "Cloud And Visibility OK"),
         AeroQuestion(question: "La visibilité se mesure en :", options: ["Mètres ou kilomètres", "Pieds", "Milles nautiques", "Degrés"], correctAnswer: "Mètres ou kilomètres"),
         AeroQuestion(question: "Un front froid apporte généralement :", options: ["Des orages et averses", "Du beau temps", "Du brouillard", "Des vents calmes"], correctAnswer: "Des orages et averses"),
         AeroQuestion(question: "Le brouillard d'advection se forme :", options: ["Quand l'air chaud passe sur une surface froide", "La nuit", "En montagne", "Au-dessus de l'eau"], correctAnswer: "Quand l'air chaud passe sur une surface froide"),
@@ -129,7 +129,6 @@ extension AeroQuestion {
         AeroQuestion(question: "La tropopause est :", options: ["La limite entre troposphère et stratosphère", "Une couche de nuages", "Le niveau de vol maximum", "Une zone de turbulence"], correctAnswer: "La limite entre troposphère et stratosphère"),
         AeroQuestion(question: "L'altitude densité augmente quand :", options: ["La température augmente", "La pression augmente", "L'altitude diminue", "L'humidité diminue"], correctAnswer: "La température augmente"),
         AeroQuestion(question: "En atmosphère chaude, les performances :", options: ["Diminuent", "Augmentent", "Restent identiques", "S'améliorent au décollage"], correctAnswer: "Diminuent"),
-        AeroQuestion(question: "Le niveau de la mer a une pression de :", options: ["1013.25 hPa en ISA", "1000 hPa", "1050 hPa", "950 hPa"], correctAnswer: "1013.25 hPa en ISA"),
 
         // PROCÉDURES ET OPÉRATIONS
         AeroQuestion(question: "Le pushback est :", options: ["Le repoussage de l'avion", "Le décollage", "L'atterrissage", "Le ravitaillement"], correctAnswer: "Le repoussage de l'avion"),
@@ -215,7 +214,7 @@ final class CultureAeroViewModel {
     }
 
     func startGame() {
-        // Sélectionner 30 questions aléatoires parmi 140
+        // Sélectionner 30 questions aléatoires parmi 139
         questions = Array(AeroQuestion.allQuestions.shuffled().prefix(totalQuestions))
         currentIndex = 0
         score = 0
@@ -331,7 +330,7 @@ struct CultureAeroView: View {
                     .font(.headline)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("30 questions aléatoires parmi 140", systemImage: "shuffle")
+                    Label("30 questions aléatoires parmi 139", systemImage: "shuffle")
                     Label("+3 points bonne réponse", systemImage: "plus.circle.fill")
                     Label("-1 point mauvaise réponse", systemImage: "minus.circle.fill")
                     Label("0 point si 'Je ne sais pas'", systemImage: "hand.raised.fill")
