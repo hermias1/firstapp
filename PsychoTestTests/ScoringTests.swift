@@ -389,6 +389,7 @@ struct PersistanceTests {
             { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = Objets3DViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = AirwaysViewModel(); v.isGameOver = true; return v.makeResult() },
         ]
         let types = Set(vms.compactMap { $0()?.gameType })
         // Un jeu jouable qui n'alimente pas la persistance n'aurait pas de
@@ -717,5 +718,48 @@ func objets3DQuestionBienFormee() {
             #expect(proposition != vraie)
             #expect(proposition.flatMap { $0 }.contains(true), "Silhouette vide proposée")
         }
+    }
+}
+
+// MARK: - Airways
+
+@Test("Des arrivées déjà espacées ne demandent aucune manœuvre")
+func airwaysAucuneManoeuvre() {
+    #expect(AirwaysGenerator.manoeuvresMinimales(arrivees: [2, 5, 8], espacement: 3) == 0)
+    #expect(AirwaysGenerator.manoeuvresMinimales(arrivees: [4], espacement: 2) == 0)
+}
+
+@Test("Le calcul de l'attente minimale est exact sur des cas connus")
+func airwaysCalculConnu() {
+    // Trois avions à la même minute, espacement 2 : 0 + 2 + 4
+    #expect(AirwaysGenerator.manoeuvresMinimales(arrivees: [5, 5, 5], espacement: 2) == 6)
+    // L'ordre d'entrée ne change rien, seul l'ordre d'arrivée compte
+    #expect(AirwaysGenerator.manoeuvresMinimales(arrivees: [9, 4, 5], espacement: 3)
+            == AirwaysGenerator.manoeuvresMinimales(arrivees: [4, 5, 9], espacement: 3))
+}
+
+@Test("La solution proposée est réellement la meilleure possible")
+func airwaysSolutionOptimale() {
+    for _ in 0..<100 {
+        let puzzle = AirwaysGenerator.generate()
+        let arrivees = puzzle.avions.map(\.arrivee)
+        let attendu = AirwaysGenerator.manoeuvresMinimales(arrivees: arrivees,
+                                                          espacement: puzzle.espacement)
+        #expect(puzzle.solution == attendu)
+
+        // Après application de l'attente, plus aucun conflit ne subsiste
+        var precedent = Int.min
+        var total = 0
+        for arrivee in arrivees.sorted() {
+            let cible = precedent == Int.min ? arrivee : max(arrivee, precedent + puzzle.espacement)
+            #expect(precedent == Int.min || cible - precedent >= puzzle.espacement)
+            total += cible - arrivee
+            precedent = cible
+        }
+        #expect(total == puzzle.solution)
+
+        #expect(puzzle.options.count == 4)
+        #expect(Set(puzzle.options).count == 4)
+        #expect(puzzle.options.contains(puzzle.solution))
     }
 }

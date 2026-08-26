@@ -223,12 +223,12 @@ extension Game {
         Game(
             type: .airways,
             name: "Airways",
-            description: "Déroute les avions avec un minimum de manœuvres",
+            description: "Espace les arrivées avec un minimum d'attente",
             icon: "airplane.circle.fill",
             color: .blue,
             category: .multitask,
             difficulty: .veryHard,
-            isImplemented: false
+            isImplemented: true
         ),
         Game(
             type: .objets3D,
