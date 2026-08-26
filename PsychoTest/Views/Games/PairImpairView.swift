@@ -166,8 +166,11 @@ final class PairImpairViewModel {
     /// Temps moyen par série : plus bas est meilleur.
     func makeResult() -> GameResult? {
         guard isGameOver else { return nil }
+        // Le total inclut les tentatives ratées : sans cela le taux de
+        // réussite vaudrait 100 % même en se trompant à chaque série.
         return GameResult(gameType: .pairImpair, score: averageTime,
-                          correctAnswers: currentSeries, totalItems: totalSeries,
+                          correctAnswers: currentSeries,
+                          totalItems: currentSeries + errorCount,
                           duration: seriesTimes.reduce(0, +))
     }
 

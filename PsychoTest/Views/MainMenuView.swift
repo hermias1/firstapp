@@ -57,6 +57,15 @@ struct MainMenuView: View {
                 .padding(.vertical)
             }
             .navigationTitle("PSY0 Training")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        ProfilView()
+                    } label: {
+                        Label("Mon profil", systemImage: "chart.bar.doc.horizontal")
+                    }
+                }
+            }
             .background(Color(.systemGroupedBackground))
         }
     }

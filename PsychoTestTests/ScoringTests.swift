@@ -539,3 +539,37 @@ func formesSolutionUnique() {
         #expect(solutions == 1, "\(solutions) placements différents donnent la cible")
     }
 }
+
+// MARK: - Dimensions
+
+@Test("Chaque jeu jouable est rattaché à au moins une dimension")
+func dimensionsCouvrentLesJeux() {
+    for jeu in Game.implementedGames where jeu.type != .cultureAero {
+        // Culture Aéro mesure des connaissances, pas une aptitude cognitive
+        #expect(!jeu.type.dimensions.isEmpty, "\(jeu.name) n'a aucune dimension")
+    }
+}
+
+@Test("Chaque dimension est travaillable avec les jeux déjà disponibles")
+func dimensionsToutesAtteignables() {
+    for dimension in Dimension.allCases {
+        let jouables = Game.implementedGames.filter {
+            $0.type.dimensions.contains(dimension)
+        }
+        // Une dimension sans aucun test jouable resterait vide dans le profil
+        #expect(!jouables.isEmpty, "Aucun jeu disponible pour \(dimension.rawValue)")
+    }
+}
+
+@MainActor
+@Test("Le taux de réussite d'un jeu chronométré tient compte des erreurs")
+func tauxReussiteChronometre() {
+    let vm = PairImpairViewModel()
+    vm.currentSeries = 10
+    vm.errorCount = 10
+    vm.isGameOver = true
+    let resultat = vm.makeResult()
+    // 10 séries réussies pour 10 erreurs : la moitié des tentatives
+    #expect(resultat?.correctAnswers == 10)
+    #expect(resultat?.totalItems == 20)
+}

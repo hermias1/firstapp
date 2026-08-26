@@ -285,3 +285,56 @@ extension GameType {
         }
     }
 }
+
+// MARK: - Dimensions évaluées
+
+/// Les dimensions selon lesquelles la sélection restitue les résultats.
+/// Un même test en évalue souvent plusieurs.
+enum Dimension: String, CaseIterable, Identifiable {
+    case attention = "Attention"
+    case spatiale = "Spatiale"
+    case numerique = "Numérique"
+    case verbale = "Verbale"
+    case intellectuelle = "Intellectuelle"
+    case memorisation = "Mémorisation"
+    case anglais = "Anglais"
+
+    var id: String { rawValue }
+
+    var icone: String {
+        switch self {
+        case .attention: return "eye"
+        case .spatiale: return "cube"
+        case .numerique: return "number"
+        case .verbale: return "text.book.closed"
+        case .intellectuelle: return "lightbulb"
+        case .memorisation: return "brain"
+        case .anglais: return "globe.europe.africa"
+        }
+    }
+}
+
+extension GameType {
+    /// Rattachement des tests aux dimensions, d'après la classification
+    /// utilisée par les organismes de préparation à la sélection.
+    var dimensions: [Dimension] {
+        switch self {
+        case .pairImpair: return [.attention, .spatiale, .numerique]
+        case .unMotSurDeux: return [.attention, .spatiale, .verbale]
+        case .m2Back: return [.attention, .memorisation]
+        case .formesEtCouleurs: return [.attention]
+        case .grillesCalculs: return [.numerique]
+        case .calculMental: return [.numerique]
+        case .boitesAMots: return [.verbale]
+        case .motsEnEtoile: return [.verbale]
+        case .seriesLogiques: return [.intellectuelle]
+        case .billes: return [.spatiale, .intellectuelle]
+        case .formesGlissees: return [.spatiale, .intellectuelle]
+        case .empilementsCubes, .cubes2D3D, .objets3D: return [.spatiale]
+        case .anglaisQCM: return [.anglais]
+        case .cultureAero: return []
+        case .psychomoteur: return [.attention]
+        case .airways: return [.attention, .intellectuelle]
+        }
+    }
+}
