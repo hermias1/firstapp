@@ -124,62 +124,68 @@ func boitesAMotsToutesLesSeriesJouables() {
 
 // MARK: - Mots en Étoile
 
-private func lettresCommunes(_ mots: [String]) -> Set<Character> {
-    guard let premier = mots.first else { return [] }
-    return mots.dropFirst().reduce(Set(premier)) { $0.intersection(Set($1)) }
+@Test("Un anneau correct est reconnu")
+func etoileAnneauValide() {
+    // Chaque mot commence par la lettre qui termine le précédent, et le
+    // sixième reboucle sur le premier
+    let anneau = ["MIRACLE", "ESTOMAC", "CADENAS", "STOPPER", "RENOUER", "REQUIEM"]
+    #expect(MotsEnEtoileGenerator.anneauValide(anneau))
 }
 
-/// Tous les sous-ensembles de 6 mots parmi les 9 proposés.
-private func groupesDeSix(_ mots: [String]) -> [[String]] {
-    var resultat: [[String]] = []
-    func choisir(_ debut: Int, _ courant: [String]) {
-        if courant.count == 6 { resultat.append(courant); return }
-        guard debut < mots.count else { return }
-        for i in debut..<mots.count {
-            choisir(i + 1, courant + [mots[i]])
+@Test("Un anneau rompu est refusé")
+func etoileAnneauRompu() {
+    // La boucle ne se referme pas : REQUIEM finit par M, MIRACLE commence par M,
+    // mais on casse un maillon intermédiaire
+    let rompu = ["MIRACLE", "ESTOMAC", "STOPPER", "CADENAS", "RENOUER", "REQUIEM"]
+    #expect(!MotsEnEtoileGenerator.anneauValide(rompu))
+
+    // Un anneau ouvert, dont le dernier mot ne revient pas au premier
+    let ouvert = ["ABRICOT", "TORCHON", "NAVETTE", "ESSAYER", "RENOUER", "REPOSER"]
+    #expect(!MotsEnEtoileGenerator.anneauValide(ouvert))
+}
+
+@Test("Un mot ne peut pas servir deux fois")
+func etoileSansDoublon() {
+    let doublon = ["RENOUER", "RENOUER", "RENOUER", "RENOUER", "RENOUER", "RENOUER"]
+    // Chaque maillon « fonctionne » mais le même mot est réutilisé six fois
+    #expect(!MotsEnEtoileGenerator.anneauValide(doublon))
+}
+
+@Test("Chaque étoile générée a bien une solution")
+func etoileGenerationSoluble() {
+    for _ in 0..<50 {
+        let puzzle = MotsEnEtoileGenerator.generate()
+        #expect(puzzle.mots.count == 9)
+        #expect(Set(puzzle.mots).count == 9, "Mot proposé deux fois")
+        #expect(puzzle.solution.count == 6)
+
+        // La solution annoncée doit vraiment refermer l'étoile
+        #expect(MotsEnEtoileGenerator.anneauValide(puzzle.solution),
+                "Solution invalide : \(puzzle.solution)")
+        // Et ses six mots doivent figurer parmi les neuf proposés
+        #expect(puzzle.solution.allSatisfy { puzzle.mots.contains($0) })
+    }
+}
+
+@Test("Tous les mots du corpus font sept lettres")
+func etoileCorpusHomogene() {
+    for mot in MotsEnEtoileGenerator.corpus {
+        #expect(mot.count == 7, "\(mot) ne fait pas 7 lettres")
+        #expect(mot == mot.uppercased(), "\(mot) n'est pas en majuscules")
+    }
+    #expect(MotsEnEtoileGenerator.corpus.count == Set(MotsEnEtoileGenerator.corpus).count)
+}
+
+@Test("Les étoiles ne sont pas dominées par une seule initiale")
+func etoileInitialesVariees() {
+    for _ in 0..<30 {
+        let puzzle = MotsEnEtoileGenerator.generate()
+        let initiales = puzzle.solution.compactMap { $0.first }
+        // Six mots commençant tous par la même lettre rendraient le jeu terne
+        for lettre in Set(initiales) {
+            #expect(initiales.filter { $0 == lettre }.count <= 2,
+                    "Trop de mots en \(lettre) : \(puzzle.solution)")
         }
-    }
-    choisir(0, [])
-    return resultat
-}
-
-@Test("Chaque puzzle propose 9 mots distincts")
-func etoileNeufMotsDistincts() {
-    for puzzle in StarPuzzle.allPuzzles {
-        let mots = puzzle.solution + puzzle.distractors
-        #expect(mots.count == 9)
-        #expect(Set(mots).count == 9)
-    }
-}
-
-@Test("La solution partage bien les lettres annoncées")
-func etoileLettresAnnonceesExactes() {
-    for puzzle in StarPuzzle.allPuzzles {
-        let communes = lettresCommunes(puzzle.solution)
-        #expect(communes == Set(puzzle.commonLetters),
-                "Puzzle \(puzzle.commonLetters) : lettres réelles \(communes.sorted())")
-    }
-}
-
-@Test("Aucun autre groupe de 6 mots ne partage autant de lettres")
-func etoileSolutionUnique() {
-    for puzzle in StarPuzzle.allPuzzles {
-        let mots = puzzle.solution + puzzle.distractors
-        let cible = lettresCommunes(puzzle.solution).count
-        for groupe in groupesDeSix(mots) where Set(groupe) != Set(puzzle.solution) {
-            // Un groupe concurrent aussi bon rendrait le puzzle indevinable
-            #expect(lettresCommunes(groupe).count < cible,
-                    "Groupe concurrent \(groupe) dans le puzzle \(puzzle.commonLetters)")
-        }
-    }
-}
-
-@Test("Les mots d'un puzzle ont tous la même longueur")
-func etoileLongueurHomogene() {
-    for puzzle in StarPuzzle.allPuzzles {
-        let longueurs = Set((puzzle.solution + puzzle.distractors).map(\.count))
-        // Une longueur différente serait un indice visuel gratuit
-        #expect(longueurs.count == 1)
     }
 }
 
