@@ -450,6 +450,7 @@ struct FormesGlisseesView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Formes Glissées")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

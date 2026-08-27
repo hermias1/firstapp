@@ -280,6 +280,7 @@ struct BillesView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Billes")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -247,6 +247,7 @@ struct FormesCouleursView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Formes et Couleurs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -341,7 +342,7 @@ struct FormesCouleursView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.pink)
+                    .background(Theme.accent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
@@ -428,7 +429,7 @@ struct FormesCouleursView: View {
                         .font(.system(size: 48, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 100)
-                        .background(Color.blue.opacity(0.2))
+                        .background(Theme.filet)
                         .foregroundStyle(.blue)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .overlay(
@@ -445,7 +446,7 @@ struct FormesCouleursView: View {
                         .font(.system(size: 48, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 100)
-                        .background(Color.orange.opacity(0.2))
+                        .background(Theme.filet)
                         .foregroundStyle(Theme.ambre)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .overlay(
@@ -488,7 +489,7 @@ struct FormesCouleursView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.pink)
+                    .background(Theme.accent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }

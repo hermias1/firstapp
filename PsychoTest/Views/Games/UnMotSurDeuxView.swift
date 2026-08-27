@@ -328,6 +328,7 @@ struct UnMotSurDeuxView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Un Mot sur Deux")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

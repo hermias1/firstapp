@@ -214,6 +214,7 @@ struct M2BackView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("M2 Back")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

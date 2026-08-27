@@ -357,6 +357,7 @@ struct MotsEnEtoileView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Mots en Étoile")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

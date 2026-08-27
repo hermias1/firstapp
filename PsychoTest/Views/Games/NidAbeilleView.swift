@@ -317,6 +317,7 @@ struct NidAbeilleView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Nid d'Abeille")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

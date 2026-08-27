@@ -207,6 +207,7 @@ struct GrillesCalculsView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Grilles de Calculs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

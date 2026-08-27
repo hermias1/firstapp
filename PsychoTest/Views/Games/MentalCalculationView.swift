@@ -16,6 +16,7 @@ struct MentalCalculationView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Calcul Mental")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

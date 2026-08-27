@@ -308,6 +308,7 @@ struct Objets3DView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Objets 3D")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -361,6 +361,7 @@ struct EmpilementsView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Empilements")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

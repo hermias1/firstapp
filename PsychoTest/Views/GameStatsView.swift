@@ -45,7 +45,7 @@ struct GameStatsView: View {
                         .frame(maxWidth: .infinity)
                     }
 
-                    Section("Évolution") {
+                    Section(type.lowerIsBetter ? "Évolution — plus bas est meilleur" : "Évolution") {
                         graphique
                             .frame(height: 200)
                             .padding(.vertical, 8)
@@ -96,6 +96,10 @@ struct GameStatsView: View {
                 .foregroundStyle(jeu?.teinte ?? Theme.accent)
         }
         .chartXAxis(.hidden)
+        // Sur un test mesuré en temps, un score qui baisse est une progression :
+        // sans inverser l'axe, la courbe semble dire le contraire.
+        .chartYScale(domain: .automatic(includesZero: false,
+                                        reversed: type.lowerIsBetter))
     }
 
     private func statistique(_ titre: String, _ valeur: String) -> some View {

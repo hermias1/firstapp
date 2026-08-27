@@ -372,6 +372,7 @@ struct CubesPatronsView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Cubes 2D/3D")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -457,6 +457,7 @@ struct ComprehensionAnglaiseView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Compréhension")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -233,6 +233,7 @@ struct AirwaysView: View {
         }
         .padding()
         .recordSession(when: viewModel.isGameOver) { viewModel.makeResult() }
+        .sortieProtegee(enPartie: viewModel.isGameActive) { viewModel.stopGame() }
         .navigationTitle("Airways")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -319,7 +320,10 @@ struct AirwaysView: View {
                 }
 
                 RadarView(avions: puzzle.avions)
-                    .frame(height: 180)
+                    // Hauteur relative : à 180 points fixes, le radar poussait
+                    // la grille de réponses hors de l'écran sur iPhone SE dès
+                    // que six avions étaient listés.
+                    .frame(maxHeight: 150)
 
                 VStack(spacing: 4) {
                     ForEach(puzzle.avions) { avion in
