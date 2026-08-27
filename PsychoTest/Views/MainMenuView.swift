@@ -26,7 +26,7 @@ struct MainMenuView: View {
                         ], spacing: 12) {
                             ForEach(implementedGames) { game in
                                 NavigationLink(destination: destinationView(for: game)) {
-                                    GameCard(game: game, record: record(for: game.type))
+                                    GameCard(game: game, etat: etat(for: game.type))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -66,17 +66,17 @@ struct MainMenuView: View {
                     }
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.fond)
         }
     }
 
-    /// Meilleur score du jeu, ou nil s'il n'a jamais été joué.
-    private func record(for type: GameType) -> String? {
+    /// Ce que la carte doit annoncer : un record, ou une invitation à s'y mettre.
+    private func etat(for type: GameType) -> EtatDeJeu {
         let scores = sessions.filter { $0.gameType == type.rawValue }.map(\.score)
         guard let meilleur = type.lowerIsBetter ? scores.min() : scores.max() else {
-            return nil
+            return .jamaisJoue
         }
-        return type.format(meilleur)
+        return .record(type.format(meilleur))
     }
 
     @ViewBuilder

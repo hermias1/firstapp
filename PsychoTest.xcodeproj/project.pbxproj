@@ -44,6 +44,7 @@
 		A1000103 /* AirwaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000103 /* AirwaysView.swift */; };
 		A1000104 /* PsychomoteurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000104 /* PsychomoteurView.swift */; };
 		A1000105 /* PropositionsQCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000105 /* PropositionsQCM.swift */; };
+		A1000106 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000106 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		B1000103 /* AirwaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirwaysView.swift; sourceTree = "<group>"; };
 		B1000104 /* PsychomoteurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsychomoteurView.swift; sourceTree = "<group>"; };
 		B1000105 /* PropositionsQCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropositionsQCM.swift; sourceTree = "<group>"; };
+		B1000106 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				B1000015 /* Assets.xcassets */,
+				B1000106 /* Theme.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				A1000095 /* GameStatsView.swift in Sources */,
 				A1000099 /* ProfilView.swift in Sources */,
 				A1000003 /* Game.swift in Sources */,
+				A1000106 /* Theme.swift in Sources */,
 				A1000091 /* GameResult.swift in Sources */,
 				A1000094 /* RecordSessionModifier.swift in Sources */,
 				A1000092 /* GameSession.swift in Sources */,

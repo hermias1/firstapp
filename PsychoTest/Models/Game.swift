@@ -7,7 +7,6 @@ struct Game: Identifiable {
     let name: String
     let description: String
     let icon: String
-    let color: Color
     let category: GameCategory
     let difficulty: Difficulty
     let isImplemented: Bool
@@ -58,7 +57,6 @@ extension Game {
             name: "Pair ou Impair",
             description: "Alterne entre pairs et impairs en ordre croissant",
             icon: "number.circle.fill",
-            color: .blue,
             category: .cognitive,
             difficulty: .easy,
             isImplemented: true
@@ -68,7 +66,6 @@ extension Game {
             name: "M2 Back",
             description: "Le chiffre est-il identique à celui d'il y a 2 coups ?",
             icon: "brain.head.profile",
-            color: .purple,
             category: .memory,
             difficulty: .easy,
             isImplemented: true
@@ -78,7 +75,6 @@ extension Game {
             name: "Grilles de Calculs",
             description: "Trouve les calculs faux dans une grille de 9",
             icon: "square.grid.3x3.fill",
-            color: .orange,
             category: .logic,
             difficulty: .easy,
             isImplemented: true
@@ -88,7 +84,6 @@ extension Game {
             name: "Séries Logiques",
             description: "Complète la suite avec le bon élément",
             icon: "list.number",
-            color: .green,
             category: .logic,
             difficulty: .easy,
             isImplemented: true
@@ -98,7 +93,6 @@ extension Game {
             name: "Anglais",
             description: "30 QCM grammaire et vocabulaire en 7min30",
             icon: "textformat.abc",
-            color: .red,
             category: .language,
             difficulty: .easy,
             isImplemented: true
@@ -108,7 +102,6 @@ extension Game {
             name: "Culture Aéronautique",
             description: "QCM sur l'aviation (barème à points négatifs)",
             icon: "airplane",
-            color: .cyan,
             category: .language,
             difficulty: .easy,
             isImplemented: true
@@ -120,7 +113,6 @@ extension Game {
             name: "Un Mot sur Deux",
             description: "Alterne 2 thématiques en ordre alphabétique",
             icon: "textformat.alt",
-            color: .indigo,
             category: .cognitive,
             difficulty: .medium,
             isImplemented: true
@@ -130,7 +122,6 @@ extension Game {
             name: "Formes et Couleurs",
             description: "Associe forme/couleur/remplissage à une touche",
             icon: "square.on.circle",
-            color: .pink,
             category: .cognitive,
             difficulty: .medium,
             isImplemented: true
@@ -140,7 +131,6 @@ extension Game {
             name: "Boîtes à Mots",
             description: "Range les mots dans la bonne boîte thématique",
             icon: "tray.2.fill",
-            color: .brown,
             category: .memory,
             difficulty: .medium,
             isImplemented: true
@@ -148,9 +138,8 @@ extension Game {
         Game(
             type: .motsEnEtoile,
             name: "Mots en Étoile",
-            description: "Place 6 mots sur une étoile selon leurs lettres communes",
+            description: "Enchaîne 6 mots qui se relient par une lettre",
             icon: "star.fill",
-            color: .yellow,
             category: .logic,
             difficulty: .medium,
             isImplemented: true
@@ -161,7 +150,6 @@ extension Game {
             name: "Calcul Mental",
             description: "Un maximum d'opérations en 60 secondes",
             icon: "plusminus.circle.fill",
-            color: .mint,
             category: .cognitive,
             difficulty: .medium,
             isImplemented: true
@@ -173,7 +161,6 @@ extension Game {
             name: "Empilements",
             description: "Identifie l'empilement qui a subi une symétrie",
             icon: "cube.fill",
-            color: .mint,
             category: .spatial,
             difficulty: .hard,
             isImplemented: true
@@ -183,7 +170,6 @@ extension Game {
             name: "Billes",
             description: "Trouve le nombre min de déplacements dans les tubes",
             icon: "circle.grid.2x1.fill",
-            color: .teal,
             category: .spatial,
             difficulty: .hard,
             isImplemented: true
@@ -193,7 +179,6 @@ extension Game {
             name: "Formes Glissées",
             description: "Superpose des formes pour reproduire une figure cible",
             icon: "square.on.square",
-            color: .gray,
             category: .spatial,
             difficulty: .hard,
             isImplemented: true
@@ -203,7 +188,6 @@ extension Game {
             name: "Cubes 2D/3D",
             description: "Retrouve le cube correspondant au patron déplié",
             icon: "cube.transparent.fill",
-            color: .purple,
             category: .spatial,
             difficulty: .hard,
             isImplemented: true
@@ -215,7 +199,6 @@ extension Game {
             name: "Psychomoteur",
             description: "Suis la cible et réagis aux chiffres en même temps",
             icon: "hand.tap.fill",
-            color: .red,
             category: .multitask,
             difficulty: .veryHard,
             isImplemented: true
@@ -225,7 +208,6 @@ extension Game {
             name: "Airways",
             description: "Espace les arrivées avec un minimum d'attente",
             icon: "airplane.circle.fill",
-            color: .blue,
             category: .multitask,
             difficulty: .veryHard,
             isImplemented: true
@@ -235,12 +217,14 @@ extension Game {
             name: "Objets 3D",
             description: "Retrouve la silhouette d'un assemblage vu sous un angle",
             icon: "view.3d",
-            color: .green,
             category: .spatial,
             difficulty: .veryHard,
             isImplemented: true
         )
     ]
+
+    /// Couleur de famille du test, dérivée de sa catégorie.
+    var teinte: Color { category.teinte }
 
     static var implementedGames: [Game] {
         allGames.filter { $0.isImplemented }

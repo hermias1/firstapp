@@ -1,62 +1,102 @@
 import SwiftUI
 
+/// Ce qu'affiche une carte à propos d'un test déjà travaillé.
+enum EtatDeJeu: Equatable {
+    case jamaisJoue
+    case record(String)
+}
+
 struct GameCard: View {
     let game: Game
     var isDisabled: Bool = false
-    /// Meilleur score déjà réalisé, mis en forme dans l'unité du jeu.
-    var record: String? = nil
+    var etat: EtatDeJeu = .jamaisJoue
 
     var body: some View {
-        VStack(spacing: 12) {
-            Image(systemName: game.icon)
-                .font(.system(size: 36))
-                .foregroundStyle(isDisabled ? .gray : game.color)
-
-            VStack(spacing: 4) {
-                Text(game.name)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(isDisabled ? .secondary : .primary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-
-                Text(game.description)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top) {
+                Image(systemName: game.icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(isDisabled ? Theme.texteFaible : game.teinte)
+                    .frame(width: 30, height: 30)
+                    .background(
+                        RoundedRectangle(cornerRadius: 9)
+                            .fill(game.teinte.opacity(isDisabled ? 0.06 : 0.12))
+                    )
+                Spacer(minLength: 4)
+                Text(game.category.rawValue.uppercased())
+                    .font(.etiquette)
+                    .tracking(1.0)
+                    .foregroundStyle(Theme.texteFaible)
+                    .lineLimit(1)
             }
 
-            if let record {
-                Label(record, systemImage: "trophy.fill")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(game.color)
-            }
+            Text(game.name)
+                .font(.carte)
+                .foregroundStyle(isDisabled ? Theme.texteFaible : Theme.texteFort)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
 
-            // Indicateur de difficulté
-            HStack(spacing: 2) {
-                ForEach(0..<4) { index in
-                    Circle()
-                        .fill(index < game.difficulty.rawValue ? game.color.opacity(isDisabled ? 0.3 : 1) : Color.gray.opacity(0.3))
-                        .frame(width: 6, height: 6)
+            Text(game.description)
+                .font(.system(size: 11))
+                .foregroundStyle(Theme.texteFaible)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+
+            Spacer(minLength: 0)
+
+            HStack(spacing: 6) {
+                // Difficulté en barres plutôt qu'en pastilles de 6 points,
+                // illisibles à cette taille.
+                HStack(spacing: 3) {
+                    ForEach(0..<4, id: \.self) { index in
+                        Capsule()
+                            .fill(index < game.difficulty.rawValue
+                                  ? game.teinte : Theme.filet)
+                            .frame(width: 10, height: 3)
+                    }
+                }
+                Spacer(minLength: 0)
+                switch etat {
+                case .jamaisJoue:
+                    // Un appel à l'action plutôt qu'un vide
+                    Text("À TRAVAILLER")
+                        .font(.etiquette)
+                        .tracking(0.6)
+                        .minimumScaleFactor(0.8)
+                        .foregroundStyle(Theme.texteFaible)
+                        .lineLimit(1)
+                case .record(let valeur):
+                    Label(valeur, systemImage: "trophy.fill")
+                        .font(.mesurePetite)
+                        .foregroundStyle(Theme.ambre)
+                        .lineLimit(1)
                 }
             }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 160)
-        .padding(.vertical, 12)
-        .padding(.horizontal, 8)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(isDisabled ? 0.05 : 0.1), radius: 5, y: 2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        // minHeight et non height : la carte doit pouvoir grandir avec le
+        // réglage de taille de texte de l'utilisateur.
+        .frame(minHeight: 138, alignment: .top)
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: Theme.rayon)
+                .fill(Theme.surface)
+        )
+        .overlay(
+            // Un filet, pas une ombre : l'ombre noire disparaissait sur fond
+            // sombre, où la carte devenait invisible.
+            RoundedRectangle(cornerRadius: Theme.rayon)
+                .strokeBorder(Theme.filet, lineWidth: 1)
+        )
         .opacity(isDisabled ? 0.6 : 1)
     }
 }
 
 #Preview {
-    HStack {
-        GameCard(game: Game.allGames[0], record: "12,4 s")
-        GameCard(game: Game.allGames[0], isDisabled: true)
+    HStack(spacing: 12) {
+        GameCard(game: Game.allGames[0], etat: .record("12,4 s"))
+        GameCard(game: Game.allGames[10])
     }
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Theme.fond)
 }

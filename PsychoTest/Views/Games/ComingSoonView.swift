@@ -9,7 +9,7 @@ struct ComingSoonView: View {
 
             Image(systemName: game.icon)
                 .font(.system(size: 80))
-                .foregroundStyle(game.color)
+                .foregroundStyle(game.teinte)
 
             Text(game.name)
                 .font(.largeTitle)

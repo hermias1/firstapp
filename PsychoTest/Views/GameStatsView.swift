@@ -90,10 +90,10 @@ struct GameStatsView: View {
         return Chart(Array(recentes.enumerated()), id: \.offset) { index, partie in
             LineMark(x: .value("Partie", index + 1),
                      y: .value("Score", partie.score))
-                .foregroundStyle(jeu?.color ?? .accentColor)
+                .foregroundStyle(jeu?.teinte ?? Theme.accent)
             PointMark(x: .value("Partie", index + 1),
                       y: .value("Score", partie.score))
-                .foregroundStyle(jeu?.color ?? .accentColor)
+                .foregroundStyle(jeu?.teinte ?? Theme.accent)
         }
         .chartXAxis(.hidden)
     }
