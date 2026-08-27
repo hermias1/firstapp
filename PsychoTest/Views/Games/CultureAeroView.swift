@@ -215,7 +215,9 @@ final class CultureAeroViewModel {
 
     func startGame() {
         // Sélectionner 30 questions aléatoires parmi 139
-        questions = Array(AeroQuestion.allQuestions.shuffled().prefix(totalQuestions))
+        questions = BanqueRotation.tirer(AeroQuestion.allQuestions,
+                                         nombre: totalQuestions,
+                                         cle: "aero") { $0.question }
         currentIndex = 0
         score = 0
         answered = 0

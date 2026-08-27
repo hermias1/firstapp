@@ -196,7 +196,9 @@ final class UnMotSurDeuxViewModel {
         nextExpectedTheme2Index = 0
 
         // Sélectionner une paire aléatoire
-        currentPair = WordPair.allPairs.randomElement()
+        currentPair = BanqueRotation.tirer(WordPair.allPairs, nombre: 1,
+                                           cle: "motSurDeux") { $0.theme1 + "/" + $0.theme2 }.first
+            ?? WordPair.allPairs.randomElement()
 
         guard let pair = currentPair else { return }
 

@@ -8,6 +8,15 @@ enum PointDeVue: String, CaseIterable {
     case face = "de face"
     case cote = "de côté"
 
+    /// D'où l'observateur regarde l'assemblage.
+    var precision: String {
+        switch self {
+        case .dessus: return "en regardant vers le bas"
+        case .face: return "depuis l'avant"
+        case .cote: return "depuis la droite"
+        }
+    }
+
     /// Les deux coordonnées conservées par la projection.
     func projeter(_ cube: Cube) -> (Int, Int) {
         switch self {
@@ -73,17 +82,30 @@ enum Objets3DGenerator {
             guard correcte.flatMap({ $0 }).filter({ $0 }).count >= 3 else { continue }
 
             var fausses: [[[Bool]]] = []
+
+            // Les silhouettes du MÊME assemblage vu sous les autres angles :
+            // c'est exactement l'erreur que commet un candidat qui se trompe
+            // d'axe, et cela donne des propositions franchement différentes.
+            // Les fabriquer en changeant une seule case de la bonne réponse
+            // produisait quatre grilles presque identiques.
+            for autre in PointDeVue.allCases where autre != vue {
+                let candidate = projection(empilement, vue: autre)
+                if candidate != correcte && !fausses.contains(candidate) {
+                    fausses.append(candidate)
+                }
+            }
+
+            // Complété au besoin par des variantes d'une case
             var tentatives = 0
             while fausses.count < 3 && tentatives < 300 {
                 tentatives += 1
-                let candidate = muter(correcte)
-                // Une silhouette vide, identique à la bonne réponse ou déjà
-                // proposée ne ferait pas un distracteur
+                let candidate = muter(fausses.randomElement() ?? correcte)
                 guard candidate != correcte,
                       candidate.flatMap({ $0 }).contains(true),
                       !fausses.contains(candidate) else { continue }
                 fausses.append(candidate)
             }
+            fausses = Array(fausses.prefix(3))
             guard fausses.count == 3 else { continue }
 
             var propositions = fausses
@@ -104,6 +126,47 @@ enum Objets3DGenerator {
 }
 
 // MARK: - Rendu
+
+/// Petit schéma indiquant depuis où l'assemblage est observé.
+struct DirectionRegardView: View {
+    let vue: PointDeVue
+
+    var body: some View {
+        Group {
+            switch vue {
+            case .dessus:
+                VStack(spacing: 2) {
+                    oeil
+                    Image(systemName: "arrow.down").font(.system(size: 11, weight: .bold))
+                    objet
+                }
+            case .face:
+                HStack(spacing: 2) {
+                    oeil
+                    Image(systemName: "arrow.right").font(.system(size: 11, weight: .bold))
+                    objet
+                }
+            case .cote:
+                HStack(spacing: 2) {
+                    objet
+                    Image(systemName: "arrow.left").font(.system(size: 11, weight: .bold))
+                    oeil
+                }
+            }
+        }
+        .foregroundStyle(Theme.texteFaible)
+    }
+
+    private var oeil: some View {
+        Image(systemName: "eye.fill").font(.system(size: 12))
+    }
+
+    private var objet: some View {
+        RoundedRectangle(cornerRadius: 3)
+            .fill(Theme.accentProfond.opacity(0.65))
+            .frame(width: 16, height: 16)
+    }
+}
 
 /// Une silhouette : cases pleines et cases vides.
 struct SilhouetteView: View {
@@ -331,8 +394,16 @@ struct Objets3DView: View {
                 EmpilementView(cubes: question.empilement)
                     .frame(height: 130)
 
-                Text("Quelle est la vue \(question.vue.rawValue) ?")
-                    .font(.subheadline.weight(.medium))
+                HStack(spacing: 10) {
+                    DirectionRegardView(vue: question.vue)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Quelle est la vue \(question.vue.rawValue) ?")
+                            .font(.subheadline.weight(.semibold))
+                        Text(question.vue.precision)
+                            .font(.caption2)
+                            .foregroundStyle(Theme.texteFaible)
+                    }
+                }
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
                     ForEach(question.propositions.indices, id: \.self) { index in

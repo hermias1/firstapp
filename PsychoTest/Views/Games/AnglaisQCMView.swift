@@ -304,7 +304,12 @@ final class AnglaisQCMViewModel {
 
     func startGame() {
         // Sélectionner 30 questions aléatoires parmi 190
-        questions = Array(EnglishQuestion.allQuestions.shuffled().prefix(totalQuestions))
+        // Sert d'abord les questions jamais vues, pour qu'un candidat qui
+        // enchaîne les parties parcoure toute la banque avant de recroiser
+        // une question.
+        questions = BanqueRotation.tirer(EnglishQuestion.allQuestions,
+                                         nombre: totalQuestions,
+                                         cle: "anglais") { $0.question }
 
         currentIndex = 0
         timeRemaining = 450

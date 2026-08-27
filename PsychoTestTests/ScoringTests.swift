@@ -962,3 +962,82 @@ func objets3DAssemblageLisible() {
                 "Un cube est masqué dans \(question.empilement)")
     }
 }
+
+@Test("Les silhouettes proposées sont franchement différentes entre elles")
+func objets3DPropositionsDistinctes() {
+    var identiquesAUneCase = 0
+    for _ in 0..<60 {
+        let question = Objets3DGenerator.generate()
+        // Toutes distinctes deux à deux
+        for i in question.propositions.indices {
+            for j in question.propositions.indices where j > i {
+                #expect(question.propositions[i] != question.propositions[j],
+                        "Deux propositions identiques")
+            }
+        }
+        // Et au moins une proposition doit différer de la bonne réponse
+        // autrement que par une seule case : sinon les quatre grilles se
+        // ressemblent au point d'être indiscernables d'un coup d'œil.
+        let vraie = question.propositions[question.indexCorrect]
+        let ecarts = question.propositions.enumerated()
+            .filter { $0.offset != question.indexCorrect }
+            .map { autre -> Int in
+                var d = 0
+                for l in 0..<max(vraie.count, autre.element.count) {
+                    for c in 0..<max(vraie.first?.count ?? 0, autre.element.first?.count ?? 0) {
+                        let a = l < vraie.count && c < vraie[l].count ? vraie[l][c] : false
+                        let b = l < autre.element.count && c < autre.element[l].count
+                                ? autre.element[l][c] : false
+                        if a != b { d += 1 }
+                    }
+                }
+                return d
+            }
+        if ecarts.allSatisfy({ $0 <= 1 }) { identiquesAUneCase += 1 }
+    }
+    #expect(identiquesAUneCase < 15,
+            "\(identiquesAUneCase)/60 questions n'ont que des variantes d'une case")
+}
+
+// MARK: - Rotation des banques
+
+@Test("Deux parties consécutives ne repiochent pas dans les mêmes questions")
+func rotationSertLesInedits() {
+    let cle = "test.rotation.\(UUID().uuidString)"
+    let banque = (1...100).map { "Q\($0)" }
+
+    let premiere = BanqueRotation.tirer(banque, nombre: 30, cle: cle) { $0 }
+    let seconde = BanqueRotation.tirer(banque, nombre: 30, cle: cle) { $0 }
+
+    #expect(premiere.count == 30)
+    #expect(seconde.count == 30)
+    // Tant que la banque n'est pas épuisée, aucun recoupement
+    #expect(Set(premiere).intersection(Set(seconde)).isEmpty,
+            "\(Set(premiere).intersection(Set(seconde)).count) questions revues")
+    BanqueRotation.reinitialiser(cle)
+}
+
+@Test("Une fois la banque parcourue, le tour recommence sans planter")
+func rotationBoucleQuandEpuisee() {
+    let cle = "test.rotation.\(UUID().uuidString)"
+    let banque = (1...10).map { "Q\($0)" }
+
+    var servis: Set<String> = []
+    for _ in 0..<6 {
+        let tirage = BanqueRotation.tirer(banque, nombre: 4, cle: cle) { $0 }
+        #expect(tirage.count == 4, "Tirage incomplet une fois la banque épuisée")
+        #expect(Set(tirage).count == 4, "Doublon à l'intérieur d'un même tirage")
+        servis.formUnion(tirage)
+    }
+    // Sur six tirages de 4 dans une banque de 10, tout doit avoir été vu
+    #expect(servis.count == 10, "Seulement \(servis.count)/10 questions servies")
+    BanqueRotation.reinitialiser(cle)
+}
+
+@Test("Une banque plus petite que le tirage demandé ne boucle pas")
+func rotationBanquePlusPetite() {
+    let cle = "test.rotation.\(UUID().uuidString)"
+    let tirage = BanqueRotation.tirer(["A", "B"], nombre: 5, cle: cle) { $0 }
+    #expect(tirage.count == 2)
+    BanqueRotation.reinitialiser(cle)
+}

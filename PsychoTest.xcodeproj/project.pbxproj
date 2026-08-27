@@ -45,6 +45,7 @@
 		A1000104 /* PsychomoteurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000104 /* PsychomoteurView.swift */; };
 		A1000105 /* PropositionsQCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000105 /* PropositionsQCM.swift */; };
 		A1000106 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000106 /* Theme.swift */; };
+		A1000107 /* BanqueRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000107 /* BanqueRotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		B1000104 /* PsychomoteurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsychomoteurView.swift; sourceTree = "<group>"; };
 		B1000105 /* PropositionsQCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropositionsQCM.swift; sourceTree = "<group>"; };
 		B1000106 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B1000107 /* BanqueRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BanqueRotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,6 +222,7 @@
 				B1000093 /* ScoreStore.swift */,
 				B1000096 /* Countdown.swift */,
 				B1000105 /* PropositionsQCM.swift */,
+				B1000107 /* BanqueRotation.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				A1000093 /* ScoreStore.swift in Sources */,
 				A1000096 /* Countdown.swift in Sources */,
 				A1000105 /* PropositionsQCM.swift in Sources */,
+				A1000107 /* BanqueRotation.swift in Sources */,
 				A1000005 /* GameCard.swift in Sources */,
 				A1000006 /* TimerView.swift in Sources */,
 				A1000007 /* ScoreView.swift in Sources */,
