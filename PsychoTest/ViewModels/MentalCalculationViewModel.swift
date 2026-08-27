@@ -18,6 +18,8 @@ final class MentalCalculationViewModel {
     var difficulty: Difficulty = .medium
 
     private var timerTask: Task<Void, Never>?
+    /// Instant d'affichage de l'opération courante.
+    private var questionAffichee: Date = Date()
 
     enum Difficulty: String, CaseIterable {
         case easy = "Facile"
@@ -75,9 +77,12 @@ final class MentalCalculationViewModel {
 
         if answer == correctAnswer {
             correctCount += 1
-            let basePoints = 10
-            let timeBonus = timeRemaining / 10
-            score += basePoints + timeBonus
+            // Le bonus mesure la rapidité sur CETTE opération. Il valait
+            // auparavant timeRemaining / 10, c'est-à-dire qu'il récompensait
+            // le fait d'être tôt dans la partie, pas d'avoir répondu vite.
+            let delai = Date().timeIntervalSince(questionAffichee)
+            let bonus = delai < 2 ? 5 : (delai < 4 ? 3 : (delai < 7 ? 1 : 0))
+            score += 10 + bonus
         }
 
         userAnswer = ""
@@ -85,6 +90,7 @@ final class MentalCalculationViewModel {
     }
 
     private func generateQuestion() {
+        questionAffichee = Date()
         let range = difficulty.range
         let operations = difficulty.operations
         let operation = operations.randomElement() ?? .addition

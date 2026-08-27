@@ -471,6 +471,10 @@ final class AnglaisQCMViewModel {
     func selectAnswer(_ answer: String) {
         guard selectedAnswer == nil, let question = currentQuestion else { return }
 
+        // Le chrono se suspend pendant l'affichage de la correction : sur
+        // trente questions, ces attentes prélevaient une vingtaine de secondes
+        // sur un budget de 450, sans que le joueur puisse rien en faire.
+        timerTask?.cancel()
         selectedAnswer = answer
         showFeedback = true
 
@@ -499,6 +503,17 @@ final class AnglaisQCMViewModel {
             endGame()
         } else {
             shuffleCurrentOptions()
+            reprendreTimer()
+        }
+    }
+
+    /// Relance le compte à rebours là où il s'était arrêté.
+    private func reprendreTimer() {
+        timerTask?.cancel()
+        timerTask = Countdown.start(seconds: TimeInterval(timeRemaining)) { [self] restant in
+            timeRemaining = Int(restant.rounded(.up))
+        } onFinish: { [self] in
+            endGame()
         }
     }
 

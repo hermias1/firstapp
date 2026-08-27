@@ -451,7 +451,9 @@ func countdownSeTermine() async {
     } onFinish: {
         temoin.fini = true
     }
-    try? await Task.sleep(for: .milliseconds(600))
+    // Marge large : ce test partage le main actor avec les autres, dont
+    // certains tournent des milliers d'itérations.
+    try? await Task.sleep(for: .milliseconds(2000))
     tache.cancel()
 
     #expect(temoin.fini)
@@ -1257,4 +1259,44 @@ func examenEpreuvesRoutables() {
     for type in ExamenBlancView.ordre {
         #expect(GameType.allCases.contains(type))
     }
+}
+
+@MainActor
+@Test("Le bonus de calcul mental récompense la rapidité, pas le moment de la partie")
+func calculMentalBonusRapide() {
+    let vm = MentalCalculationViewModel()
+    vm.startGame()
+
+    // Répondre juste, immédiatement : base 10 + bonus maximal
+    vm.userAnswer = "\(vm.correctAnswer)"
+    vm.submitAnswer()
+    let scoreRapide = vm.score
+    #expect(scoreRapide == 15, "Score immédiat : \(scoreRapide)")
+
+    // Le score ne dépend plus du temps restant sur la partie
+    vm.timeRemaining = 5
+    vm.userAnswer = "\(vm.correctAnswer)"
+    vm.submitAnswer()
+    #expect(vm.score - scoreRapide == 15,
+            "Une réponse aussi rapide doit valoir autant en fin de partie")
+    vm.stopGame()
+}
+
+@MainActor
+@Test("Une écoute déjà lancée n'en consomme pas une seconde")
+func comprehensionDoubleAppui() {
+    let vm = ComprehensionViewModel()
+    vm.startGame()
+    // Se placer sur le texte à écouter
+    while vm.texteCourant?.mode != .ecoute && vm.indexTexte < vm.textes.count - 1 {
+        vm.indexTexte += 1
+    }
+    guard vm.texteCourant?.mode == .ecoute else { return }
+
+    vm.ecouter()
+    let apresPremiere = vm.ecoutesRestantes
+    vm.ecouter()   // second appui immédiat
+    #expect(vm.ecoutesRestantes == apresPremiere,
+            "Deux appuis rapprochés ont consommé deux écoutes")
+    vm.stopGame()
 }

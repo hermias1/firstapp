@@ -255,13 +255,22 @@ enum ComprehensionGenerator {
 /// fichiers audio, fonctionne hors connexion, et permettra plus tard de faire
 /// varier le débit pour entraîner à des voix plus rapides.
 @MainActor
-final class LecteurAnglais {
+final class LecteurAnglais: NSObject, AVSpeechSynthesizerDelegate {
     private let synthetiseur = AVSpeechSynthesizer()
 
-    var estEnTrainDeParler: Bool { synthetiseur.isSpeaking }
+    /// Drapeau propre plutôt que `isSpeaking` : celui-ci reste faux pendant les
+    /// quelques instants où la synthèse démarre, si bien que deux appuis
+    /// rapprochés passaient tous les deux et consommaient les deux écoutes.
+    private(set) var estEnTrainDeParler = false
+
+    override init() {
+        super.init()
+        synthetiseur.delegate = self
+    }
 
     func lire(_ texte: String, vitesse: Float = 0.48) {
         arreter()
+        estEnTrainDeParler = true
         let phrase = AVSpeechUtterance(string: texte)
         phrase.voice = AVSpeechSynthesisVoice(language: "en-US")
         phrase.rate = vitesse
@@ -270,9 +279,20 @@ final class LecteurAnglais {
     }
 
     func arreter() {
+        estEnTrainDeParler = false
         if synthetiseur.isSpeaking {
             synthetiseur.stopSpeaking(at: .immediate)
         }
+    }
+
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer,
+                                       didFinish utterance: AVSpeechUtterance) {
+        Task { @MainActor in estEnTrainDeParler = false }
+    }
+
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer,
+                                       didCancel utterance: AVSpeechUtterance) {
+        Task { @MainActor in estEnTrainDeParler = false }
     }
 }
 
@@ -352,8 +372,18 @@ final class ComprehensionViewModel {
     }
 
     private func startTimer() {
+        lancerTimer(pour: TimeInterval(Self.duree))
+    }
+
+    /// Relance le compte à rebours là où il s'était arrêté.
+    private func reprendreTimer() {
+        lancerTimer(pour: TimeInterval(timeRemaining))
+    }
+
+    private func lancerTimer(pour duree: TimeInterval) {
         timerTask?.cancel()
-        timerTask = Countdown.start(seconds: TimeInterval(Self.duree)) { [self] restant in
+        guard duree > 0 else { return endGame() }
+        timerTask = Countdown.start(seconds: duree) { [self] restant in
             timeRemaining = Int(restant.rounded(.up))
         } onFinish: { [self] in
             endGame()
@@ -363,6 +393,9 @@ final class ComprehensionViewModel {
     /// Lance la lecture à voix haute, dans la limite des écoutes autorisées.
     func ecouter() {
         guard let texte = texteCourant, texte.mode == .ecoute, ecoutesRestantes > 0 else { return }
+        // Une lecture déjà en cours ne consomme pas une seconde écoute : deux
+        // appuis rapprochés faisaient perdre les deux d'un coup.
+        guard !lecteur.estEnTrainDeParler else { return }
         ecoutesRestantes -= 1
         lecteur.lire(texte.texte)
     }
@@ -378,6 +411,8 @@ final class ComprehensionViewModel {
 
     func repondre(_ reponse: String) {
         guard !showFeedback, let question = questionCourante else { return }
+        // Suspendu pendant la correction, comme sur le QCM d'anglais
+        timerTask?.cancel()
         selectedAnswer = reponse
         showFeedback = true
 
@@ -401,6 +436,7 @@ final class ComprehensionViewModel {
         guard let texte = texteCourant else { return endGame() }
         selectedAnswer = nil
         showFeedback = false
+        reprendreTimer()
 
         if indexQuestion + 1 < texte.questions.count {
             indexQuestion += 1

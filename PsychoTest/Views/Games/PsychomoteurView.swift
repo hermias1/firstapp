@@ -88,7 +88,9 @@ final class PsychomoteurViewModel {
         suiviTask?.cancel()
         suiviTask = Task { @MainActor in
             while !Task.isCancelled {
-                if let debut {
+                if let debut, Date().timeIntervalSince(debut) > 2 {
+                    // Les deux premières secondes servent à poser le doigt :
+                    // les compter comme du hors-cible pénalisait le démarrage.
                     let cible = Self.positionCible(Date().timeIntervalSince(debut))
                     echantillons += 1
                     if let doigt = positionDoigt {
@@ -215,8 +217,8 @@ struct PsychomoteurView: View {
                 GameRulesButton(
                     title: "Règles - Psychomoteur",
                     rules: [
-                        RuleItem(icon: "hand.draw", text: "Garde ton doigt sur la cible mobile"),
-                        RuleItem(icon: "scope", text: "Le cercle devient vert quand tu es dessus"),
+                        RuleItem(icon: "hands.sparkles", text: "Tiens le téléphone à deux mains"),
+                        RuleItem(icon: "hand.draw", text: "Un pouce suit la cible, l'autre répond"),
                         RuleItem(icon: "number", text: "Un chiffre apparaît régulièrement"),
                         RuleItem(icon: "2.circle", text: "Touche PAIR uniquement si le chiffre est pair"),
                         RuleItem(icon: "exclamationmark.triangle", text: "Oubli ou faux signalement : -3 points"),
@@ -239,7 +241,8 @@ struct PsychomoteurView: View {
             Text("Psychomoteur").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
-                Label("Garde ton doigt sur la cible mobile", systemImage: "hand.draw")
+                Label("Tiens le téléphone à deux mains", systemImage: "hands.sparkles")
+                Label("Un pouce suit la cible, l'autre appuie sur PAIR", systemImage: "hand.draw")
                 Label("Un chiffre apparaît régulièrement", systemImage: "number")
                 Label("Touche PAIR si le chiffre est pair", systemImage: "2.circle")
                 Label("Les deux tâches comptent en même temps", systemImage: "arrow.triangle.branch")
@@ -272,6 +275,11 @@ struct PsychomoteurView: View {
     private var gameView: some View {
         VStack(spacing: 12) {
             HStack {
+                // Repère d'état placé hors de la zone de poursuite : sous le
+                // doigt, le joueur ne voyait pas le cercle qu'il recouvre.
+                Circle()
+                    .fill(estSurCibleMaintenant ? Theme.vert : Theme.rouge)
+                    .frame(width: 12, height: 12)
                 Text(String(format: "Précision %.0f%%", viewModel.precisionPoursuite))
                     .font(.headline.monospacedDigit())
                 Spacer()
@@ -352,6 +360,15 @@ struct PsychomoteurView: View {
                 .font(.caption)
                 .foregroundStyle(viewModel.feedbackSecondaire == "Correct" ? Theme.vert : Theme.rouge)
         }
+    }
+
+    /// Le joueur est-il sur la cible à cet instant.
+    private var estSurCibleMaintenant: Bool {
+        guard let doigt = viewModel.positionDoigt else { return false }
+        let cible = PsychomoteurViewModel.positionCible(viewModel.tempsEcoule)
+        let dx = doigt.x - cible.x
+        let dy = doigt.y - cible.y
+        return sqrt(dx * dx + dy * dy) <= PsychomoteurViewModel.tolerance
     }
 
     private func estSurCible(geo: CGSize, cible: CGPoint) -> Bool {
