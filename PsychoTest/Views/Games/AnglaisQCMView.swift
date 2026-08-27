@@ -14,7 +14,7 @@ struct EnglishQuestion: Identifiable {
     }
 }
 
-// MARK: - Questions Database (190 questions)
+// MARK: - Questions Database (302 questions)
 extension EnglishQuestion {
     static let allQuestions: [EnglishQuestion] = grammarQuestions + vocabularyQuestions
 
@@ -155,6 +155,120 @@ extension EnglishQuestion {
         EnglishQuestion(question: "She insisted ___ paying.", options: ["on", "in", "at", "for"], correctAnswer: "on", category: .grammar),
         EnglishQuestion(question: "I apologized ___ being late.", options: ["for", "about", "of", "to"], correctAnswer: "for", category: .grammar),
         EnglishQuestion(question: "He succeeded ___ passing the exam.", options: ["in", "on", "at", "to"], correctAnswer: "in", category: .grammar),
+
+        // MARK: Questions ajoutées après contrôle de double réponse
+        EnglishQuestion(question: "Last summer, the crew ___ three transatlantic flights in a single week.", options: ["operated", "has operated", "have operated", "had been operating"], correctAnswer: "operated", category: .grammar),
+        EnglishQuestion(question: "My sister ___ in Toulouse since she joined the aerospace industry in 2019.", options: ["has lived", "lives", "lived", "is living"], correctAnswer: "has lived", category: .grammar),
+        EnglishQuestion(question: "This time tomorrow we ___ over the Atlantic.", options: ["will be flying", "will fly", "would be flying", "will have flown"], correctAnswer: "will be flying", category: .grammar),
+        EnglishQuestion(question: "According to the timetable, the airport shuttle ___ every twenty minutes.", options: ["leaves", "is leaving", "will be leaving", "has left"], correctAnswer: "leaves", category: .grammar),
+        EnglishQuestion(question: "By the time we reached the gate, the plane ___.", options: ["had already left", "has already left", "would already leave", "is already leaving"], correctAnswer: "had already left", category: .grammar),
+        EnglishQuestion(question: "By the time you land in Tokyo, we ___ the meeting.", options: ["will have finished", "will finish", "have finished", "would finish"], correctAnswer: "will have finished", category: .grammar),
+        EnglishQuestion(question: "We ___ over the Alps when the seatbelt sign suddenly came on.", options: ["were flying", "flew", "have flown", "had flown"], correctAnswer: "were flying", category: .grammar),
+        EnglishQuestion(question: "He has been a flight instructor since he ___ the air force in 2015.", options: ["left", "has left", "had left", "was leaving"], correctAnswer: "left", category: .grammar),
+        EnglishQuestion(question: "If I ___ you, I would apply for the cadet programme this year.", options: ["were", "am", "will be", "would be"], correctAnswer: "were", category: .grammar),
+        EnglishQuestion(question: "If the fog ___ so thick that night, we would have landed on time.", options: ["hadn't been", "wasn't", "wouldn't have been", "hasn't been"], correctAnswer: "hadn't been", category: .grammar),
+        EnglishQuestion(question: "If she had passed the medical last year, she ___ a first officer today.", options: ["would be", "would have been", "will be", "is"], correctAnswer: "would be", category: .grammar),
+        EnglishQuestion(question: "If the wind ___ any stronger, the airport will close the second runway.", options: ["gets", "will get", "would get", "got"], correctAnswer: "gets", category: .grammar),
+        EnglishQuestion(question: "The northern runway ___ since Monday for resurfacing work.", options: ["has been closed", "is closing", "was closed", "closes"], correctAnswer: "has been closed", category: .grammar),
+        EnglishQuestion(question: "On yesterday's flight, the safety demonstration ___ by the purser.", options: ["was given", "has been given", "gave", "is given"], correctAnswer: "was given", category: .grammar),
+        EnglishQuestion(question: "All electronic devices must ___ during take-off and landing.", options: ["be switched off", "switching off", "being switched off", "to be switched off"], correctAnswer: "be switched off", category: .grammar),
+        EnglishQuestion(question: "The new turboprop ___ to be the quietest aircraft in its class.", options: ["is said", "says", "is saying", "has said"], correctAnswer: "is said", category: .grammar),
+        EnglishQuestion(question: "She apologised for ___ late to the briefing.", options: ["being", "be", "to be", "been"], correctAnswer: "being", category: .grammar),
+        EnglishQuestion(question: "The captain suggested ___ a more northerly route to avoid the storm.", options: ["taking", "to take", "take", "took"], correctAnswer: "taking", category: .grammar),
+        EnglishQuestion(question: "Halfway through the checklist, the co-pilot stopped ___ a call from the tower.", options: ["to take", "taking", "take", "taken"], correctAnswer: "to take", category: .grammar),
+        EnglishQuestion(question: "I clearly remember ___ the cabin door before we left the aircraft.", options: ["locking", "to lock", "lock", "locked"], correctAnswer: "locking", category: .grammar),
+        EnglishQuestion(question: "She was still at the check-in desk at 9:05, so she ___ the 9:00 flight.", options: ["can't have boarded", "must have boarded", "should have boarded", "needn't have boarded"], correctAnswer: "can't have boarded", category: .grammar),
+        EnglishQuestion(question: "Passengers ___ use mobile phones during take-off: it is strictly forbidden.", options: ["must not", "do not have to", "need not", "might not"], correctAnswer: "must not", category: .grammar),
+        EnglishQuestion(question: "You ___ leave now if you want to catch the last shuttle to the terminal.", options: ["had better", "have better", "would better", "should better"], correctAnswer: "had better", category: .grammar),
+        EnglishQuestion(question: "Before onboard weather radar existed, pilots ___ see storms only when they were already very close.", options: ["could", "can", "could have", "will be able to"], correctAnswer: "could", category: .grammar),
+        EnglishQuestion(question: "___ life of a long-haul pilot is far less glamorous than people imagine.", options: ["The", "A", "No article", "Some"], correctAnswer: "The", category: .grammar),
+        EnglishQuestion(question: "___ Netherlands is one of the airline's busiest destinations.", options: ["The", "A", "No article", "That"], correctAnswer: "The", category: .grammar),
+        EnglishQuestion(question: "The connecting flight leaves ___ Tuesday at dawn.", options: ["on", "in", "at", "by"], correctAnswer: "on", category: .grammar),
+        EnglishQuestion(question: "We arrived ___ the airport almost three hours before departure.", options: ["at", "in", "to", "on"], correctAnswer: "at", category: .grammar),
+        EnglishQuestion(question: "The duty manager is responsible ___ the cabin crew roster.", options: ["for", "of", "to", "with"], correctAnswer: "for", category: .grammar),
+        EnglishQuestion(question: "This aircraft is capable ___ flying for twelve hours without refuelling.", options: ["of", "to", "for", "in"], correctAnswer: "of", category: .grammar),
+        EnglishQuestion(question: "The engineer ___ signed the maintenance report has thirty years' experience.", options: ["who", "which", "whose", "whom"], correctAnswer: "who", category: .grammar),
+        EnglishQuestion(question: "Reykjavik, ___ is the capital of Iceland, was our stopover on the way to New York.", options: ["which", "that", "where", "what"], correctAnswer: "which", category: .grammar),
+        EnglishQuestion(question: "The passenger ___ suitcase was lost has been offered compensation.", options: ["whose", "who's", "whom", "which"], correctAnswer: "whose", category: .grammar),
+        EnglishQuestion(question: "That's the colleague ___ I shared a hotel room in Osaka.", options: ["with whom", "who", "that", "which"], correctAnswer: "with whom", category: .grammar),
+        EnglishQuestion(question: "The A350 is ___ quieter than the aircraft it replaced.", options: ["far", "very", "so", "too"], correctAnswer: "far", category: .grammar),
+        EnglishQuestion(question: "It was ___ landing I have ever experienced.", options: ["the smoothest", "the most smooth", "smoothest", "smoother"], correctAnswer: "the smoothest", category: .grammar),
+        EnglishQuestion(question: "The flight to Dubai takes ___ the flight to Cairo.", options: ["twice as long as", "twice longer than", "two times longer as", "twice as longer as"], correctAnswer: "twice as long as", category: .grammar),
+        EnglishQuestion(question: "___ we leave, the better our chances of avoiding the traffic.", options: ["The sooner", "Sooner", "More soon", "The soonest"], correctAnswer: "The sooner", category: .grammar),
+        EnglishQuestion(question: "He told me yesterday that he ___ his licence the previous month.", options: ["had obtained", "has obtained", "obtains", "will obtain"], correctAnswer: "had obtained", category: .grammar),
+        EnglishQuestion(question: "The immigration officer asked me ___.", options: ["where I was going", "where was I going", "where I am going", "where do I go"], correctAnswer: "where I was going", category: .grammar),
+        EnglishQuestion(question: "She said she ___ call us the following day.", options: ["would", "will", "shall", "would have"], correctAnswer: "would", category: .grammar),
+        EnglishQuestion(question: "The instructor told us ___ during the emergency briefing.", options: ["not to talk", "to not talking", "don't talk", "that not talk"], correctAnswer: "not to talk", category: .grammar),
+        EnglishQuestion(question: "Not only ___ the flight delayed, but our luggage was also sent to the wrong city.", options: ["was", "it was", "did", "had"], correctAnswer: "was", category: .grammar),
+        EnglishQuestion(question: "No sooner ___ we taken off than the storm broke over the airport.", options: ["had", "have", "did", "were"], correctAnswer: "had", category: .grammar),
+        EnglishQuestion(question: "Seldom ___ such severe turbulence on this route.", options: ["have we experienced", "we have experienced", "did we experienced", "we experienced"], correctAnswer: "have we experienced", category: .grammar),
+        EnglishQuestion(question: "How ___ luggage are you taking on board?", options: ["much", "many", "few", "several"], correctAnswer: "much", category: .grammar),
+        EnglishQuestion(question: "There were ___ complaints about the noise that the airline changed the flight path.", options: ["so many", "so much", "such many", "too many"], correctAnswer: "so many", category: .grammar),
+        EnglishQuestion(question: "___ of the crew members speaks Japanese, so we will need an interpreter.", options: ["None", "No one", "Any", "Both"], correctAnswer: "None", category: .grammar),
+        EnglishQuestion(question: "You've never flown a glider, ___?", options: ["have you", "haven't you", "did you", "do you"], correctAnswer: "have you", category: .grammar),
+        EnglishQuestion(question: "Let's take the earlier train to the airport, ___?", options: ["shall we", "will we", "do we", "shan't we"], correctAnswer: "shall we", category: .grammar),
+        EnglishQuestion(question: "Hand me the checklist, ___?", options: ["will you", "do you", "shall you", "are you"], correctAnswer: "will you", category: .grammar),
+        EnglishQuestion(question: "I'm sitting in the wrong seat, ___?", options: ["aren't I", "amn't I", "am not I", "isn't it"], correctAnswer: "aren't I", category: .grammar),
+        EnglishQuestion(question: "The aircraft had to ___ shortly after take-off because of an oil leak.", options: ["turn back", "turn down", "turn over", "turn up"], correctAnswer: "turn back", category: .grammar),
+        EnglishQuestion(question: "The crew briefing has been ___ until Monday morning.", options: ["put off", "put out", "put away", "put up"], correctAnswer: "put off", category: .grammar),
+        EnglishQuestion(question: "He ___ his mother, who was a navigator in the 1980s.", options: ["takes after", "takes over", "takes up", "takes on"], correctAnswer: "takes after", category: .grammar),
+        EnglishQuestion(question: "The rental car ___ petrol ten kilometres from the terminal.", options: ["ran out of", "ran over", "ran into", "ran through"], correctAnswer: "ran out of", category: .grammar),
+        EnglishQuestion(question: "Quel mot a le sens le plus proche de « reluctant » ?", options: ["unwilling", "eager", "reliable", "thorough"], correctAnswer: "unwilling", category: .vocabulary),
+        EnglishQuestion(question: "Quel adjectif a le sens le plus proche de « scarce » ?", options: ["rare", "plentiful", "frightened", "costly"], correctAnswer: "rare", category: .vocabulary),
+        EnglishQuestion(question: "Quel verbe a le sens le plus proche de « to enhance » ?", options: ["to improve", "to weaken", "to postpone", "to describe"], correctAnswer: "to improve", category: .vocabulary),
+        EnglishQuestion(question: "Quel adjectif a le sens le plus proche de « cautious » ?", options: ["careful", "curious", "reckless", "confident"], correctAnswer: "careful", category: .vocabulary),
+        EnglishQuestion(question: "Quel adjectif a le sens le plus proche de « tedious » ?", options: ["boring", "tidy", "risky", "brief"], correctAnswer: "boring", category: .vocabulary),
+        EnglishQuestion(question: "In radio communication, « to acknowledge a message » means:", options: ["to confirm that you have received it", "to answer it in detail", "to forward it to another station", "to write it down in the logbook"], correctAnswer: "to confirm that you have received it", category: .vocabulary),
+        EnglishQuestion(question: "Quel groupe verbal a le sens le plus proche de « to jeopardise » ?", options: ["to put at risk", "to speed up", "to make official", "to share out equally"], correctAnswer: "to put at risk", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « to accelerate » ?", options: ["to slow down", "to speed up", "to refuel", "to turn"], correctAnswer: "to slow down", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « temporary » ?", options: ["permanent", "brief", "seasonal", "fragile"], correctAnswer: "permanent", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « to allow » ?", options: ["to forbid", "to permit", "to require", "to postpone"], correctAnswer: "to forbid", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « to tighten » ?", options: ["to loosen", "to fasten", "to inspect", "to twist"], correctAnswer: "to loosen", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « to hire » (an employee) ?", options: ["to dismiss", "to recruit", "to promote", "to train"], correctAnswer: "to dismiss", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « shallow » (water) ?", options: ["deep", "narrow", "calm", "muddy"], correctAnswer: "deep", category: .vocabulary),
+        EnglishQuestion(question: "Quel est le contraire de « guilty » ?", options: ["innocent", "responsible", "ashamed", "convicted"], correctAnswer: "innocent", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « The new medicine had no ___ on the pain. »", options: ["effect", "affect", "affects", "affectation"], correctAnswer: "effect", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « He refused to lie about the incident: for him it was a matter of ___. »", options: ["principle", "principal", "principals", "principality"], correctAnswer: "principle", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « The aircraft carries a full ___ of eight cabin crew members. »", options: ["complement", "compliment", "completion", "complimentary"], correctAnswer: "complement", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « Be careful not to ___ your boarding pass. »", options: ["lose", "loose", "loosen", "loss"], correctAnswer: "lose", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « Could you ___ me on which route to take? »", options: ["advise", "advice", "advises", "advising"], correctAnswer: "advise", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « I forgot my pen — could you ___ me yours? »", options: ["lend", "borrow", "hire", "take"], correctAnswer: "lend", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « This instrument is extremely ___ to changes in temperature. »", options: ["sensitive", "sensible", "sensational", "senseless"], correctAnswer: "sensitive", category: .vocabulary),
+        EnglishQuestion(question: "« To be under the weather » means:", options: ["to feel slightly ill", "to be caught in a storm", "to be extremely busy", "to arrive late"], correctAnswer: "to feel slightly ill", category: .vocabulary),
+        EnglishQuestion(question: "« To bite the bullet » means:", options: ["to force yourself to do something unpleasant", "to lose your temper suddenly", "to make a serious mistake", "to speak without thinking"], correctAnswer: "to force yourself to do something unpleasant", category: .vocabulary),
+        EnglishQuestion(question: "Someone who is « on cloud nine » is:", options: ["extremely happy", "completely lost", "very tired", "slightly annoyed"], correctAnswer: "extremely happy", category: .vocabulary),
+        EnglishQuestion(question: "« To call it a day » means:", options: ["to stop working for the day", "to postpone a meeting until tomorrow", "to work extra hours", "to fix a date for an event"], correctAnswer: "to stop working for the day", category: .vocabulary),
+        EnglishQuestion(question: "Something that happens « once in a blue moon » happens:", options: ["very rarely", "every month", "suddenly", "only at night"], correctAnswer: "very rarely", category: .vocabulary),
+        EnglishQuestion(question: "« To let the cat out of the bag » means:", options: ["to reveal a secret by accident", "to make a difficult choice", "to escape from a trap", "to waste a good opportunity"], correctAnswer: "to reveal a secret by accident", category: .vocabulary),
+        EnglishQuestion(question: "For an aircraft, « to take off » means:", options: ["to leave the ground", "to slow down on the runway", "to return to the parking stand", "to unload the cargo"], correctAnswer: "to leave the ground", category: .vocabulary),
+        EnglishQuestion(question: "« To put off a meeting » means:", options: ["to postpone it to a later date", "to cancel it for good", "to make it shorter", "to attend it in person"], correctAnswer: "to postpone it to a later date", category: .vocabulary),
+        EnglishQuestion(question: "« To look after someone » means:", options: ["to take care of them", "to search for them", "to glance at them quickly", "to look for information about them"], correctAnswer: "to take care of them", category: .vocabulary),
+        EnglishQuestion(question: "« He gave up after three attempts. » This means:", options: ["he stopped trying", "he finally succeeded", "he started again from the beginning", "he asked someone for help"], correctAnswer: "he stopped trying", category: .vocabulary),
+        EnglishQuestion(question: "« The aircraft ran out of de-icing fluid. » « To run out of something » means:", options: ["to have no more of it left", "to leave a place in a hurry", "to buy a large quantity of it", "to use it for the first time"], correctAnswer: "to have no more of it left", category: .vocabulary),
+        EnglishQuestion(question: "At the airport, « to check in » means:", options: ["to register for your flight before departure", "to go through the security control", "to get on board the aircraft", "to collect your baggage after landing"], correctAnswer: "to register for your flight before departure", category: .vocabulary),
+        EnglishQuestion(question: "« To turn down an offer » means:", options: ["to refuse it", "to accept it immediately", "to negotiate a better one", "to make it public"], correctAnswer: "to refuse it", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « Children have to ___ their homework every evening. »", options: ["do", "make", "take", "give"], correctAnswer: "do", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « The flight was delayed by ___ rain. »", options: ["heavy", "strong", "large", "powerful"], correctAnswer: "heavy", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « Please ___ attention to the safety demonstration. »", options: ["pay", "do", "take", "make"], correctAnswer: "pay", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « The trainee is ___ good progress. »", options: ["making", "doing", "taking", "having"], correctAnswer: "making", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « I need a ___ coffee to stay awake. »", options: ["strong", "heavy", "hard", "powerful"], correctAnswer: "strong", category: .vocabulary),
+        EnglishQuestion(question: "Complétez : « If we don't hurry, we'll ___ our flight. »", options: ["miss", "lose", "fail", "lack"], correctAnswer: "miss", category: .vocabulary),
+        EnglishQuestion(question: "« Actually, the departure gate has changed. » Le mot « actually » signifie ici :", options: ["En fait", "Actuellement", "Activement", "Finalement"], correctAnswer: "En fait", category: .vocabulary),
+        EnglishQuestion(question: "« The delay was long, but we eventually took off. » Le mot « eventually » signifie ici :", options: ["finalement", "éventuellement", "occasionnellement", "immédiatement"], correctAnswer: "finalement", category: .vocabulary),
+        EnglishQuestion(question: "« She attended the safety briefing. » Le verbe « to attend » signifie ici :", options: ["assister à", "attendre", "animer", "annuler"], correctAnswer: "assister à", category: .vocabulary),
+        EnglishQuestion(question: "« A library » se traduit en français par :", options: ["une bibliothèque", "une librairie", "une maison d'édition", "un libre-service"], correctAnswer: "une bibliothèque", category: .vocabulary),
+        EnglishQuestion(question: "« He was very sympathetic when I told him about the incident. » « Sympathetic » signifie ici :", options: ["compatissant", "sympathique", "distant", "drôle"], correctAnswer: "compatissant", category: .vocabulary),
+        EnglishQuestion(question: "« She passed her exam. » Cela signifie :", options: ["Elle a réussi son examen.", "Elle a passé l'épreuve, sans que l'on sache le résultat.", "Elle s'est inscrite à l'examen.", "Elle a raté son examen."], correctAnswer: "Elle a réussi son examen.", category: .vocabulary),
+        EnglishQuestion(question: "In an aircraft, the cockpit is:", options: ["the compartment from which the pilots fly the aircraft", "the cabin where the passengers are seated", "the hold where the baggage is stored", "the tower from which controllers work"], correctAnswer: "the compartment from which the pilots fly the aircraft", category: .vocabulary),
+        EnglishQuestion(question: "A runway is:", options: ["a strip of ground used for take-off and landing", "a road connecting the terminals of an airport", "a corridor of air used for navigation", "an area where aircraft are parked and refuelled"], correctAnswer: "a strip of ground used for take-off and landing", category: .vocabulary),
+        EnglishQuestion(question: "An aircraft that is taxiing is:", options: ["moving on the ground between the stand and the runway", "flying at low altitude just before landing", "being pushed backwards by a tug", "waiting at the stand with the engines shut down"], correctAnswer: "moving on the ground between the stand and the runway", category: .vocabulary),
+        EnglishQuestion(question: "At the airport, « boarding » is:", options: ["the passengers getting on the aircraft", "the passengers leaving the aircraft after landing", "the loading of freight into the hold", "the checking of passports at the border"], correctAnswer: "the passengers getting on the aircraft", category: .vocabulary),
+        EnglishQuestion(question: "A flight with a delay is a flight that:", options: ["leaves later than scheduled", "has been cancelled by the airline", "has been diverted to another airport", "is flying at a lower altitude than usual"], correctAnswer: "leaves later than scheduled", category: .vocabulary),
+        EnglishQuestion(question: "The crew of an aircraft is:", options: ["all the people working on board", "all the passengers travelling on board", "the ground staff working at the check-in desks", "the group of aircraft owned by an airline"], correctAnswer: "all the people working on board", category: .vocabulary),
+        EnglishQuestion(question: "At an airport, a gate is:", options: ["the point in the terminal where passengers board the aircraft", "the entrance to the airport car park", "the barrier at the end of a runway", "the counter where boarding passes are issued"], correctAnswer: "the point in the terminal where passengers board the aircraft", category: .vocabulary),
+        EnglishQuestion(question: "Which sentence is correct?", options: ["I have two pieces of luggage.", "I have two luggages.", "I have two luggage.", "I have a luggage."], correctAnswer: "I have two pieces of luggage.", category: .vocabulary),
+        EnglishQuestion(question: "Turbulence is:", options: ["irregular movements of the air that shake the aircraft", "a strong wind blowing across the runway", "a thick layer of cloud that reduces visibility", "a sudden loss of engine power"], correctAnswer: "irregular movements of the air that shake the aircraft", category: .vocabulary),
+        EnglishQuestion(question: "The altitude of an aircraft is:", options: ["its vertical distance above sea level", "its speed relative to the ground", "the distance remaining to its destination", "the angle of its wings relative to the airflow"], correctAnswer: "its vertical distance above sea level", category: .vocabulary),
     ]
 
     // MARK: - Vocabulary Questions (100+)
@@ -303,7 +417,7 @@ final class AnglaisQCMViewModel {
     }
 
     func startGame() {
-        // Sélectionner 30 questions aléatoires parmi 190
+        // Sélectionner 30 questions aléatoires parmi 300
         // Sert d'abord les questions jamais vues, pour qu'un candidat qui
         // enchaîne les parties parcoure toute la banque avant de recroiser
         // une question.
@@ -432,7 +546,7 @@ struct AnglaisQCMView: View {
                         RuleItem(icon: "list.bullet", text: "30 QCM (grammaire + vocabulaire)"),
                         RuleItem(icon: "timer", text: "7 minutes 30 au total"),
                         RuleItem(icon: "clock", text: "~15 secondes par question"),
-                        RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 190")
+                        RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 300")
                     ],
                     accentColor: Theme.accentViolet,
                     isGameActive: viewModel.isGameActive
@@ -464,7 +578,7 @@ struct AnglaisQCMView: View {
                     Label("30 QCM (grammaire + vocabulaire)", systemImage: "list.bullet")
                     Label("7 minutes 30 au total", systemImage: "timer")
                     Label("~15 secondes par question", systemImage: "clock")
-                    Label("Questions aléatoires parmi 190", systemImage: "shuffle")
+                    Label("Questions aléatoires parmi 300", systemImage: "shuffle")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
