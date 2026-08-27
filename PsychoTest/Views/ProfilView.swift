@@ -54,6 +54,17 @@ struct ProfilView: View {
             } footer: {
                 Text("Le taux est calculé sur tes cinq dernières parties de chaque test.")
             }
+
+            Section("Comment tu seras noté le jour J") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("La sélection ne donne pas de note : elle donne une **classe**, c'est-à-dire un rang. Au PSY0, les candidats sont répartis en quatre classes de 25 %.")
+                    Text("Ta classe dépend donc entièrement des autres candidats, et le niveau demandé change chaque année selon la concurrence. Un même score peut suffire une année et pas la suivante.")
+                    Text("Cette application ne connaît que tes propres parties : elle te situe par rapport à toi-même, pas par rapport aux autres candidats.")
+                        .foregroundStyle(Theme.texteFaible)
+                }
+                .font(.system(size: 14))
+                .padding(.vertical, 2)
+            }
         }
         .navigationTitle("Mon profil")
         .navigationBarTitleDisplayMode(.inline)

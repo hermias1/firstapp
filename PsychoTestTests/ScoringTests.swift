@@ -319,6 +319,29 @@ struct PersistanceTests {
         #expect(store.best(for: .grillesCalculs)?.score == -2)
     }
 
+    @Test("Une partie est située par rapport aux précédentes")
+    func situationDeLaPartie() throws {
+        let store = try storeVide()
+
+        // La première partie ne se compare à rien
+        #expect(store.enregistrer(resultat(.m2Back, 50)) == .premiere)
+        // Mieux que tout le reste : record
+        #expect(store.enregistrer(resultat(.m2Back, 80)) == .record)
+        // Entre les deux : deuxième sur trois
+        #expect(store.enregistrer(resultat(.m2Back, 60)) == .rang(2, sur: 3))
+        // Moins bien que tout : dernière
+        #expect(store.enregistrer(resultat(.m2Back, 10)) == .rang(4, sur: 4))
+    }
+
+    @Test("Sur un jeu chronométré, le plus petit temps est le mieux classé")
+    func situationJeuChronometre() throws {
+        let store = try storeVide()
+        store.enregistrer(resultat(.pairImpair, 14))
+        store.enregistrer(resultat(.pairImpair, 11))
+        // 12 s est moins bon que 11 s mais meilleur que 14 s
+        #expect(store.enregistrer(resultat(.pairImpair, 12)) == .rang(2, sur: 3))
+    }
+
     @Test("Les jeux ne mélangent pas leurs scores")
     func recordCloisonneParJeu() throws {
         let store = try storeVide()
@@ -1080,3 +1103,4 @@ func anglaisRythme() {
     vm.timeRemaining = 300
     #expect(vm.avanceSurLeRythme > 0)
 }
+

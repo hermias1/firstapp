@@ -12,18 +12,18 @@ private struct RecordSessionModifier: ViewModifier {
 
     @Environment(\.modelContext) private var context
     @State private var dejaEnregistre = false
-    @State private var afficheRecord = false
+    @State private var situation: ScoreStore.Situation?
 
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
-                if afficheRecord {
-                    Label("Nouveau record !", systemImage: "trophy.fill")
-                        .font(.headline)
+                if let situation, let texte = libelle(situation) {
+                    Label(texte, systemImage: situation == .record ? "trophy.fill" : "chart.bar.fill")
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(Capsule().fill(Theme.ambre))
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 9)
+                        .background(Capsule().fill(situation == .record ? Theme.ambre : Theme.accent))
                         .padding(.top, 8)
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
@@ -32,14 +32,27 @@ private struct RecordSessionModifier: ViewModifier {
                 guard estTermine else {
                     // Nouvelle partie : on réarme la garde
                     dejaEnregistre = false
-                    afficheRecord = false
+                    situation = nil
                     return
                 }
                 guard !dejaEnregistre, let resultat = resultat() else { return }
                 dejaEnregistre = true
-                let record = ScoreStore(context: context).record(resultat)
-                withAnimation(.spring) { afficheRecord = record }
+                let resultatSituation = ScoreStore(context: context).enregistrer(resultat)
+                withAnimation(.spring) { situation = resultatSituation }
             }
+    }
+}
+
+private extension RecordSessionModifier {
+    /// La première partie ne se compare à rien : mieux vaut ne rien annoncer.
+    func libelle(_ situation: ScoreStore.Situation) -> String? {
+        switch situation {
+        case .premiere: return nil
+        case .record: return "Nouveau record !"
+        case .rang(let rang, let total):
+            // Un score égal au record n'est pas un record, mais reste 1re
+            return "\(rang)\(rang == 1 ? "re" : "e") meilleure sur \(total)"
+        }
     }
 }
 
