@@ -47,6 +47,7 @@
 		A1000106 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000106 /* Theme.swift */; };
 		A1000107 /* BanqueRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000107 /* BanqueRotation.swift */; };
 		A1000108 /* TutoExemple.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000108 /* TutoExemple.swift */; };
+		A1000109 /* ExamenBlancView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000109 /* ExamenBlancView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		B1000106 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B1000107 /* BanqueRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BanqueRotation.swift; sourceTree = "<group>"; };
 		B1000108 /* TutoExemple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutoExemple.swift; sourceTree = "<group>"; };
+		B1000109 /* ExamenBlancView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamenBlancView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,6 +168,7 @@
 				B1000002 /* MainMenuView.swift */,
 				B1000095 /* GameStatsView.swift */,
 				B1000099 /* ProfilView.swift */,
+				B1000109 /* ExamenBlancView.swift */,
 				E1000005 /* Games */,
 				E1000006 /* Components */,
 			);
@@ -362,6 +365,7 @@
 				A1000002 /* MainMenuView.swift in Sources */,
 				A1000095 /* GameStatsView.swift in Sources */,
 				A1000099 /* ProfilView.swift in Sources */,
+				A1000109 /* ExamenBlancView.swift in Sources */,
 				A1000003 /* Game.swift in Sources */,
 				A1000106 /* Theme.swift in Sources */,
 				A1000091 /* GameResult.swift in Sources */,

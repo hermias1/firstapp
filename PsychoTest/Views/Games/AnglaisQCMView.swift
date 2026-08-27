@@ -416,6 +416,22 @@ final class AnglaisQCMViewModel {
         return Double(correctAnswers) / Double(totalQuestions) * 100
     }
 
+    /// Écart au rythme nécessaire pour traiter toutes les questions, en
+    /// secondes : positif si le candidat est en avance.
+    ///
+    /// Les candidats citent la gestion du temps comme leur principale
+    /// difficulté sur cette épreuve ; sans repère, on ne s'aperçoit du retard
+    /// qu'une fois qu'il est trop tard.
+    var avanceSurLeRythme: Int {
+        guard totalQuestions > 0 else { return 0 }
+        let budgetParQuestion = Double(dureeTotale) / Double(totalQuestions)
+        let attenduRestant = budgetParQuestion * Double(totalQuestions - currentIndex)
+        return timeRemaining - Int(attenduRestant.rounded())
+    }
+
+    static let dureeTotale = 450
+    var dureeTotale: Int { Self.dureeTotale }
+
     func startGame() {
         // Sélectionner 30 questions aléatoires parmi 300
         // Sert d'abord les questions jamais vues, pour qu'un candidat qui

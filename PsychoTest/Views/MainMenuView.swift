@@ -60,6 +60,13 @@ struct MainMenuView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
+                        ExamenBlancView()
+                    } label: {
+                        Label("Examen blanc", systemImage: "list.number")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
                         ProfilView()
                     } label: {
                         Label("Mon profil", systemImage: "chart.bar.doc.horizontal")

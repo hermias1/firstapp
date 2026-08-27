@@ -1041,3 +1041,42 @@ func rotationBanquePlusPetite() {
     #expect(tirage.count == 2)
     BanqueRotation.reinitialiser(cle)
 }
+
+// MARK: - Examen blanc
+
+@Test("Le parcours d'examen ne liste que des épreuves jouables")
+func examenOrdreJouable() {
+    let jouables = Set(Game.implementedGames.map(\.type))
+    for type in ExamenBlancView.ordre {
+        #expect(jouables.contains(type), "\(type.rawValue) n'est pas jouable")
+    }
+    #expect(Set(ExamenBlancView.ordre).count == ExamenBlancView.ordre.count,
+            "Une épreuve figure deux fois dans le parcours")
+}
+
+@MainActor
+@Test("L'indicateur de rythme dit vrai")
+func anglaisRythme() {
+    let vm = AnglaisQCMViewModel()
+    vm.totalQuestions = 30
+
+    // Au départ, tout le temps est là : ni avance ni retard
+    vm.currentIndex = 0
+    vm.timeRemaining = 450
+    #expect(vm.avanceSurLeRythme == 0)
+
+    // À mi-parcours avec la moitié du temps : dans les clous
+    vm.currentIndex = 15
+    vm.timeRemaining = 225
+    #expect(vm.avanceSurLeRythme == 0)
+
+    // À mi-parcours avec seulement 100 s : nettement en retard
+    vm.currentIndex = 15
+    vm.timeRemaining = 100
+    #expect(vm.avanceSurLeRythme < -100)
+
+    // Rapide sur les premières questions : en avance
+    vm.currentIndex = 20
+    vm.timeRemaining = 300
+    #expect(vm.avanceSurLeRythme > 0)
+}
