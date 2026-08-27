@@ -297,6 +297,13 @@ final class ComprehensionViewModel {
     var showFeedback: Bool = false
     var ecoutesRestantes: Int = 2
 
+    /// Les options dans l'ordre affiché.
+    ///
+    /// Sans mélange, l'ordre est celui du corpus — où la bonne réponse se
+    /// trouve en première position dans 77 % des cas. Toucher le premier
+    /// bouton suffisait alors à répondre juste sans lire le texte.
+    private(set) var optionsAffichees: [String] = []
+
     private let lecteur = LecteurAnglais()
     private var timerTask: Task<Void, Never>?
     private var transitionTask: Task<Void, Never>?
@@ -312,14 +319,20 @@ final class ComprehensionViewModel {
         return texte.questions[indexQuestion]
     }
 
+    private func melangerOptions() {
+        optionsAffichees = questionCourante?.options.shuffled() ?? []
+    }
+
     var totalQuestions: Int {
         textes.reduce(0) { $0 + $1.questions.count }
     }
 
+    /// Rapporté au nombre total de questions du tirage, et non aux seules
+    /// questions traitées : sinon abandonner après une bonne réponse affichait
+    /// 100 %.
     var accuracy: Double {
-        let total = correctAnswers + wrongAnswers
-        guard total > 0 else { return 0 }
-        return Double(correctAnswers) / Double(total) * 100
+        guard totalQuestions > 0 else { return 0 }
+        return Double(correctAnswers) / Double(totalQuestions) * 100
     }
 
     func startGame() {
@@ -360,6 +373,7 @@ final class ComprehensionViewModel {
         indexQuestion = 0
         selectedAnswer = nil
         showFeedback = false
+        melangerOptions()
     }
 
     func repondre(_ reponse: String) {
@@ -390,6 +404,7 @@ final class ComprehensionViewModel {
 
         if indexQuestion + 1 < texte.questions.count {
             indexQuestion += 1
+            melangerOptions()
         } else if indexTexte + 1 < textes.count {
             indexTexte += 1
             indexQuestion = 0
@@ -412,7 +427,7 @@ final class ComprehensionViewModel {
         guard isGameOver else { return nil }
         return GameResult(gameType: .anglaisComprehension, score: Double(correctAnswers),
                           correctAnswers: correctAnswers,
-                          totalItems: max(1, correctAnswers + wrongAnswers),
+                          totalItems: max(1, totalQuestions),
                           duration: Double(Self.duree - timeRemaining))
     }
 
@@ -637,7 +652,7 @@ struct ComprehensionAnglaiseView: View {
                         .fixedSize(horizontal: false, vertical: true)
 
                     VStack(spacing: 8) {
-                        ForEach(question.options, id: \.self) { option in
+                        ForEach(viewModel.optionsAffichees, id: \.self) { option in
                             Button {
                                 viewModel.repondre(option)
                             } label: {

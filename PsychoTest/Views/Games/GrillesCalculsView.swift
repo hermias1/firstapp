@@ -170,9 +170,13 @@ final class GrillesCalculsViewModel {
     /// Trouvés moins fausses sélections moins ratés : peut être négatif.
     func makeResult() -> GameResult? {
         guard isGameOver else { return nil }
+        // Le total compte les calculs examinés, pas les grilles : sinon le
+        // nombre de bonnes réponses dépassait le total et le taux de réussite
+        // grimpait au-dessus de 100 %.
         return GameResult(gameType: .grillesCalculs, score: Double(totalScore),
                           correctAnswers: gridResults.reduce(0) { $0 + $1.correct },
-                          totalItems: totalGrids, duration: 0)
+                          totalItems: max(1, gridResults.reduce(0) { $0 + $1.correct + $1.wrong + $1.missed }),
+                          duration: 0)
     }
 
     func stopGame() {
@@ -223,7 +227,7 @@ struct GrillesCalculsView: View {
                     title: "Règles - Grilles de Calculs",
                     rules: [
                         RuleItem(icon: "square.grid.3x3", text: "Grille de 9 calculs"),
-                        RuleItem(icon: "xmark.circle", text: "0 à 4 calculs sont faux"),
+                        RuleItem(icon: "xmark.circle", text: "1 à 4 calculs sont faux"),
                         RuleItem(icon: "hand.tap", text: "Clique sur les calculs faux"),
                         RuleItem(icon: "checkmark.circle", text: "Valide après chaque grille"),
                         RuleItem(icon: "timer", text: "45 secondes par grille")
@@ -256,7 +260,7 @@ struct GrillesCalculsView: View {
 
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Grille de 9 calculs", systemImage: "square.grid.3x3")
-                    Label("0 à 4 calculs sont faux", systemImage: "xmark.circle")
+                    Label("1 à 4 calculs sont faux", systemImage: "xmark.circle")
                     Label("Clique sur les calculs faux", systemImage: "hand.tap")
                     Label("45 secondes par grille", systemImage: "timer")
                 }

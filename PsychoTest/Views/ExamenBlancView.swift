@@ -119,33 +119,40 @@ struct ExamenBlancView: View {
         let suivante = debut != nil && partie == nil
             && Self.ordre.prefix(index).allSatisfy { self.partie(pour: $0) != nil }
 
-        HStack(spacing: 10) {
-            Text("\(index + 1)")
-                .font(.system(size: 11, weight: .bold, design: .monospaced))
-                .foregroundStyle(partie != nil ? .white : Theme.texteFaible)
-                .frame(width: 22, height: 22)
-                .background(Circle().fill(partie != nil ? Theme.vert : Theme.filet))
+        // Chaque épreuve se lance depuis la liste : sinon le parcours n'est
+        // qu'un pense-bête et il faut repasser par le menu à chaque test.
+        NavigationLink {
+            JeuDestination(type: type)
+        } label: {
+            HStack(spacing: 10) {
+                Text("\(index + 1)")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(partie != nil ? .white : Theme.texteFaible)
+                    .frame(width: 22, height: 22)
+                    .background(Circle().fill(partie != nil ? Theme.vert : Theme.filet))
 
-            VStack(alignment: .leading, spacing: 1) {
-                Text(jeu?.name ?? type.rawValue)
-                    .font(.system(size: 15, weight: suivante ? .semibold : .regular))
-                    .foregroundStyle(Theme.texteFort)
-                if suivante {
-                    Text("à faire maintenant")
-                        .font(.caption2)
-                        .foregroundStyle(Theme.accent)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(jeu?.name ?? type.rawValue)
+                        .font(.system(size: 15, weight: suivante ? .semibold : .regular))
+                        .foregroundStyle(Theme.texteFort)
+                    if suivante {
+                        Text("à faire maintenant")
+                            .font(.caption2)
+                            .foregroundStyle(Theme.accent)
+                    }
+                }
+
+                Spacer()
+
+                if let partie {
+                    Text(type.format(partie.score))
+                        .font(.mesurePetite)
+                        .foregroundStyle(Theme.texteFaible)
                 }
             }
-
-            Spacer()
-
-            if let partie {
-                Text(type.format(partie.score))
-                    .font(.mesurePetite)
-                    .foregroundStyle(Theme.texteFaible)
-            }
+            .frame(minHeight: 44)
+            .padding(.vertical, 2)
         }
-        .padding(.vertical, 2)
     }
 
     private func dureeLisible(_ duree: TimeInterval) -> String {

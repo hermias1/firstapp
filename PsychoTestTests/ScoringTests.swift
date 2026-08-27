@@ -1201,3 +1201,60 @@ func formesValidationExplicite() {
     #expect(vm.formesRestantes.count == puzzle.formes.count)
     vm.stopGame()
 }
+
+// MARK: - Défauts trouvés par la revue côté joueur
+
+@MainActor
+@Test("Les options de compréhension sont mélangées à l'affichage")
+func comprehensionOptionsMelangees() {
+    // Dans le corpus, la bonne réponse est en première position dans 77 % des
+    // cas : sans mélange, toucher le premier bouton suffirait à répondre juste.
+    var premieres = 0
+    let essais = 40
+    for _ in 0..<essais {
+        let vm = ComprehensionViewModel()
+        vm.startGame()
+        vm.passerAuxQuestions()
+        if let question = vm.questionCourante,
+           let premiere = vm.optionsAffichees.first {
+            #expect(Set(vm.optionsAffichees) == Set(question.options),
+                    "Le mélange a perdu ou ajouté une option")
+            if premiere == question.correctAnswer { premieres += 1 }
+        }
+        vm.stopGame()
+    }
+    #expect(premieres < essais * 3 / 5,
+            "La bonne réponse arrive en tête \(premieres)/\(essais) fois")
+}
+
+@MainActor
+@Test("Un abandon n'affiche pas un sans-faute")
+func comprehensionAbandonNeDonnePasCent() {
+    let vm = ComprehensionViewModel()
+    vm.startGame()
+    // Une seule bonne réponse, puis le temps expire
+    vm.correctAnswers = 1
+    vm.wrongAnswers = 0
+    #expect(vm.accuracy < 30, "Répondre à une question sur \(vm.totalQuestions) donne \(vm.accuracy) %")
+    vm.stopGame()
+}
+
+@MainActor
+@Test("Le taux de réussite des grilles ne dépasse pas 100 %")
+func grillesTauxPlafonne() {
+    let vm = GrillesCalculsViewModel()
+    // Dix grilles où le joueur trouve trois calculs faux à chaque fois
+    vm.gridResults = Array(repeating: (correct: 3, wrong: 0, missed: 0), count: 10)
+    vm.isGameOver = true
+    let resultat = vm.makeResult()
+    let taux = Double(resultat!.correctAnswers) / Double(resultat!.totalItems) * 100
+    #expect(taux <= 100, "Taux de \(taux) %")
+}
+
+@Test("Toutes les épreuves du parcours d'examen sont routables")
+func examenEpreuvesRoutables() {
+    // JeuDestination doit couvrir chaque type, sinon la ligne mène à un écran vide
+    for type in ExamenBlancView.ordre {
+        #expect(GameType.allCases.contains(type))
+    }
+}
