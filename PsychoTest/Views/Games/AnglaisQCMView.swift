@@ -429,7 +429,7 @@ struct AnglaisQCMView: View {
                         RuleItem(icon: "clock", text: "~15 secondes par question"),
                         RuleItem(icon: "shuffle", text: "Questions aléatoires parmi 190")
                     ],
-                    accentColor: .red,
+                    accentColor: Theme.accentViolet,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -445,7 +445,7 @@ struct AnglaisQCMView: View {
 
             Image(systemName: "textformat.abc")
                 .font(.system(size: 80))
-                .foregroundStyle(.red)
+                .foregroundStyle(Theme.accentViolet)
 
             Text("Test d'Anglais")
                 .font(.largeTitle)
@@ -465,7 +465,7 @@ struct AnglaisQCMView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()
@@ -499,16 +499,16 @@ struct AnglaisQCMView: View {
                     .foregroundStyle(viewModel.timeRemaining < 60 ? .red : .primary)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(Color(.systemGray6))
+                    .background(Theme.surface)
                     .clipShape(Capsule())
             }
 
             // Score
             HStack(spacing: 16) {
                 Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Theme.vert)
                 Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.rouge)
             }
             .font(.subheadline)
 
@@ -520,8 +520,8 @@ struct AnglaisQCMView: View {
                     .font(.caption)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
-                    .background(Color.red.opacity(0.15))
-                    .foregroundStyle(.red)
+                    .background(Theme.accentViolet.opacity(0.15))
+                    .foregroundStyle(Theme.rouge)
                     .clipShape(Capsule())
 
                 // Question
@@ -558,9 +558,9 @@ struct AnglaisQCMView: View {
     private func optionBackground(_ option: String, question: EnglishQuestion) -> Color {
         if viewModel.showFeedback {
             if option == question.correctAnswer {
-                return .green
+                return Theme.vert
             } else if option == viewModel.selectedAnswer {
-                return .red
+                return Theme.rouge
             }
         }
         return Color(.systemGray5)
@@ -593,7 +593,7 @@ struct AnglaisQCMView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

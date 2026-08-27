@@ -23,7 +23,7 @@ private struct RecordSessionModifier: ViewModifier {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
-                        .background(Capsule().fill(.orange))
+                        .background(Capsule().fill(Theme.ambre))
                         .padding(.top, 8)
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }

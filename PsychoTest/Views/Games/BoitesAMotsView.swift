@@ -326,7 +326,7 @@ struct BoitesAMotsView: View {
                         RuleItem(icon: "hand.tap", text: "Range-le dans la boîte de son thème"),
                         RuleItem(icon: "lightbulb", text: "Tu définis toi-même les associations")
                     ],
-                    accentColor: .brown,
+                    accentColor: Theme.accentViolet,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -342,7 +342,7 @@ struct BoitesAMotsView: View {
 
             Image(systemName: "tray.2.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.brown)
+                .foregroundStyle(Theme.accentViolet)
 
             Text("Boîtes à Mots")
                 .font(.largeTitle)
@@ -362,7 +362,7 @@ struct BoitesAMotsView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("5 séries, fais le minimum d'erreurs")
@@ -396,9 +396,9 @@ struct BoitesAMotsView: View {
 
                 HStack(spacing: 12) {
                     Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.vert)
                     Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Theme.rouge)
                 }
                 .font(.subheadline)
             }
@@ -406,7 +406,7 @@ struct BoitesAMotsView: View {
             // Mot actuel
             ZStack {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.systemGray6))
+                    .fill(Theme.surface)
                     .frame(height: 80)
 
                 if viewModel.showingWord {
@@ -424,7 +424,7 @@ struct BoitesAMotsView: View {
             if let feedback = viewModel.feedback {
                 Text(feedback)
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(feedback.contains("Correct") || feedback.contains("Nouvelle") ? .green : .red)
+                    .foregroundStyle(feedback.contains("Correct") || feedback.contains("Nouvelle") ? Theme.vert : Theme.rouge)
                     .multilineTextAlignment(.center)
             }
 
@@ -446,7 +446,7 @@ struct BoitesAMotsView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 100)
-                        .background(viewModel.isBoxAssigned(index) ? Color.brown.opacity(0.2) : Color(.systemGray5))
+                        .background(viewModel.isBoxAssigned(index) ? Theme.accentViolet.opacity(0.2) : Color(.systemGray5))
                         .foregroundStyle(viewModel.isBoxAssigned(index) ? .brown : .primary)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
@@ -469,7 +469,7 @@ struct BoitesAMotsView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -481,7 +481,7 @@ struct BoitesAMotsView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

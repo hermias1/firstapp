@@ -40,7 +40,7 @@ struct MentalCalculationView: View {
                         RuleItem(icon: "flame", text: "Le max d'opérations possible"),
                         RuleItem(icon: "star", text: "Bonus de temps pour les réponses rapides")
                     ],
-                    accentColor: .blue,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -57,7 +57,7 @@ struct MentalCalculationView: View {
 
             Image(systemName: "plus.forwardslash.minus")
                 .font(.system(size: 80))
-                .foregroundStyle(.blue)
+                .foregroundStyle(Theme.accent)
 
             Text("Calcul Mental")
                 .font(.largeTitle)
@@ -126,7 +126,7 @@ struct MentalCalculationView: View {
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.center)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Theme.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .focused($isInputFocused)
                 .onSubmit {
@@ -157,7 +157,7 @@ struct MentalCalculationView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Temps écoulé !")
                 .font(.largeTitle)

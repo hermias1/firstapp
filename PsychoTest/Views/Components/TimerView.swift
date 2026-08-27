@@ -11,11 +11,11 @@ struct TimerView: View {
 
     private var timerColor: Color {
         if progress > 0.5 {
-            return .green
+            return Theme.vert
         } else if progress > 0.25 {
             return .orange
         } else {
-            return .red
+            return Theme.rouge
         }
     }
 

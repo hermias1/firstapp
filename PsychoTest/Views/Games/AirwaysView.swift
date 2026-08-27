@@ -93,7 +93,7 @@ struct RadarView: View {
                 }
                 Image(systemName: "triangle.fill")
                     .font(.caption)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Theme.ambre)
 
                 ForEach(avions) { avion in
                     let angle = Double(avion.cap) * .pi / 180
@@ -259,7 +259,7 @@ struct AirwaysView: View {
                         RuleItem(icon: "number", text: "Donne le total MINIMAL de minutes d'attente"),
                         RuleItem(icon: "timer", text: "45 secondes par situation")
                     ],
-                    accentColor: .blue,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -272,7 +272,7 @@ struct AirwaysView: View {
             Spacer()
             Image(systemName: "airplane.circle.fill")
                 .font(.system(size: 76))
-                .foregroundStyle(.blue)
+                .foregroundStyle(Theme.accent)
             Text("Airways").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -285,7 +285,7 @@ struct AirwaysView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 situations, 45s chacune")
@@ -300,7 +300,7 @@ struct AirwaysView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -336,7 +336,7 @@ struct AirwaysView: View {
                     }
                 }
                 .padding(8)
-                .background(Color(.systemGray6))
+                .background(Theme.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
                 Text("Espacement exigé : \(puzzle.espacement) min")
@@ -367,7 +367,7 @@ struct AirwaysView: View {
                          ? "Correct !"
                          : "La réponse était \(puzzle.solution)")
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(viewModel.selectedAnswer == puzzle.solution ? .green : .red)
+                        .foregroundStyle(viewModel.selectedAnswer == puzzle.solution ? Theme.vert : Theme.rouge)
                 }
 
                 Spacer(minLength: 0)
@@ -377,8 +377,8 @@ struct AirwaysView: View {
 
     private func couleur(_ option: Int, puzzle: AirwaysPuzzle) -> Color {
         guard viewModel.showFeedback else { return .blue }
-        if option == puzzle.solution { return .green }
-        if option == viewModel.selectedAnswer { return .red }
+        if option == puzzle.solution { return Theme.vert }
+        if option == viewModel.selectedAnswer { return Theme.rouge }
         return .gray
     }
 
@@ -387,7 +387,7 @@ struct AirwaysView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -395,7 +395,7 @@ struct AirwaysView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -406,7 +406,7 @@ struct AirwaysView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

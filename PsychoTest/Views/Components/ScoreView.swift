@@ -55,5 +55,5 @@ struct ScoreView: View {
 #Preview {
     ScoreView(score: 150, correct: 8, total: 10)
         .padding()
-        .background(Color(.systemGroupedBackground))
+        .background(Theme.fond)
 }

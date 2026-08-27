@@ -348,7 +348,7 @@ private struct FormeApercu: View {
         .padding(6)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(selectionnee ? Color.gray.opacity(0.35) : Color(.systemGray6))
+                .fill(selectionnee ? Theme.accentProfond.opacity(0.35) : Color(.systemGray6))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 8)
@@ -434,7 +434,7 @@ struct FormesGlisseesView: View {
                         RuleItem(icon: "hand.tap", text: "Touche une case : la forme s'y pose par son coin haut-gauche"),
                         RuleItem(icon: "timer", text: "60 secondes par grille")
                     ],
-                    accentColor: .gray,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -449,7 +449,7 @@ struct FormesGlisseesView: View {
             Spacer()
             Image(systemName: "square.on.square")
                 .font(.system(size: 76))
-                .foregroundStyle(.gray)
+                .foregroundStyle(Theme.accentProfond)
             Text("Formes Glissées")
                 .font(.largeTitle.weight(.bold))
 
@@ -467,7 +467,7 @@ struct FormesGlisseesView: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 grilles, 60s chacune")
@@ -482,7 +482,7 @@ struct FormesGlisseesView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -562,7 +562,7 @@ struct FormesGlisseesView: View {
                     if viewModel.showFeedback {
                         Text(viewModel.derniereReussie ? "Correct !" : "Raté")
                             .font(.headline)
-                            .foregroundStyle(viewModel.derniereReussie ? .green : .red)
+                            .foregroundStyle(viewModel.derniereReussie ? Theme.vert : Theme.rouge)
                     } else {
                         Button("Recommencer le placement") {
                             viewModel.recommencer()
@@ -590,7 +590,7 @@ struct FormesGlisseesView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -598,7 +598,7 @@ struct FormesGlisseesView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -609,7 +609,7 @@ struct FormesGlisseesView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

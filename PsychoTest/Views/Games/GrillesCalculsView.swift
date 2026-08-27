@@ -228,7 +228,7 @@ struct GrillesCalculsView: View {
                         RuleItem(icon: "checkmark.circle", text: "Valide après chaque grille"),
                         RuleItem(icon: "timer", text: "45 secondes par grille")
                     ],
-                    accentColor: .orange,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -244,7 +244,7 @@ struct GrillesCalculsView: View {
 
             Image(systemName: "square.grid.3x3.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.orange)
+                .foregroundStyle(Theme.accentProfond)
 
             Text("Grilles de Calculs")
                 .font(.largeTitle)
@@ -264,7 +264,7 @@ struct GrillesCalculsView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 grilles au total")
@@ -328,14 +328,14 @@ struct GrillesCalculsView: View {
             if viewModel.showingResult, let score = viewModel.lastGridScore {
                 HStack(spacing: 20) {
                     Label("\(score.correct) trouvés", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.vert)
                     if score.wrong > 0 {
                         Label("\(score.wrong) erreurs", systemImage: "xmark.circle.fill")
-                            .foregroundStyle(.red)
+                            .foregroundStyle(Theme.rouge)
                     }
                     if score.missed > 0 {
                         Label("\(score.missed) ratés", systemImage: "exclamationmark.circle.fill")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Theme.ambre)
                     }
                 }
                 .font(.subheadline)
@@ -364,7 +364,7 @@ struct GrillesCalculsView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -381,7 +381,7 @@ struct GrillesCalculsView: View {
                 ResultRow(label: "Score total", value: "\(viewModel.totalScore)")
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()
@@ -430,15 +430,15 @@ struct CalculationCell: View {
     private var backgroundColor: Color {
         if showResult {
             if isActuallyWrong && isSelected {
-                return .green.opacity(0.3)
+                return Theme.vert.opacity(0.3)
             } else if isActuallyWrong && !isSelected {
                 return .orange.opacity(0.3)
             } else if !isActuallyWrong && isSelected {
-                return .red.opacity(0.3)
+                return Theme.rouge.opacity(0.3)
             }
             return Color(.systemGray6)
         }
-        return isSelected ? Color.orange.opacity(0.3) : Color(.systemGray6)
+        return isSelected ? Theme.accentProfond.opacity(0.3) : Color(.systemGray6)
     }
 
     private var foregroundColor: Color {
@@ -448,11 +448,11 @@ struct CalculationCell: View {
     private var borderColor: Color {
         if showResult {
             if isActuallyWrong && isSelected {
-                return .green
+                return Theme.vert
             } else if isActuallyWrong && !isSelected {
                 return .orange
             } else if !isActuallyWrong && isSelected {
-                return .red
+                return Theme.rouge
             }
             return .clear
         }

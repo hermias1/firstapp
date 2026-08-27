@@ -239,7 +239,7 @@ struct M2BackView: View {
                         RuleItem(icon: "xmark.circle", text: "NON sinon"),
                         RuleItem(icon: "number", text: "42 chiffres au total")
                     ],
-                    accentColor: .purple,
+                    accentColor: Theme.accentViolet,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -255,7 +255,7 @@ struct M2BackView: View {
 
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 80))
-                .foregroundStyle(.purple)
+                .foregroundStyle(Theme.accentViolet)
 
             Text("M2 Back")
                 .font(.largeTitle)
@@ -275,7 +275,7 @@ struct M2BackView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("42 chiffres au total")
@@ -309,9 +309,9 @@ struct M2BackView: View {
 
                 HStack(spacing: 16) {
                     Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.vert)
                     Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Theme.rouge)
                 }
                 .font(.subheadline)
             }
@@ -321,7 +321,7 @@ struct M2BackView: View {
             // Zone d'affichage du nombre
             ZStack {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(Color(.systemGray6))
+                    .fill(Theme.surface)
                     .frame(width: 200, height: 200)
 
                 if viewModel.isShowingNumber {
@@ -345,14 +345,14 @@ struct M2BackView: View {
             if let feedback = viewModel.feedback {
                 Text(feedback == .correct ? "Correct !" : "Faux !")
                     .font(.headline)
-                    .foregroundStyle(feedback == .correct ? .green : .red)
+                    .foregroundStyle(feedback == .correct ? Theme.vert : Theme.rouge)
             }
 
             // Timer bar
             if viewModel.isWaitingForAnswer {
                 GeometryReader { geo in
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.purple.opacity(0.3))
+                        .fill(Theme.accentViolet.opacity(0.3))
                         .frame(height: 8)
                         .overlay(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 4)
@@ -402,7 +402,7 @@ struct M2BackView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -414,7 +414,7 @@ struct M2BackView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

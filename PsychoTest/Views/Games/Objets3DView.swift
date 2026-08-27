@@ -270,7 +270,7 @@ struct Objets3DView: View {
                         RuleItem(icon: "arrow.down.to.line", text: "Les cubes alignés se confondent en une seule case"),
                         RuleItem(icon: "timer", text: "20 secondes par question")
                     ],
-                    accentColor: .green,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -283,7 +283,7 @@ struct Objets3DView: View {
             Spacer()
             Image(systemName: "view.3d")
                 .font(.system(size: 76))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.accentProfond)
             Text("Objets 3D").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -295,7 +295,7 @@ struct Objets3DView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("15 questions, 20s chacune")
@@ -310,7 +310,7 @@ struct Objets3DView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -363,15 +363,15 @@ struct Objets3DView: View {
 
     private func fond(_ index: Int, question: Objets3DGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return Color(.systemBackground) }
-        if index == question.indexCorrect { return .green.opacity(0.2) }
-        if index == viewModel.selectedIndex { return .red.opacity(0.2) }
+        if index == question.indexCorrect { return Theme.vert.opacity(0.2) }
+        if index == viewModel.selectedIndex { return Theme.rouge.opacity(0.2) }
         return Color(.systemBackground)
     }
 
     private func bordure(_ index: Int, question: Objets3DGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return Color(.systemGray4) }
-        if index == question.indexCorrect { return .green }
-        if index == viewModel.selectedIndex { return .red }
+        if index == question.indexCorrect { return Theme.vert }
+        if index == viewModel.selectedIndex { return Theme.rouge }
         return Color(.systemGray4)
     }
 
@@ -380,7 +380,7 @@ struct Objets3DView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -388,7 +388,7 @@ struct Objets3DView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -399,7 +399,7 @@ struct Objets3DView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

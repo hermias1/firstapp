@@ -326,7 +326,7 @@ struct CultureAeroView: View {
                         RuleItem(icon: "minus.circle", text: "-1 point si incorrect"),
                         RuleItem(icon: "forward", text: "Tu peux passer une question")
                     ],
-                    accentColor: .cyan,
+                    accentColor: Theme.accentViolet,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -342,7 +342,7 @@ struct CultureAeroView: View {
 
             Image(systemName: "airplane")
                 .font(.system(size: 80))
-                .foregroundStyle(.cyan)
+                .foregroundStyle(Theme.accentViolet)
 
             Text("Culture Aéronautique")
                 .font(.largeTitle)
@@ -362,7 +362,7 @@ struct CultureAeroView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()
@@ -392,7 +392,7 @@ struct CultureAeroView: View {
 
                 Text("Score: \(Int(viewModel.score))")
                     .font(.headline)
-                    .foregroundStyle(viewModel.score >= 0 ? .green : .red)
+                    .foregroundStyle(viewModel.score >= 0 ? Theme.vert : Theme.rouge)
             }
 
             Spacer()
@@ -447,9 +447,9 @@ struct CultureAeroView: View {
     private func optionBackground(_ option: String, question: AeroQuestion) -> Color {
         if viewModel.showFeedback {
             if option == question.correctAnswer {
-                return .green
+                return Theme.vert
             } else if option == viewModel.selectedAnswer {
-                return .red
+                return Theme.rouge
             }
         }
         return Color(.systemGray5)
@@ -468,7 +468,7 @@ struct CultureAeroView: View {
 
             Image(systemName: viewModel.score >= 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(viewModel.score >= 0 ? .green : .red)
+                .foregroundStyle(viewModel.score >= 0 ? Theme.vert : Theme.rouge)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -482,7 +482,7 @@ struct CultureAeroView: View {
                 ResultRow(label: "Score final", value: "\(Int(viewModel.score)) pts")
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("Barème: +3 correct, -1 incorrect, 0 passé")

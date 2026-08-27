@@ -414,7 +414,7 @@ struct SeriesLogiquesView: View {
                         RuleItem(icon: "plus.circle", text: "+1 point si correct"),
                         RuleItem(icon: "minus.circle", text: "-1/3 point si incorrect")
                     ],
-                    accentColor: .green,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -430,7 +430,7 @@ struct SeriesLogiquesView: View {
 
             Image(systemName: "list.number")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.accentProfond)
 
             Text("Séries Logiques")
                 .font(.largeTitle)
@@ -450,7 +450,7 @@ struct SeriesLogiquesView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("15 questions • 12 types de logiques")
@@ -488,9 +488,9 @@ struct SeriesLogiquesView: View {
             // Score actuel
             HStack(spacing: 16) {
                 Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Theme.vert)
                 Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.rouge)
             }
             .font(.subheadline)
 
@@ -512,7 +512,7 @@ struct SeriesLogiquesView: View {
                     Text("?")
                         .font(.title.weight(.bold))
                         .frame(width: 60, height: 60)
-                        .background(Color.green.opacity(0.2))
+                        .background(Theme.accentProfond.opacity(0.2))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
 
@@ -522,11 +522,11 @@ struct SeriesLogiquesView: View {
                         if viewModel.selectedAnswer == sequence.correctAnswer {
                             Text("✓ Correct !")
                                 .font(.headline)
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Theme.vert)
                         } else {
                             Text("✗ Réponse : \(sequence.correctAnswer)")
                                 .font(.headline)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Theme.rouge)
                         }
 
                         Text(sequence.explanation)
@@ -536,7 +536,7 @@ struct SeriesLogiquesView: View {
                             .padding(.horizontal)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Theme.surface)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
@@ -570,12 +570,12 @@ struct SeriesLogiquesView: View {
     private func optionBackground(_ option: String, sequence: LogicSequence) -> Color {
         if viewModel.showFeedback {
             if option == sequence.correctAnswer {
-                return .green
+                return Theme.vert
             } else if option == viewModel.selectedAnswer {
-                return .red
+                return Theme.rouge
             }
         } else if option == viewModel.selectedAnswer {
-            return .green.opacity(0.5)
+            return Theme.vert.opacity(0.5)
         }
         return Color(.systemGray5)
     }
@@ -593,7 +593,7 @@ struct SeriesLogiquesView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.accentProfond)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -606,7 +606,7 @@ struct SeriesLogiquesView: View {
                 ResultRow(label: "Score final", value: String(format: "%.1f", viewModel.finalScore))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("Barème: +1 correct, -1/3 incorrect")

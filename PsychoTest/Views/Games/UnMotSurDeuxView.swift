@@ -350,7 +350,7 @@ struct UnMotSurDeuxView: View {
                         RuleItem(icon: "textformat.abc.dottedunderline", text: "Ordre alphabétique dans chaque thème"),
                         RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
-                    accentColor: .indigo,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -366,7 +366,7 @@ struct UnMotSurDeuxView: View {
 
             Image(systemName: "textformat.alt")
                 .font(.system(size: 80))
-                .foregroundStyle(.indigo)
+                .foregroundStyle(Theme.accent)
 
             Text("Un Mot sur Deux")
                 .font(.largeTitle)
@@ -386,7 +386,7 @@ struct UnMotSurDeuxView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 séries, le plus vite possible")
@@ -424,7 +424,7 @@ struct UnMotSurDeuxView: View {
                     .foregroundStyle(viewModel.expectingTheme1 ? .indigo : .orange)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(viewModel.expectingTheme1 ? Color.indigo.opacity(0.15) : Color.orange.opacity(0.15))
+                    .background(viewModel.expectingTheme1 ? Theme.accent.opacity(0.15) : Color.orange.opacity(0.15))
                     .clipShape(Capsule())
             }
 
@@ -435,16 +435,16 @@ struct UnMotSurDeuxView: View {
                     .foregroundStyle(.indigo)
                 Label(viewModel.theme2Name, systemImage: "circle.fill")
                     .font(.caption)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Theme.ambre)
             }
 
             if viewModel.hasError {
                 Text("Erreur ! Recommence...")
                     .font(.headline)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.rouge)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.red.opacity(0.15))
+                    .background(Theme.rouge.opacity(0.15))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
 
@@ -493,7 +493,7 @@ struct UnMotSurDeuxView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -506,7 +506,7 @@ struct UnMotSurDeuxView: View {
                 ResultRow(label: "Temps total", value: String(format: "%.1fs", viewModel.seriesTimes.reduce(0, +)))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

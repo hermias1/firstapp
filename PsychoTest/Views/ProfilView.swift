@@ -91,9 +91,9 @@ struct ProfilView: View {
 
     private func couleur(_ taux: Double) -> Color {
         switch taux {
-        case ..<50: return .red
-        case ..<75: return .orange
-        default: return .green
+        case ..<50: return Theme.rouge
+        case ..<75: return Theme.ambre
+        default: return Theme.vert
         }
     }
 }

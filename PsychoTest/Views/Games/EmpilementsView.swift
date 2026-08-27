@@ -370,7 +370,7 @@ struct EmpilementsView: View {
                         RuleItem(icon: "hand.tap", text: "Touche celui qui a subi la symétrie"),
                         RuleItem(icon: "timer", text: "10 secondes par question")
                     ],
-                    accentColor: .mint,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -385,7 +385,7 @@ struct EmpilementsView: View {
             Spacer()
             Image(systemName: "cube.fill")
                 .font(.system(size: 76))
-                .foregroundStyle(.mint)
+                .foregroundStyle(Theme.accentProfond)
             Text("Empilements")
                 .font(.largeTitle.weight(.bold))
 
@@ -398,7 +398,7 @@ struct EmpilementsView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("20 questions, 10s chacune")
@@ -413,7 +413,7 @@ struct EmpilementsView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.mint)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -480,7 +480,7 @@ struct EmpilementsView: View {
                          ? "Temps écoulé"
                          : (viewModel.selectedIndex == question.indexSymetrie ? "Correct !" : "Raté"))
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(viewModel.selectedIndex == question.indexSymetrie ? .green : .red)
+                        .foregroundStyle(viewModel.selectedIndex == question.indexSymetrie ? Theme.vert : Theme.rouge)
                 }
 
                 Spacer()
@@ -490,15 +490,15 @@ struct EmpilementsView: View {
 
     private func couleurFond(_ index: Int, question: EmpilementsGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return Color(.systemGray6) }
-        if index == question.indexSymetrie { return .green.opacity(0.25) }
-        if index == viewModel.selectedIndex { return .red.opacity(0.25) }
+        if index == question.indexSymetrie { return Theme.vert.opacity(0.25) }
+        if index == viewModel.selectedIndex { return Theme.rouge.opacity(0.25) }
         return Color(.systemGray6)
     }
 
     private func bordure(_ index: Int, question: EmpilementsGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return .clear }
-        if index == question.indexSymetrie { return .green }
-        if index == viewModel.selectedIndex { return .red }
+        if index == question.indexSymetrie { return Theme.vert }
+        if index == viewModel.selectedIndex { return Theme.rouge }
         return .clear
     }
 
@@ -507,7 +507,7 @@ struct EmpilementsView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -515,7 +515,7 @@ struct EmpilementsView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -526,7 +526,7 @@ struct EmpilementsView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.mint)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

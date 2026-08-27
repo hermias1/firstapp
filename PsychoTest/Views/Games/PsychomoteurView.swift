@@ -221,7 +221,7 @@ struct PsychomoteurView: View {
                         RuleItem(icon: "exclamationmark.triangle", text: "Oubli ou faux signalement : -3 points"),
                         RuleItem(icon: "timer", text: "60 secondes")
                     ],
-                    accentColor: .red,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -234,7 +234,7 @@ struct PsychomoteurView: View {
             Spacer()
             Image(systemName: "hand.tap.fill")
                 .font(.system(size: 76))
-                .foregroundStyle(.red)
+                .foregroundStyle(Theme.accent)
             Text("Psychomoteur").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -246,7 +246,7 @@ struct PsychomoteurView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("60 secondes de double tâche")
@@ -261,7 +261,7 @@ struct PsychomoteurView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.red)
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -291,8 +291,8 @@ struct PsychomoteurView: View {
 
                     ZStack {
                         Circle()
-                            .strokeBorder(surCible ? Color.green : Color.red, lineWidth: 3)
-                            .background(Circle().fill((surCible ? Color.green : Color.red).opacity(0.15)))
+                            .strokeBorder(surCible ? Theme.vert : Theme.rouge, lineWidth: 3)
+                            .background(Circle().fill((surCible ? Theme.vert : Theme.rouge).opacity(0.15)))
                             .frame(width: rayon * 2, height: rayon * 2)
                             .position(centre)
 
@@ -319,7 +319,7 @@ struct PsychomoteurView: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 340)
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
 
             // Tâche secondaire
@@ -341,7 +341,7 @@ struct PsychomoteurView: View {
                         .font(.title3.weight(.bold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 68)
-                        .background(Color.red)
+                        .background(Theme.accent)
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
@@ -349,7 +349,7 @@ struct PsychomoteurView: View {
 
             Text(viewModel.feedbackSecondaire ?? " ")
                 .font(.caption)
-                .foregroundStyle(viewModel.feedbackSecondaire == "Correct" ? .green : .red)
+                .foregroundStyle(viewModel.feedbackSecondaire == "Correct" ? Theme.vert : Theme.rouge)
         }
     }
 
@@ -365,7 +365,7 @@ struct PsychomoteurView: View {
             Spacer()
             Image(systemName: viewModel.scoreGlobal >= 60 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.scoreGlobal >= 60 ? .green : .red)
+                .foregroundStyle(viewModel.scoreGlobal >= 60 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -375,7 +375,7 @@ struct PsychomoteurView: View {
                 ResultRow(label: "Erreurs secondaires", value: "\(viewModel.erreursSecondaires)")
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -386,7 +386,7 @@ struct PsychomoteurView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.red)
+                    .background(Theme.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

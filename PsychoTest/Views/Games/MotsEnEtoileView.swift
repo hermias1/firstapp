@@ -383,7 +383,7 @@ struct MotsEnEtoileView: View {
                         RuleItem(icon: "arrow.uturn.left", text: "La 6ᵉ branche reboucle sur la 1ʳᵉ"),
                         RuleItem(icon: "timer", text: "50 secondes par étoile")
                     ],
-                    accentColor: .yellow,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -396,7 +396,7 @@ struct MotsEnEtoileView: View {
             Spacer()
             Image(systemName: "star.fill")
                 .font(.system(size: 74))
-                .foregroundStyle(.yellow)
+                .foregroundStyle(Theme.accentProfond)
             Text("Mots en Étoile").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -408,7 +408,7 @@ struct MotsEnEtoileView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             VStack(spacing: 3) {
@@ -429,7 +429,7 @@ struct MotsEnEtoileView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.yellow)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -470,7 +470,7 @@ struct MotsEnEtoileView: View {
                                     .frame(maxWidth: .infinity)
                                     .frame(height: 44)
                                     .background(viewModel.motSelectionne == mot
-                                                ? Color.yellow.opacity(0.4) : Color(.systemGray6))
+                                                ? Theme.accentProfond.opacity(0.4) : Color(.systemGray6))
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                             }
                             .buttonStyle(.plain)
@@ -483,7 +483,7 @@ struct MotsEnEtoileView: View {
                     VStack(spacing: 4) {
                         Text(viewModel.lastAnswerCorrect ? "Étoile valide !" : "Raté")
                             .font(.headline)
-                            .foregroundStyle(viewModel.lastAnswerCorrect ? .green : .red)
+                            .foregroundStyle(viewModel.lastAnswerCorrect ? Theme.vert : Theme.rouge)
                         if !viewModel.lastAnswerCorrect {
                             Text("Une solution : " + puzzle.solution.joined(separator: " → "))
                                 .font(.caption2.monospaced())
@@ -537,7 +537,7 @@ struct MotsEnEtoileView: View {
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(viewModel.branches[index] == nil
-                          ? Color(.systemGray6) : Color.yellow.opacity(0.18))
+                          ? Color(.systemGray6) : Theme.accentProfond.opacity(0.18))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -565,13 +565,13 @@ struct MotsEnEtoileView: View {
                     .font(.caption.monospaced().weight(.bold))
                     .foregroundStyle(.white)
                     .frame(width: 20, height: 20)
-                    .background(Circle().fill(Color.green))
+                    .background(Circle().fill(Theme.vert))
             } else if conflit {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.bold))
                     .foregroundStyle(.white)
                     .frame(width: 20, height: 20)
-                    .background(Circle().fill(Color.red))
+                    .background(Circle().fill(Theme.rouge))
             } else {
                 Circle()
                     .strokeBorder(Color(.systemGray3), lineWidth: 1)
@@ -592,7 +592,7 @@ struct MotsEnEtoileView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -600,7 +600,7 @@ struct MotsEnEtoileView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -611,7 +611,7 @@ struct MotsEnEtoileView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.yellow)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

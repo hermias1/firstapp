@@ -305,7 +305,7 @@ struct BillesView: View {
                         RuleItem(icon: "number", text: "Donne le nombre MINIMAL de coups"),
                         RuleItem(icon: "timer", text: "45 secondes par puzzle")
                     ],
-                    accentColor: .teal,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -320,7 +320,7 @@ struct BillesView: View {
             Spacer()
             Image(systemName: "circle.grid.2x1.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.teal)
+                .foregroundStyle(Theme.accentProfond)
             Text("Billes")
                 .font(.largeTitle.weight(.bold))
 
@@ -333,7 +333,7 @@ struct BillesView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 puzzles, 45s chacun")
@@ -348,7 +348,7 @@ struct BillesView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.teal)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -401,7 +401,7 @@ struct BillesView: View {
                          ? "Correct !"
                          : "La réponse était \(puzzle.solution)")
                         .font(.headline)
-                        .foregroundStyle(viewModel.selectedAnswer == puzzle.solution ? .green : .red)
+                        .foregroundStyle(viewModel.selectedAnswer == puzzle.solution ? Theme.vert : Theme.rouge)
                 }
 
                 Spacer()
@@ -411,8 +411,8 @@ struct BillesView: View {
 
     private func couleurBouton(_ option: Int, puzzle: BillesPuzzle) -> Color {
         guard viewModel.showFeedback else { return .teal }
-        if option == puzzle.solution { return .green }
-        if option == viewModel.selectedAnswer { return .red }
+        if option == puzzle.solution { return Theme.vert }
+        if option == viewModel.selectedAnswer { return Theme.rouge }
         return .gray
     }
 
@@ -421,7 +421,7 @@ struct BillesView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !")
                 .font(.largeTitle.weight(.bold))
 
@@ -430,7 +430,7 @@ struct BillesView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -441,7 +441,7 @@ struct BillesView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.teal)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()

@@ -223,7 +223,7 @@ struct PairImpairView: View {
                         RuleItem(icon: "arrow.up", text: "Ordre croissant obligatoire"),
                         RuleItem(icon: "exclamationmark.triangle", text: "Erreur = nouvelle série")
                     ],
-                    accentColor: .blue,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -239,7 +239,7 @@ struct PairImpairView: View {
 
             Image(systemName: "number.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.blue)
+                .foregroundStyle(Theme.accent)
 
             Text("Pair ou Impair")
                 .font(.largeTitle)
@@ -261,7 +261,7 @@ struct PairImpairView: View {
                 .foregroundStyle(.secondary)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("10 séries, le plus vite possible")
@@ -298,17 +298,17 @@ struct PairImpairView: View {
                     .foregroundStyle(viewModel.expectingPair ? .blue : .orange)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(viewModel.expectingPair ? Color.blue.opacity(0.15) : Color.orange.opacity(0.15))
+                    .background(viewModel.expectingPair ? Theme.accent.opacity(0.15) : Color.orange.opacity(0.15))
                     .clipShape(Capsule())
             }
 
             if viewModel.hasError {
                 Text("Erreur ! Recommence...")
                     .font(.headline)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.rouge)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.red.opacity(0.15))
+                    .background(Theme.rouge.opacity(0.15))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
 
@@ -343,7 +343,7 @@ struct PairImpairView: View {
     private func buttonColor(for number: Int) -> Color {
         // START button
         if number == 0 {
-            return viewModel.isSelected(number) ? .green : .green.opacity(0.3)
+            return viewModel.isSelected(number) ? .green : Theme.vert.opacity(0.3)
         }
 
         // Nombres pairs et impairs
@@ -359,7 +359,7 @@ struct PairImpairView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -372,7 +372,7 @@ struct PairImpairView: View {
                 ResultRow(label: "Temps total", value: String(format: "%.1fs", viewModel.seriesTimes.reduce(0, +)))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

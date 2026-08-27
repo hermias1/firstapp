@@ -271,7 +271,7 @@ struct FormesCouleursView: View {
                         RuleItem(icon: "timer", text: "2.5 secondes par forme"),
                         RuleItem(icon: "eye", text: "Forme visible 0.8 seconde")
                     ],
-                    accentColor: .pink,
+                    accentColor: Theme.accent,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -287,7 +287,7 @@ struct FormesCouleursView: View {
 
             Image(systemName: "square.on.circle")
                 .font(.system(size: 80))
-                .foregroundStyle(.pink)
+                .foregroundStyle(Theme.accent)
 
             Text("Formes et Couleurs")
                 .font(.largeTitle)
@@ -305,7 +305,7 @@ struct FormesCouleursView: View {
                             Label("Bleu → N", systemImage: "circle")
                                 .foregroundStyle(.blue)
                             Label("Orange → X", systemImage: "circle")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Theme.ambre)
                         }
                         .font(.subheadline)
                     }
@@ -325,7 +325,7 @@ struct FormesCouleursView: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("30 formes • 0.8s affichage • 2.5s réponse")
@@ -359,9 +359,9 @@ struct FormesCouleursView: View {
 
                 HStack(spacing: 12) {
                     Label("\(viewModel.correctAnswers)", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.vert)
                     Label("\(viewModel.wrongAnswers)", systemImage: "xmark.circle.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Theme.rouge)
                 }
                 .font(.subheadline)
             }
@@ -371,7 +371,7 @@ struct FormesCouleursView: View {
             // Zone d'affichage de la forme
             ZStack {
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(Color(.systemGray6))
+                    .fill(Theme.surface)
                     .frame(width: 200, height: 200)
 
                 if viewModel.isShowingShape, let shape = viewModel.currentShape {
@@ -387,7 +387,7 @@ struct FormesCouleursView: View {
             if let feedback = viewModel.feedback {
                 Text(feedback)
                     .font(.headline)
-                    .foregroundStyle(feedback.contains("Correct") ? .green : .red)
+                    .foregroundStyle(feedback.contains("Correct") ? Theme.vert : Theme.rouge)
             } else {
                 Text(" ")
                     .font(.headline)
@@ -396,7 +396,7 @@ struct FormesCouleursView: View {
             // Timer bar
             GeometryReader { geo in
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.pink.opacity(0.3))
+                    .fill(Theme.accent.opacity(0.3))
                     .frame(height: 8)
                     .overlay(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
@@ -446,7 +446,7 @@ struct FormesCouleursView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 100)
                         .background(Color.orange.opacity(0.2))
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Theme.ambre)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .overlay(
                             RoundedRectangle(cornerRadius: 16)
@@ -464,7 +464,7 @@ struct FormesCouleursView: View {
 
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.green)
+                .foregroundStyle(Theme.vert)
 
             Text("Terminé !")
                 .font(.largeTitle)
@@ -476,7 +476,7 @@ struct FormesCouleursView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Spacer()

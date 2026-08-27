@@ -181,7 +181,7 @@ struct PatronView: View {
             .font(.system(size: cote * 0.42))
             .foregroundStyle(.primary)
             .frame(width: cote, height: cote)
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .overlay(Rectangle().stroke(Color(.systemGray3), lineWidth: 1))
     }
 }
@@ -204,7 +204,7 @@ struct CubeVueView: View {
             HStack(spacing: 0) {
                 symbole(vue[1])
                     .frame(width: cote, height: cote)
-                    .background(Color(.systemGray6))
+                    .background(Theme.surface)
                     .overlay(Rectangle().stroke(Color(.systemGray3), lineWidth: 1))
                 symbole(vue[2])
                     .frame(width: cote * 0.55, height: cote)
@@ -363,7 +363,7 @@ struct CubesPatronsView: View {
                         RuleItem(icon: "exclamationmark.triangle", text: "Attention au sens de rotation des faces"),
                         RuleItem(icon: "timer", text: "25 secondes par question")
                     ],
-                    accentColor: .purple,
+                    accentColor: Theme.accentProfond,
                     isGameActive: viewModel.isGameActive
                 )
             }
@@ -376,7 +376,7 @@ struct CubesPatronsView: View {
             Spacer()
             Image(systemName: "cube.transparent.fill")
                 .font(.system(size: 76))
-                .foregroundStyle(.purple)
+                .foregroundStyle(Theme.accentProfond)
             Text("Cubes 2D/3D").font(.largeTitle.weight(.bold))
 
             VStack(alignment: .leading, spacing: 8) {
@@ -388,7 +388,7 @@ struct CubesPatronsView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("15 questions, 25s chacune")
@@ -403,7 +403,7 @@ struct CubesPatronsView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.purple)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
@@ -454,7 +454,7 @@ struct CubesPatronsView: View {
                          ? "Temps écoulé"
                          : (viewModel.selectedIndex == question.indexCorrect ? "Correct !" : "Raté"))
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(viewModel.selectedIndex == question.indexCorrect ? .green : .red)
+                        .foregroundStyle(viewModel.selectedIndex == question.indexCorrect ? Theme.vert : Theme.rouge)
                 }
 
                 Spacer()
@@ -464,15 +464,15 @@ struct CubesPatronsView: View {
 
     private func fond(_ index: Int, question: CubesGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return Color(.systemBackground) }
-        if index == question.indexCorrect { return .green.opacity(0.2) }
-        if index == viewModel.selectedIndex { return .red.opacity(0.2) }
+        if index == question.indexCorrect { return Theme.vert.opacity(0.2) }
+        if index == viewModel.selectedIndex { return Theme.rouge.opacity(0.2) }
         return Color(.systemBackground)
     }
 
     private func bordure(_ index: Int, question: CubesGenerator.Question) -> Color {
         guard viewModel.showFeedback else { return Color(.systemGray4) }
-        if index == question.indexCorrect { return .green }
-        if index == viewModel.selectedIndex { return .red }
+        if index == question.indexCorrect { return Theme.vert }
+        if index == viewModel.selectedIndex { return Theme.rouge }
         return Color(.systemGray4)
     }
 
@@ -481,7 +481,7 @@ struct CubesPatronsView: View {
             Spacer()
             Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .red)
+                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
             Text("Terminé !").font(.largeTitle.weight(.bold))
 
             VStack(spacing: 12) {
@@ -489,7 +489,7 @@ struct CubesPatronsView: View {
                 ResultRow(label: "Précision", value: String(format: "%.0f%%", viewModel.accuracy))
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Button {
@@ -500,7 +500,7 @@ struct CubesPatronsView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.purple)
+                    .background(Theme.accentProfond)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             Spacer()
