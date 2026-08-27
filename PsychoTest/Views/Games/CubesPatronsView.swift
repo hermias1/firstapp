@@ -379,17 +379,22 @@ struct CubesPatronsView: View {
                 .foregroundStyle(Theme.accentProfond)
             Text("Cubes 2D/3D").font(.largeTitle.weight(.bold))
 
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Un patron déplié est présenté", systemImage: "square.grid.3x3")
-                Label("Quatre cubes en perspective sont proposés", systemImage: "cube")
-                Label("Un seul peut être plié à partir du patron", systemImage: "checkmark")
-                Label("Attention au sens de rotation des faces", systemImage: "exclamationmark.triangle")
+            ReglesCompactes(regles: [
+                "Un patron déplié montre les six faces",
+                "Un seul des quatre cubes peut être plié à partir de lui",
+                "Attention au sens de rotation autour d'un sommet"
+            ], teinte: Theme.accentProfond)
+            .padding(.horizontal, 4)
+
+            TutoExemple(legende: "Deux faces opposées sur le patron ne peuvent jamais se voir ensemble sur le cube. Et trois faces qui se rejoignent en un coin ont un ordre précis : l'inverser donne un cube impossible.") {
+                HStack(spacing: 18) {
+                    PatronView(cube: cubeExemple, cote: 26)
+                    Image(systemName: "arrow.right")
+                        .font(.footnote)
+                        .foregroundStyle(Theme.texteFaible)
+                    CubeVueView(vue: cubeExemple.vue, cote: 32)
+                }
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .padding()
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("15 questions, 25s chacune")
                 .font(.callout)
@@ -408,6 +413,10 @@ struct CubesPatronsView: View {
             }
             Spacer()
         }
+    }
+
+    private var cubeExemple: CubeSymbolise {
+        CubeSymbolise(symboles: [0, 1, 2, 3, 4, 5])
     }
 
     @ViewBuilder

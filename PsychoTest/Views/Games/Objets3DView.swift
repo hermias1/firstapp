@@ -349,17 +349,23 @@ struct Objets3DView: View {
                 .foregroundStyle(Theme.accentProfond)
             Text("Objets 3D").font(.largeTitle.weight(.bold))
 
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Un assemblage de cubes est présenté", systemImage: "cube")
-                Label("On te demande une vue précise", systemImage: "eye")
-                Label("Choisis la silhouette correspondante", systemImage: "square.grid.2x2")
-                Label("Les cubes alignés se confondent", systemImage: "arrow.down.to.line")
+            ReglesCompactes(regles: [
+                "Un assemblage de cubes est présenté",
+                "On te demande sa silhouette sous un angle précis",
+                "Les cubes alignés dans l'axe du regard n'en font qu'un"
+            ], teinte: Theme.accentProfond)
+            .padding(.horizontal, 4)
+
+            TutoExemple(legende: "Vu de dessus, cet assemblage se réduit à son ombre au sol : la hauteur disparaît, et deux cubes superposés ne comptent que pour une case.") {
+                HStack(spacing: 16) {
+                    EmpilementView(cubes: assemblageExemple, cote: 15)
+                        .frame(width: 84, height: 70)
+                    DirectionRegardView(vue: .dessus)
+                    SilhouetteView(
+                        grille: Objets3DGenerator.projection(assemblageExemple, vue: .dessus),
+                        cote: 17)
+                }
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .padding()
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("15 questions, 20s chacune")
                 .font(.callout)
@@ -378,6 +384,12 @@ struct Objets3DView: View {
             }
             Spacer()
         }
+    }
+
+    private var assemblageExemple: Empilement {
+        EmpilementsGenerator.normaliser(
+            [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+             Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 0, z: 1)])
     }
 
     @ViewBuilder

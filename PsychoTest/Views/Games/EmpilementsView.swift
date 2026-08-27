@@ -389,17 +389,27 @@ struct EmpilementsView: View {
             Text("Empilements")
                 .font(.largeTitle.weight(.bold))
 
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Trois empilements sont présentés", systemImage: "cube")
-                Label("Deux sont identiques, à une rotation près", systemImage: "arrow.triangle.2.circlepath")
-                Label("Le troisième a subi une symétrie", systemImage: "flip.horizontal")
-                Label("Touche celui qui a subi la symétrie", systemImage: "hand.tap")
+            ReglesCompactes(regles: [
+                "Trois empilements sont présentés",
+                "Deux sont la même forme, vue sous un autre angle",
+                "Le troisième est son image dans un miroir"
+            ], teinte: Theme.accentProfond)
+            .padding(.horizontal, 4)
+
+            TutoExemple(legende: "Ici, la 3ᵉ figure est le reflet des deux autres : c'est elle qu'il faut désigner. Une rotation garde la forme, un miroir l'inverse.") {
+                HStack(spacing: 14) {
+                    ForEach(Array(figuresExemple.enumerated()), id: \.offset) { index, figure in
+                        VStack(spacing: 4) {
+                            EmpilementView(cubes: figure, cote: 13)
+                                .frame(width: 62, height: 58)
+                            Text(index == 2 ? "MIROIR" : "\(index + 1)")
+                                .font(.etiquette)
+                                .tracking(0.8)
+                                .foregroundStyle(index == 2 ? Theme.vert : Theme.texteFaible)
+                        }
+                    }
+                }
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .padding()
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("20 questions, 10s chacune")
                 .font(.callout)
@@ -418,6 +428,23 @@ struct EmpilementsView: View {
             }
             Spacer()
         }
+    }
+
+    /// Une forme chirale, deux de ses orientations et son reflet.
+    private var figuresExemple: [Empilement] {
+        let forme = EmpilementsGenerator.normaliser(
+            [Cube(x: 0, y: 0, z: 0), Cube(x: 1, y: 0, z: 0),
+             Cube(x: 1, y: 1, z: 0), Cube(x: 1, y: 1, z: 1)])
+        let vues = EmpilementsGenerator.toutesLesRotations(forme)
+            .filter(EmpilementsGenerator.lisible)
+        let reflets = EmpilementsGenerator.toutesLesRotations(EmpilementsGenerator.miroir(forme))
+            .filter(EmpilementsGenerator.lisible)
+        let premiere = vues.first ?? forme
+        let seconde = vues.first {
+            EmpilementsGenerator.empreinte($0) != EmpilementsGenerator.empreinte(premiere)
+        } ?? forme
+        let reflet = reflets.first ?? EmpilementsGenerator.miroir(forme)
+        return [premiere, seconde, reflet]
     }
 
     @ViewBuilder

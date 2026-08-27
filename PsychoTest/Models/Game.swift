@@ -55,7 +55,7 @@ extension Game {
         Game(
             type: .pairImpair,
             name: "Pair ou Impair",
-            description: "Alterne entre pairs et impairs en ordre croissant",
+            description: "Alterne pairs et impairs",
             icon: "number.circle.fill",
             category: .cognitive,
             difficulty: .easy,
@@ -64,7 +64,7 @@ extension Game {
         Game(
             type: .m2Back,
             name: "M2 Back",
-            description: "Le chiffre est-il identique à celui d'il y a 2 coups ?",
+            description: "Le chiffre d'il y a 2 coups",
             icon: "brain.head.profile",
             category: .memory,
             difficulty: .easy,
@@ -73,7 +73,7 @@ extension Game {
         Game(
             type: .grillesCalculs,
             name: "Grilles de Calculs",
-            description: "Trouve les calculs faux dans une grille de 9",
+            description: "Repère les calculs faux",
             icon: "square.grid.3x3.fill",
             category: .logic,
             difficulty: .easy,
@@ -82,7 +82,7 @@ extension Game {
         Game(
             type: .seriesLogiques,
             name: "Séries Logiques",
-            description: "Complète la suite avec le bon élément",
+            description: "Complète la suite",
             icon: "list.number",
             category: .logic,
             difficulty: .easy,
@@ -91,7 +91,7 @@ extension Game {
         Game(
             type: .anglaisQCM,
             name: "Anglais",
-            description: "30 QCM grammaire et vocabulaire en 7min30",
+            description: "30 QCM en 7 min 30",
             icon: "textformat.abc",
             category: .language,
             difficulty: .easy,
@@ -100,7 +100,7 @@ extension Game {
         Game(
             type: .cultureAero,
             name: "Culture Aéronautique",
-            description: "QCM sur l'aviation (barème à points négatifs)",
+            description: "QCM aviation, points négatifs",
             icon: "airplane",
             category: .language,
             difficulty: .easy,
@@ -111,7 +111,7 @@ extension Game {
         Game(
             type: .unMotSurDeux,
             name: "Un Mot sur Deux",
-            description: "Alterne 2 thématiques en ordre alphabétique",
+            description: "Deux thèmes en alphabétique",
             icon: "textformat.alt",
             category: .cognitive,
             difficulty: .medium,
@@ -120,7 +120,7 @@ extension Game {
         Game(
             type: .formesEtCouleurs,
             name: "Formes et Couleurs",
-            description: "Associe forme/couleur/remplissage à une touche",
+            description: "Forme et couleur, une touche",
             icon: "square.on.circle",
             category: .cognitive,
             difficulty: .medium,
@@ -129,7 +129,7 @@ extension Game {
         Game(
             type: .boitesAMots,
             name: "Boîtes à Mots",
-            description: "Range les mots dans la bonne boîte thématique",
+            description: "Range les mots par thème",
             icon: "tray.2.fill",
             category: .memory,
             difficulty: .medium,
@@ -138,7 +138,7 @@ extension Game {
         Game(
             type: .motsEnEtoile,
             name: "Mots en Étoile",
-            description: "Enchaîne 6 mots qui se relient par une lettre",
+            description: "6 mots liés par une lettre",
             icon: "star.fill",
             category: .logic,
             difficulty: .medium,
@@ -148,7 +148,7 @@ extension Game {
         Game(
             type: .calculMental,
             name: "Calcul Mental",
-            description: "Un maximum d'opérations en 60 secondes",
+            description: "Un maximum en 60 secondes",
             icon: "plusminus.circle.fill",
             category: .cognitive,
             difficulty: .medium,
@@ -159,7 +159,7 @@ extension Game {
         Game(
             type: .empilementsCubes,
             name: "Empilements",
-            description: "Identifie l'empilement qui a subi une symétrie",
+            description: "Trouve la symétrie",
             icon: "cube.fill",
             category: .spatial,
             difficulty: .hard,
@@ -168,7 +168,7 @@ extension Game {
         Game(
             type: .billes,
             name: "Billes",
-            description: "Trouve le nombre min de déplacements dans les tubes",
+            description: "Le nombre minimal de coups",
             icon: "circle.grid.2x1.fill",
             category: .spatial,
             difficulty: .hard,
@@ -177,7 +177,7 @@ extension Game {
         Game(
             type: .formesGlissees,
             name: "Formes Glissées",
-            description: "Superpose des formes pour reproduire une figure cible",
+            description: "Superpose pour reproduire",
             icon: "square.on.square",
             category: .spatial,
             difficulty: .hard,
@@ -186,7 +186,7 @@ extension Game {
         Game(
             type: .cubes2D3D,
             name: "Cubes 2D/3D",
-            description: "Retrouve le cube correspondant au patron déplié",
+            description: "Le cube du patron déplié",
             icon: "cube.transparent.fill",
             category: .spatial,
             difficulty: .hard,
@@ -197,7 +197,7 @@ extension Game {
         Game(
             type: .psychomoteur,
             name: "Psychomoteur",
-            description: "Suis la cible et réagis aux chiffres en même temps",
+            description: "Deux tâches à la fois",
             icon: "hand.tap.fill",
             category: .multitask,
             difficulty: .veryHard,
@@ -206,7 +206,7 @@ extension Game {
         Game(
             type: .airways,
             name: "Airways",
-            description: "Espace les arrivées avec un minimum d'attente",
+            description: "Espace les arrivées",
             icon: "airplane.circle.fill",
             category: .multitask,
             difficulty: .veryHard,
@@ -215,7 +215,7 @@ extension Game {
         Game(
             type: .objets3D,
             name: "Objets 3D",
-            description: "Retrouve la silhouette d'un assemblage vu sous un angle",
+            description: "La silhouette vue d'un angle",
             icon: "view.3d",
             category: .spatial,
             difficulty: .veryHard,

@@ -399,22 +399,21 @@ struct MotsEnEtoileView: View {
                 .foregroundStyle(Theme.accentProfond)
             Text("Mots en Étoile").font(.largeTitle.weight(.bold))
 
-            VStack(alignment: .leading, spacing: 8) {
-                Label("9 mots de 7 lettres sont proposés", systemImage: "textformat.abc")
-                Label("Places-en 6 sur les branches", systemImage: "star")
-                Label("La dernière lettre d'un mot est la première du suivant", systemImage: "link")
-                Label("La 6ᵉ branche reboucle sur la 1ʳᵉ", systemImage: "arrow.uturn.left")
-            }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .padding()
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            ReglesCompactes(regles: [
+                "9 mots de 7 lettres sont proposés, places-en 6",
+                "La dernière lettre d'un mot est la première du suivant",
+                "La 6ᵉ branche reboucle sur la 1ʳᵉ"
+            ], teinte: Theme.accentProfond)
+            .padding(.horizontal, 4)
 
-            VStack(spacing: 3) {
-                Text("Exemple").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                Text("MIRACL**E** → **E**STOMA**C** → **C**ADENAS")
-                    .font(.caption.monospaced())
+            TutoExemple(legende: "MIRACLE finit par E, ESTOMAC commence par E : ils se relient. Il faut que les six mots forment ainsi une boucle fermée.") {
+                VStack(spacing: 6) {
+                    MotAvecLiaisons(mot: "MIRACLE")
+                    lettreDeLiaison("E")
+                    MotAvecLiaisons(mot: "ESTOMAC")
+                    lettreDeLiaison("C")
+                    MotAvecLiaisons(mot: "CADENAS")
+                }
             }
 
             Text("10 étoiles, 50s chacune")
@@ -434,6 +433,15 @@ struct MotsEnEtoileView: View {
             }
             Spacer()
         }
+    }
+
+    /// La lettre partagée entre deux mots voisins.
+    private func lettreDeLiaison(_ lettre: String) -> some View {
+        Text(lettre)
+            .font(.system(size: 11, weight: .bold, design: .monospaced))
+            .foregroundStyle(.white)
+            .frame(width: 19, height: 19)
+            .background(Circle().fill(Theme.vert))
     }
 
     @ViewBuilder
