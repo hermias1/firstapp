@@ -416,6 +416,7 @@ struct PersistanceTests {
             { let v = MentalCalculationViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = ComprehensionViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = Objets3DViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = AirwaysViewModel(); v.isGameOver = true; return v.makeResult() },
@@ -1104,3 +1105,44 @@ func anglaisRythme() {
     #expect(vm.avanceSurLeRythme > 0)
 }
 
+
+// MARK: - Compréhension anglaise
+
+@Test("Les textes de compréhension sont bien formés")
+func comprehensionTextesValides() {
+    #expect(ComprehensionGenerator.lectures.count >= 6)
+    #expect(ComprehensionGenerator.ecoutes.count >= 4)
+
+    for texte in ComprehensionGenerator.tous {
+        let mots = texte.texte.split(separator: " ").count
+        // Un texte à lire fait 150 à 220 mots ; un texte à écouter reste plus
+        // court, car il doit être retenu à l'oreille.
+        if texte.mode == .lecture {
+            #expect((140...240).contains(mots), "\(texte.titre) : \(mots) mots")
+        } else {
+            #expect((70...150).contains(mots), "\(texte.titre) : \(mots) mots")
+        }
+        #expect(texte.questions.count >= 2, "\(texte.titre) a trop peu de questions")
+
+        for q in texte.questions {
+            #expect(q.options.count == 4)
+            #expect(Set(q.options).count == 4, "Option dupliquée : \(q.question)")
+            #expect(q.options.contains(q.correctAnswer),
+                    "Réponse absente des options : \(q.question)")
+        }
+    }
+    let titres = ComprehensionGenerator.tous.map(\.titre)
+    #expect(Set(titres).count == titres.count, "Deux textes portent le même titre")
+}
+
+@MainActor
+@Test("Une partie enchaîne deux lectures et une écoute")
+func comprehensionTirage() {
+    let vm = ComprehensionViewModel()
+    vm.startGame()
+    #expect(vm.textes.count == 3)
+    #expect(vm.textes.filter { $0.mode == .lecture }.count == 2)
+    #expect(vm.textes.filter { $0.mode == .ecoute }.count == 1)
+    #expect(vm.totalQuestions >= 6)
+    vm.stopGame()
+}

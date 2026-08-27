@@ -40,6 +40,7 @@ enum GameType: String, CaseIterable {
     case boitesAMots
     case motsEnEtoile
     case calculMental
+    case anglaisComprehension
     case empilementsCubes
     case billes
     case formesGlissees
@@ -145,6 +146,15 @@ extension Game {
             isImplemented: true
         ),
 
+        Game(
+            type: .anglaisComprehension,
+            name: "Compréhension",
+            description: "Lis et écoute, puis réponds",
+            icon: "text.book.closed.fill",
+            category: .language,
+            difficulty: .medium,
+            isImplemented: true
+        ),
         Game(
             type: .calculMental,
             name: "Calcul Mental",
@@ -315,7 +325,7 @@ extension GameType {
         case .billes: return [.spatiale, .intellectuelle]
         case .formesGlissees: return [.spatiale, .intellectuelle]
         case .empilementsCubes, .cubes2D3D, .objets3D: return [.spatiale]
-        case .anglaisQCM: return [.anglais]
+        case .anglaisQCM, .anglaisComprehension: return [.anglais]
         case .cultureAero: return []
         case .psychomoteur: return [.attention]
         case .airways: return [.attention, .intellectuelle]
