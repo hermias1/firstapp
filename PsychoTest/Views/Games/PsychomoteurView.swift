@@ -111,7 +111,10 @@ final class PsychomoteurViewModel {
         stimulusTask?.cancel()
         stimulusTask = Task { @MainActor in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(Int.random(in: 3000...5000)))
+                // Intervalle fixe : un tirage aléatoire faisait varier le
+                // nombre de stimuli d'une partie à l'autre, donc la charge,
+                // et rendait deux scores incomparables.
+                try? await Task.sleep(for: .milliseconds(4000))
                 if Task.isCancelled { return }
 
                 chiffre = Int.random(in: 1...9)

@@ -11,6 +11,7 @@ import SwiftData
 struct ExamenBlancView: View {
     @Query private var sessions: [GameSession]
     @AppStorage("examen.debut") private var debutBrut: Double = 0
+    @State private var demandeReinitialisation = false
 
     /// L'ordre relevé dans les retours de candidats.
     static let ordre: [GameType] = [
@@ -103,13 +104,19 @@ struct ExamenBlancView: View {
             if debut != nil {
                 Section {
                     Button("Réinitialiser le parcours", role: .destructive) {
-                        debutBrut = 0
+                        demandeReinitialisation = true
                     }
                 }
             }
         }
         .navigationTitle("Examen blanc")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Réinitialiser le parcours ?", isPresented: $demandeReinitialisation) {
+            Button("Annuler", role: .cancel) {}
+            Button("Réinitialiser", role: .destructive) { debutBrut = 0 }
+        } message: {
+            Text("Le suivi de cette session sera effacé. Les parties déjà jouées restent dans tes statistiques.")
+        }
     }
 
     @ViewBuilder

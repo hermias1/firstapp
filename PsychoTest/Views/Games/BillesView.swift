@@ -228,11 +228,11 @@ struct TubeView: View {
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.white)
                 }
-                .frame(width: 26, height: 26)
+                .frame(width: 23, height: 23)
             }
         }
         .padding(6)
-        .frame(width: 44, height: CGFloat(capacite) * 30 + 16)
+        .frame(width: 44, height: CGFloat(capacite) * 26 + 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.systemGray5))
@@ -367,7 +367,7 @@ struct BillesView: View {
                     TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 45)
                 }
 
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     EtatView(titre: "Départ", tubes: puzzle.depart, capacite: puzzle.capacite)
                     Image(systemName: "arrow.down")
                         .font(.title3)

@@ -366,6 +366,15 @@ struct M2BackView: View {
 
             Spacer()
 
+            // Les deux premiers chiffres n'appellent pas de réponse : sans le
+            // dire, on croit que les boutons ne marchent pas.
+            if !viewModel.isWaitingForAnswer && viewModel.currentIndex < 2 {
+                Text("Mémorise, la question vient au 3ᵉ chiffre")
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.texteFaible)
+                    .frame(height: 56)
+            }
+
             // Boutons de réponse
             if viewModel.isWaitingForAnswer {
                 HStack(spacing: 20) {

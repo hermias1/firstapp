@@ -674,8 +674,9 @@ struct ComprehensionAnglaiseView: View {
                                 .lineSpacing(2)
                                 .padding(.top, 6)
                         }
-                        .font(.caption.weight(.semibold))
+                        .font(.system(size: 15, weight: .semibold))
                         .tint(Theme.accentViolet)
+                        .frame(minHeight: 44)
                     }
 
                     Text("Question \(viewModel.indexQuestion + 1)/\(texte.questions.count)")
