@@ -439,7 +439,7 @@ struct Objets3DView: View {
                             viewModel.repondre(index)
                         } label: {
                             SilhouetteView(grille: question.propositions[index])
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: .infinity, minHeight: 56)
                                 .padding(6)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)

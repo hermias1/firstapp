@@ -367,6 +367,9 @@ struct GrilleView: View {
 private struct FormeApercu: View {
     let forme: FormeGlissee
     let selectionnee: Bool
+    /// Même côté que les cases de la grille : une forme dessinée plus petite
+    /// que sa cible de dépôt se lit mal et trompe sur la place qu'elle prend.
+    var cote: CGFloat = 22
 
     var body: some View {
         VStack(spacing: 2) {
@@ -376,12 +379,15 @@ private struct FormeApercu: View {
                         Rectangle()
                             .fill(forme.cases.contains(.init(ligne: ligne, colonne: colonne))
                                   ? couleurGrise : Color.clear)
-                            .frame(width: 16, height: 16)
+                            .frame(width: cote, height: cote)
                     }
                 }
             }
         }
         .padding(6)
+        // Un domino vertical ne mesurait que 28 points de large : impossible
+        // à saisir de façon fiable au doigt.
+        .frame(minWidth: 44, minHeight: 44)
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(selectionnee ? Theme.accentProfond.opacity(0.35) : Color(.systemGray6))

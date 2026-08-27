@@ -218,7 +218,7 @@ final class NidAbeilleViewModel {
 
         transitionTask?.cancel()
         transitionTask = Task { @MainActor in
-            try? await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(3))
             if Task.isCancelled { return }
             currentQuestion += 1
             if currentQuestion >= totalQuestions {
@@ -444,9 +444,10 @@ struct NidAbeilleView: View {
                             .foregroundStyle(viewModel.derniereReussie ? Theme.vert : Theme.rouge)
                         if !viewModel.derniereReussie {
                             Text(puzzle.solution.joined(separator: " · "))
-                                .font(.caption2)
-                                .foregroundStyle(Theme.texteFaible)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Theme.texteFort)
                                 .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 } else {
