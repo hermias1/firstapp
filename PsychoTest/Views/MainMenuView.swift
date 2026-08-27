@@ -103,6 +103,7 @@ struct MainMenuView: View {
         case .motsEnEtoile: MotsEnEtoileView()
         case .calculMental: MentalCalculationView()
         case .anglaisComprehension: ComprehensionAnglaiseView()
+        case .nidAbeille: NidAbeilleView()
         case .billes: BillesView()
         case .formesGlissees: FormesGlisseesView()
         case .empilementsCubes: EmpilementsView()

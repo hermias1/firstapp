@@ -49,6 +49,7 @@
 		A1000108 /* TutoExemple.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000108 /* TutoExemple.swift */; };
 		A1000109 /* ExamenBlancView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000109 /* ExamenBlancView.swift */; };
 		A1000110 /* ComprehensionAnglaiseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000110 /* ComprehensionAnglaiseView.swift */; };
+		A1000111 /* NidAbeilleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000111 /* NidAbeilleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		B1000108 /* TutoExemple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutoExemple.swift; sourceTree = "<group>"; };
 		B1000109 /* ExamenBlancView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamenBlancView.swift; sourceTree = "<group>"; };
 		B1000110 /* ComprehensionAnglaiseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComprehensionAnglaiseView.swift; sourceTree = "<group>"; };
+		B1000111 /* NidAbeilleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NidAbeilleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -200,6 +202,7 @@
 				B1000103 /* AirwaysView.swift */,
 				B1000104 /* PsychomoteurView.swift */,
 				B1000110 /* ComprehensionAnglaiseView.swift */,
+				B1000111 /* NidAbeilleView.swift */,
 			);
 			path = Games;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				A1000103 /* AirwaysView.swift in Sources */,
 				A1000104 /* PsychomoteurView.swift in Sources */,
 				A1000110 /* ComprehensionAnglaiseView.swift in Sources */,
+				A1000111 /* NidAbeilleView.swift in Sources */,
 				A1000040 /* GameRulesButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

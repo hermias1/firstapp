@@ -41,6 +41,7 @@ enum GameType: String, CaseIterable {
     case motsEnEtoile
     case calculMental
     case anglaisComprehension
+    case nidAbeille
     case empilementsCubes
     case billes
     case formesGlissees
@@ -146,6 +147,15 @@ extension Game {
             isImplemented: true
         ),
 
+        Game(
+            type: .nidAbeille,
+            name: "Nid d'Abeille",
+            description: "Remplis la ruche du thème",
+            icon: "hexagon.fill",
+            category: .language,
+            difficulty: .medium,
+            isImplemented: true
+        ),
         Game(
             type: .anglaisComprehension,
             name: "Compréhension",
@@ -319,7 +329,7 @@ extension GameType {
         case .formesEtCouleurs: return [.attention]
         case .grillesCalculs: return [.numerique]
         case .calculMental: return [.numerique]
-        case .boitesAMots: return [.verbale]
+        case .boitesAMots, .nidAbeille: return [.verbale]
         case .motsEnEtoile: return [.verbale]
         case .seriesLogiques: return [.intellectuelle]
         case .billes: return [.spatiale, .intellectuelle]

@@ -417,6 +417,7 @@ struct PersistanceTests {
             { let v = FormesGlisseesViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = EmpilementsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = ComprehensionViewModel(); v.isGameOver = true; return v.makeResult() },
+            { let v = NidAbeilleViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = CubesPatronsViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = Objets3DViewModel(); v.isGameOver = true; return v.makeResult() },
             { let v = AirwaysViewModel(); v.isGameOver = true; return v.makeResult() },
@@ -1145,4 +1146,37 @@ func comprehensionTirage() {
     #expect(vm.textes.filter { $0.mode == .ecoute }.count == 1)
     #expect(vm.totalQuestions >= 6)
     vm.stopGame()
+}
+
+// MARK: - Nid d'Abeille
+
+@Test("Chaque ruche propose six bons mots et trois intrus")
+func nidRucheBienFormee() {
+    for _ in 0..<200 {
+        let puzzle = NidGenerator.generate()
+        #expect(puzzle.proposes.count == 9)
+        #expect(Set(puzzle.proposes).count == 9, "Un mot est proposé deux fois")
+        #expect(puzzle.solution.count == 6)
+
+        // Les six mots du thème figurent bien parmi les propositions
+        for mot in puzzle.solution {
+            #expect(puzzle.proposes.contains(mot))
+        }
+        // Et aucun intrus n'appartient au thème, sans quoi il y aurait
+        // plusieurs réponses correctes
+        let intrus = puzzle.proposes.filter { !puzzle.solution.contains($0) }
+        #expect(intrus.count == 3)
+        #expect(Set(intrus).isDisjoint(with: Set(puzzle.theme.mots)))
+    }
+}
+
+@Test("Les thèmes du corpus sont exploitables")
+func nidCorpusValide() {
+    #expect(NidGenerator.themes.count >= 40)
+    for theme in NidGenerator.themes {
+        #expect(theme.mots.count == 6, "\(theme.nom) n'a pas six mots")
+        #expect(Set(theme.mots).count == 6, "\(theme.nom) contient un doublon")
+    }
+    let noms = NidGenerator.themes.map(\.nom)
+    #expect(Set(noms).count == noms.count, "Deux thèmes portent le même nom")
 }

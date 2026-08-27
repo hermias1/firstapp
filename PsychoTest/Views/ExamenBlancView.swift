@@ -13,11 +13,8 @@ struct ExamenBlancView: View {
     @AppStorage("examen.debut") private var debutBrut: Double = 0
 
     /// L'ordre relevé dans les retours de candidats.
-    ///
-    /// L'épreuve du « nid d'abeille » qui ouvre la vraie session n'est pas
-    /// encore dans l'application : le parcours commence donc à la deuxième.
     static let ordre: [GameType] = [
-        .formesGlissees, .pairImpair, .m2Back, .formesEtCouleurs,
+        .nidAbeille, .formesGlissees, .pairImpair, .m2Back, .formesEtCouleurs,
         .airways, .objets3D, .seriesLogiques, .cubes2D3D,
         .grillesCalculs, .boitesAMots, .psychomoteur, .cultureAero, .anglaisQCM
     ]
