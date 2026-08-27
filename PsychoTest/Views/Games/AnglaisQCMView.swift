@@ -728,13 +728,7 @@ struct AnglaisQCMView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(viewModel.accuracy >= 70 ? .green : .orange)
-
-            Text("Terminé !")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            EnTeteDeFin(taux: viewModel.accuracy)
 
             VStack(spacing: 16) {
                 ResultRow(label: "Bonnes réponses", value: "\(viewModel.correctAnswers)")

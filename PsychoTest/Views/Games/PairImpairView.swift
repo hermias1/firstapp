@@ -25,6 +25,16 @@ final class PairImpairViewModel {
     private var impairIndex: Int = 0
     private var transitionTask: Task<Void, Never>?
 
+    /// Part des séries réussies du premier coup.
+    ///
+    /// Ces jeux n'avaient aucun taux de réussite : l'écran de fin affichait
+    /// donc une coche verte quel que soit le nombre d'erreurs.
+    var accuracy: Double {
+        let tentatives = currentSeries + errorCount
+        guard tentatives > 0 else { return 0 }
+        return Double(currentSeries) / Double(tentatives) * 100
+    }
+
     var averageTime: TimeInterval {
         guard !seriesTimes.isEmpty else { return 0 }
         return seriesTimes.reduce(0, +) / Double(seriesTimes.count)
@@ -358,13 +368,7 @@ struct PairImpairView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(Theme.vert)
-
-            Text("Terminé !")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            EnTeteDeFin(taux: viewModel.accuracy)
 
             VStack(spacing: 16) {
                 ResultRow(label: "Séries complétées", value: "\(viewModel.currentSeries)")

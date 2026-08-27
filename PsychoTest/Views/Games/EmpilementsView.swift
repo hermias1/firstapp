@@ -549,10 +549,7 @@ struct EmpilementsView: View {
     private var gameOverView: some View {
         VStack(spacing: 24) {
             Spacer()
-            Image(systemName: viewModel.accuracy >= 70 ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .font(.system(size: 70))
-                .foregroundStyle(viewModel.accuracy >= 70 ? Theme.vert : Theme.rouge)
-            Text("Terminé !").font(.largeTitle.weight(.bold))
+            EnTeteDeFin(taux: viewModel.accuracy)
 
             VStack(spacing: 12) {
                 ResultRow(label: "Bonnes réponses", value: "\(viewModel.correctAnswers)/\(viewModel.totalQuestions)")

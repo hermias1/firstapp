@@ -384,10 +384,7 @@ struct PsychomoteurView: View {
     private var gameOverView: some View {
         VStack(spacing: 24) {
             Spacer()
-            Image(systemName: viewModel.scoreGlobal >= 60 ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .font(.system(size: 70))
-                .foregroundStyle(viewModel.scoreGlobal >= 60 ? Theme.vert : Theme.rouge)
-            Text("Terminé !").font(.largeTitle.weight(.bold))
+            EnTeteDeFin(taux: viewModel.scoreGlobal)
 
             VStack(spacing: 12) {
                 ResultRow(label: "Score global", value: String(format: "%.0f", viewModel.scoreGlobal))

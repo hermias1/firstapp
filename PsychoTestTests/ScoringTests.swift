@@ -1300,3 +1300,30 @@ func comprehensionDoubleAppui() {
             "Deux appuis rapprochés ont consommé deux écoutes")
     vm.stopGame()
 }
+
+// MARK: - Cohérence du barème
+
+@Test("Tous les jeux emploient le même seuil de réussite")
+func seuilUnique() {
+    #expect(Reussite.seuil == 70)
+    #expect(Reussite.atteinte(70))
+    #expect(Reussite.atteinte(69.9) == false)
+    // Le seuil ne doit plus être écrit en dur dans les écrans de jeu
+    #expect(Reussite.icone(80) == "checkmark.circle.fill")
+    #expect(Reussite.icone(50) == "xmark.circle.fill")
+}
+
+@MainActor
+@Test("Un jeu chronométré ne félicite plus un joueur qui a tout raté")
+func chronometreNeFelicitePasToujours() {
+    let vm = PairImpairViewModel()
+    // Dix séries bouclées mais quinze erreurs en chemin
+    vm.currentSeries = 10
+    vm.errorCount = 15
+    #expect(Reussite.atteinte(vm.accuracy) == false,
+            "Taux de \(vm.accuracy) % considéré comme réussi")
+
+    // Sans faute, la réussite est acquise
+    vm.errorCount = 0
+    #expect(Reussite.atteinte(vm.accuracy))
+}
