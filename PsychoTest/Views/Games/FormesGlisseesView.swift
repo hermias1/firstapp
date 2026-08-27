@@ -76,6 +76,35 @@ enum FormesGlisseesGenerator {
         FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 1, colonne: 0),
                              .init(ligne: 1, colonne: 1), .init(ligne: 0, colonne: 2)],
                      hauteur: 2, largeur: 3),                                   // dispersée
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 0, colonne: 1),
+                             .init(ligne: 0, colonne: 2), .init(ligne: 1, colonne: 1)],
+                     hauteur: 2, largeur: 3),                                   // T
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 1, colonne: 0),
+                             .init(ligne: 2, colonne: 0), .init(ligne: 2, colonne: 1)],
+                     hauteur: 3, largeur: 2),                                   // L
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 1), .init(ligne: 1, colonne: 1),
+                             .init(ligne: 2, colonne: 0), .init(ligne: 2, colonne: 1)],
+                     hauteur: 3, largeur: 2),                                   // J
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 1), .init(ligne: 1, colonne: 0),
+                             .init(ligne: 1, colonne: 1), .init(ligne: 1, colonne: 2),
+                             .init(ligne: 2, colonne: 1)],
+                     hauteur: 3, largeur: 3),                                   // croix
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 1, colonne: 0),
+                             .init(ligne: 2, colonne: 0)],
+                     hauteur: 3, largeur: 1),                                   // barre verticale
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 1, colonne: 1)],
+                     hauteur: 2, largeur: 2),                                   // diagonale
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 0, colonne: 2),
+                             .init(ligne: 1, colonne: 0), .init(ligne: 1, colonne: 1),
+                             .init(ligne: 1, colonne: 2)],
+                     hauteur: 2, largeur: 3),                                   // U
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 0), .init(ligne: 0, colonne: 1),
+                             .init(ligne: 1, colonne: 0), .init(ligne: 1, colonne: 1),
+                             .init(ligne: 2, colonne: 0)],
+                     hauteur: 3, largeur: 2),                                   // P
+        FormeGlissee(cases: [.init(ligne: 0, colonne: 1), .init(ligne: 0, colonne: 2),
+                             .init(ligne: 1, colonne: 0), .init(ligne: 1, colonne: 1)],
+                     hauteur: 2, largeur: 3),                                   // S
     ]
 
     /// Compte les placements distincts qui reproduisent la cible.
