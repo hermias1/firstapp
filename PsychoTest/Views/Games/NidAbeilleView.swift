@@ -289,8 +289,9 @@ private struct AlveoleView: View {
                               weight: estCentre ? .bold : .semibold))
                 .foregroundStyle(estCentre ? .white : Theme.texteFort)
                 .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.6)
-                .lineLimit(2)
+                // Un facteur trop bas réduisait un thème long à 7 points
+                .minimumScaleFactor(0.8)
+                .lineLimit(3)
                 .padding(.horizontal, 6)
         }
         .frame(width: cote, height: cote)

@@ -1180,3 +1180,24 @@ func nidCorpusValide() {
     let noms = NidGenerator.themes.map(\.nom)
     #expect(Set(noms).count == noms.count, "Deux thèmes portent le même nom")
 }
+
+@MainActor
+@Test("Poser la dernière forme ne termine pas la grille toute seule")
+func formesValidationExplicite() {
+    let vm = FormesGlisseesViewModel()
+    vm.startGame()
+    guard let puzzle = vm.puzzle else { return }
+
+    // Poser les trois formes n'importe où
+    for index in puzzle.formes.indices {
+        vm.deposer(index: index, en: FormeGlissee.Position(ligne: 0, colonne: 0))
+    }
+    // Un lâcher décalé ne doit pas condamner la grille : le joueur doit
+    // pouvoir tout replacer avant de valider.
+    #expect(vm.showFeedback == false, "La grille s'est validée toute seule")
+    #expect(vm.formesRestantes.isEmpty)
+
+    vm.recommencer()
+    #expect(vm.formesRestantes.count == puzzle.formes.count)
+    vm.stopGame()
+}

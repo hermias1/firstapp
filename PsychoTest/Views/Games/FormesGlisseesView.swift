@@ -261,9 +261,16 @@ final class FormesGlisseesViewModel {
 
         if let suivante = formesRestantes.first {
             formeSelectionnee = suivante
-        } else {
-            terminer(reussi: grille == puzzle.cible)
         }
+        // La partie n'est plus close automatiquement au troisième dépôt : un
+        // lâcher décalé d'une case devenait une réponse fausse définitive,
+        // sans aucun moyen de se reprendre.
+    }
+
+    /// Valide la grille une fois les trois formes posées.
+    func valider() {
+        guard let puzzle, !showFeedback, formesRestantes.isEmpty else { return }
+        terminer(reussi: grille == puzzle.cible)
     }
 
     func recommencer() {
@@ -460,7 +467,7 @@ struct FormesGlisseesView: View {
                         RuleItem(icon: "square.fill", text: "Marine + marine = marine"),
                         RuleItem(icon: "square.lefthalf.filled", text: "Marine + gris = gris"),
                         RuleItem(icon: "square", text: "Gris + gris = marine"),
-                        RuleItem(icon: "hand.tap", text: "Touche une case : la forme s'y pose par son coin haut-gauche"),
+                        RuleItem(icon: "hand.draw", text: "Fais glisser une forme sur la grille, elle se pose sous ton doigt"),
                         RuleItem(icon: "timer", text: "60 secondes par grille")
                     ],
                     accentColor: Theme.accentProfond,
@@ -589,14 +596,32 @@ struct FormesGlisseesView: View {
                     }
 
                     if viewModel.showFeedback {
-                        Text(viewModel.derniereReussie ? "Correct !" : "Raté")
-                            .font(.headline)
-                            .foregroundStyle(viewModel.derniereReussie ? Theme.vert : Theme.rouge)
-                    } else {
-                        Button("Recommencer le placement") {
-                            viewModel.recommencer()
+                        VStack(spacing: 3) {
+                            Text(viewModel.derniereReussie ? "Correct !" : "Raté")
+                                .font(.headline)
+                                .foregroundStyle(viewModel.derniereReussie ? Theme.vert : Theme.rouge)
                         }
-                        .font(.subheadline)
+                    } else {
+                        HStack(spacing: 10) {
+                            Button("Tout replacer") {
+                                viewModel.recommencer()
+                            }
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+
+                            Button {
+                                viewModel.valider()
+                            } label: {
+                                Text("Valider")
+                                    .font(.carte)
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity, minHeight: 44)
+                                    .background(viewModel.formesRestantes.isEmpty
+                                                ? Theme.accentProfond : Theme.filet,
+                                                in: RoundedRectangle(cornerRadius: 10))
+                            }
+                            .disabled(!viewModel.formesRestantes.isEmpty)
+                        }
                     }
 
                     Spacer(minLength: 0)

@@ -171,23 +171,39 @@ struct EmpilementView: View {
             // Du fond vers l'avant, pour que les cubes proches recouvrent les autres
             let ordonnes = cubes.sorted { ($0.x + $0.y + $0.z) < ($1.x + $1.y + $1.z) }
             let points = ordonnes.map(projection)
-            let minX = points.map(\.x).min() ?? 0
-            let maxX = points.map(\.x).max() ?? 0
-            let minY = points.map(\.y).min() ?? 0
-            let maxY = points.map(\.y).max() ?? 0
-            let decalage = CGPoint(
-                x: taille.width / 2 - (minX + maxX) / 2,
-                y: taille.height / 2 - (minY + maxY) / 2
+
+            // Les limites du DESSIN, faces comprises : un cube déborde de sa
+            // demi-largeur sur les côtés, et descend d'un côté entier sous son
+            // sommet. Se caler sur les seuls centres coupait les cubes du bas
+            // dès qu'une pile dépassait trois étages.
+            let minX = (points.map(\.x).min() ?? 0) - largeurDemi
+            let maxX = (points.map(\.x).max() ?? 0) + largeurDemi
+            let minY = (points.map(\.y).min() ?? 0) - hauteurDemi
+            let maxY = (points.map(\.y).max() ?? 0) + hauteurDemi + cote
+
+            let marge: CGFloat = 6
+            let echelle = min(
+                (taille.width - marge * 2) / max(1, maxX - minX),
+                (taille.height - marge * 2) / max(1, maxY - minY),
+                1
             )
+            let milieu = CGPoint(x: (minX + maxX) / 2, y: (minY + maxY) / 2)
 
             for point in points {
-                let centre = CGPoint(x: point.x + decalage.x, y: point.y + decalage.y)
-                dessinerCube(context: context, centre: centre)
+                let centre = CGPoint(
+                    x: taille.width / 2 + (point.x - milieu.x) * echelle,
+                    y: taille.height / 2 + (point.y - milieu.y) * echelle
+                )
+                dessinerCube(context: context, centre: centre, echelle: echelle)
             }
         }
     }
 
-    private func dessinerCube(context: GraphicsContext, centre: CGPoint) {
+    private func dessinerCube(context: GraphicsContext, centre: CGPoint,
+                              echelle: CGFloat = 1) {
+        let cote = self.cote * echelle
+        let largeurDemi = self.largeurDemi * echelle
+        let hauteurDemi = self.hauteurDemi * echelle
         let haut = CGPoint(x: centre.x, y: centre.y - hauteurDemi)
         let droite = CGPoint(x: centre.x + largeurDemi, y: centre.y)
         let bas = CGPoint(x: centre.x, y: centre.y + hauteurDemi)

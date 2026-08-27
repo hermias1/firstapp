@@ -162,6 +162,9 @@ struct PatronView: View {
             ligne([.gauche, .avant, .droite, .arriere])
             ligne([nil, .bas, nil, nil])
         }
+        // Sans cela le patron s'étire dans son conteneur et la croix se
+        // désaligne de sa colonne centrale.
+        .fixedSize()
     }
 
     private func ligne(_ faces: [FaceCube?]) -> some View {
@@ -187,38 +190,69 @@ struct PatronView: View {
 }
 
 /// Un cube en perspective, montrant ses trois faces visibles.
+///
+/// Les faces sont dessinées en projection isométrique et partagent réellement
+/// leurs arêtes. Une version précédente empilait trois rectangles décalés dont
+/// les bords ne coïncidaient pas : on n'y lisait pas l'ordre des faces autour
+/// du sommet, qui est précisément ce que l'exercice teste.
 struct CubeVueView: View {
     /// Triplet dessus, avant, droite.
     let vue: [Int]
-    var cote: CGFloat = 40
+    var cote: CGFloat = 46
+
+    private var largeurDemi: CGFloat { cote * cos(.pi / 6) }
+    private var hauteurDemi: CGFloat { cote * sin(.pi / 6) }
+
+    /// Sommet supérieur du cube dans le repère de la vue.
+    private var centreHaut: CGPoint {
+        CGPoint(x: largeurDemi + 2, y: hauteurDemi + 2)
+    }
 
     var body: some View {
         ZStack {
-            // Face du dessus, en losange aplati
-            symbole(vue[0])
-                .frame(width: cote, height: cote * 0.55)
-                .background(Color(.systemGray5))
-                .overlay(Rectangle().stroke(Color(.systemGray3), lineWidth: 1))
-                .offset(y: -cote * 0.55)
+            Canvas { context, _ in
+                let c = centreHaut
+                let haut = CGPoint(x: c.x, y: c.y - hauteurDemi)
+                let droite = CGPoint(x: c.x + largeurDemi, y: c.y)
+                let bas = CGPoint(x: c.x, y: c.y + hauteurDemi)
+                let gauche = CGPoint(x: c.x - largeurDemi, y: c.y)
 
-            HStack(spacing: 0) {
-                symbole(vue[1])
-                    .frame(width: cote, height: cote)
-                    .background(Theme.surface)
-                    .overlay(Rectangle().stroke(Color(.systemGray3), lineWidth: 1))
-                symbole(vue[2])
-                    .frame(width: cote * 0.55, height: cote)
-                    .background(Color(.systemGray4))
-                    .overlay(Rectangle().stroke(Color(.systemGray3), lineWidth: 1))
+                dessiner([haut, droite, bas, gauche], teinte: 0.92, context: context)
+                dessiner([gauche, bas,
+                          CGPoint(x: bas.x, y: bas.y + cote),
+                          CGPoint(x: gauche.x, y: gauche.y + cote)],
+                         teinte: 0.80, context: context)
+                dessiner([bas, droite,
+                          CGPoint(x: droite.x, y: droite.y + cote),
+                          CGPoint(x: bas.x, y: bas.y + cote)],
+                         teinte: 0.66, context: context)
             }
+
+            // Un symbole au centre de chaque face visible
+            symbole(vue[0]).position(centreHaut)
+            symbole(vue[1]).position(
+                x: centreHaut.x - largeurDemi / 2,
+                y: centreHaut.y + hauteurDemi / 2 + cote / 2)
+            symbole(vue[2]).position(
+                x: centreHaut.x + largeurDemi / 2,
+                y: centreHaut.y + hauteurDemi / 2 + cote / 2)
         }
-        .frame(width: cote * 1.6, height: cote * 1.7)
+        .frame(width: largeurDemi * 2 + 4, height: hauteurDemi * 2 + cote + 4)
+    }
+
+    private func dessiner(_ sommets: [CGPoint], teinte: Double, context: GraphicsContext) {
+        var chemin = Path()
+        chemin.move(to: sommets[0])
+        for point in sommets.dropFirst() { chemin.addLine(to: point) }
+        chemin.closeSubpath()
+        context.fill(chemin, with: .color(Color(white: teinte)))
+        context.stroke(chemin, with: .color(.black.opacity(0.4)), lineWidth: 1)
     }
 
     private func symbole(_ index: Int) -> some View {
         Image(systemName: CubesGenerator.symboles[index])
-            .font(.system(size: cote * 0.36))
-            .foregroundStyle(.primary)
+            .font(.system(size: cote * 0.34, weight: .semibold))
+            .foregroundStyle(.black)
     }
 }
 

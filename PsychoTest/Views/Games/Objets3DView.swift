@@ -403,8 +403,24 @@ struct Objets3DView: View {
                     TimerView(timeRemaining: viewModel.timeRemaining, totalTime: 20)
                 }
 
+                // Sans repère sur le dessin lui-même, « de face » et « de côté »
+                // dépendent de l'axe que le joueur appelle spontanément l'avant :
+                // deux réponses deviennent alors défendables.
                 EmpilementView(cubes: question.empilement)
                     .frame(height: 130)
+                    .overlay(alignment: .bottom) {
+                        HStack(spacing: 26) {
+                            reperAxe("CÔTÉ", icone: "arrow.up.right",
+                                     actif: question.vue == .cote)
+                            reperAxe("FACE", icone: "arrow.up.left",
+                                     actif: question.vue == .face)
+                        }
+                        .offset(y: 10)
+                    }
+                    .overlay(alignment: .top) {
+                        reperAxe("DESSUS", icone: "arrow.down",
+                                 actif: question.vue == .dessus)
+                    }
 
                 HStack(spacing: 10) {
                     DirectionRegardView(vue: question.vue)
@@ -442,6 +458,21 @@ struct Objets3DView: View {
                 Spacer()
             }
         }
+    }
+
+    /// Indique depuis quel côté de la figure on est censé regarder.
+    private func reperAxe(_ titre: String, icone: String, actif: Bool) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: icone).font(.system(size: 10, weight: .bold))
+            Text(titre).font(.etiquette).tracking(0.8)
+        }
+        .foregroundStyle(actif ? .white : Theme.texteFaible)
+        .padding(.horizontal, 7)
+        .padding(.vertical, 3)
+        .background(
+            Capsule().fill(actif ? Theme.accentProfond : Theme.surface)
+        )
+        .overlay(Capsule().strokeBorder(Theme.filet, lineWidth: actif ? 0 : 1))
     }
 
     private func fond(_ index: Int, question: Objets3DGenerator.Question) -> Color {
